@@ -17,6 +17,12 @@ prodConfig.module.rules.unshift({
         fallback: 'vue-style-loader',
         use: ['css-loader', 'postcss-loader', 'less-loader']
     })
+}, {
+    test: /\.css$/,
+    use: ExtractTextPlugin.extract({
+        fallback: 'vue-style-loader',
+        use: ['css-loader', 'postcss-loader']
+    })
 });
 
 prodConfig.plugins = (prodConfig.plugins || []).concat([

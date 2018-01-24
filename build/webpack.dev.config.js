@@ -9,6 +9,9 @@ const url = `http://localhost:${config.dev.port}/v2-table/index`;
 devConfig.module.rules.unshift({
     test: /\.less$/,
     use: ['vue-style-loader', 'css-loader', 'postcss-loader', 'less-loader']
+}, {
+    test: /\.css$/,
+    use: ['vue-style-loader', 'css-loader', 'postcss-loader']
 });
 
 devConfig.plugins = (devConfig.plugins || []).concat([
