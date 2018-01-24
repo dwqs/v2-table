@@ -1,3 +1,8 @@
+import 'github-markdown-css';
+import 'highlight.js/styles/color-brewer.css';
+
+import './common.less';
+
 import Vue from 'vue';
 
 import V2Table from '../src/index';
