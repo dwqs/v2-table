@@ -7,7 +7,7 @@
             </div>
         </div>
         <div class="demo-block-control" @click="isExpanded = !isExpanded">
-            {{ isExpanded ? '隐藏代码' : '显示代码' }}
+            {{ isExpanded ? 'Expand' : 'Hide' }}
         </div>
     </div>
 </template>
@@ -32,7 +32,7 @@
         }
         .docs-demo-meta {
             p {
-                padding-left: 24px;
+                padding: 0 24px;
             }
             pre, .hljs, code {
                 margin-bottom: 0;
