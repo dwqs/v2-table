@@ -48,7 +48,7 @@
     .v2-table__table-thead th {
         border-right: 1px solid @border-regular-color;
     }
-    .v2-table__body-row td {
+    .v2-table__row td {
         border-right: 1px solid @border-regular-color;
     }
 }
@@ -103,7 +103,7 @@
 
 }
 
-.v2-table__body-row {
+.v2-table__row {
     background-color: @background-color-white;
     transition: @all-transition;
     &:hover {
@@ -111,5 +111,8 @@
     }
     td {
         border-bottom: 1px solid @border-regular-color;
+    }
+    &.v2-table__row-striped {
+        background-color: @background-color-stripe;
     }
 }

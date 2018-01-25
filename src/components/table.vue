@@ -13,7 +13,8 @@
                         <table-row 
                             v-for="(row, index) in rows" 
                             :key="index" 
-                            :row="row" 
+                            :row="row"
+                            :index="index" 
                             :columns="columns">
                         </table-row>
                     </tbody>
@@ -54,7 +55,18 @@
             border: {
                 type: Boolean,
                 default: false
+            },
+
+            stripe: {
+                type: Boolean,
+                default: false
             }
+        },
+
+        provide () {
+            return {
+                table: this
+            };
         },
 
         data () {

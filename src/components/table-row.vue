@@ -13,15 +13,34 @@
     import TableCell from './table-cell';
 
     export default {
-        props: ['columns', 'row'],
-        components: {
-            TableCell
+        props: {
+            columns: {
+                type: Array,
+                default: () => []
+            },
+
+            row: {
+                type: Object,
+                default: () => {}
+            },
+
+            index: [String, Number]
         },
+
+        inject: ['table'],
+
         methods: {
             getRowClass () {
-                const cls = ['v2-table__body-row'];
+                const cls = ['v2-table__row'];
+                if (this.table.stripe && (this.index + 1) % 2 === 0) {
+                    cls.push('v2-table__row-striped');
+                }
                 return cls.join(' ');
             }
+        },
+
+        components: {
+            TableCell
         }
     };
 </script>
