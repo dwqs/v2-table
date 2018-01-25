@@ -1,5 +1,9 @@
+import Table from './components/table.vue';
+import TableColumn from './components/table-column.vue';
+
 function install (Vue) {
-    console.log('install table');
+    Vue.component(Table.name, Table);
+    Vue.component(TableColumn.name, TableColumn);
 };
 
 const V2Table = {
@@ -7,6 +11,8 @@ const V2Table = {
 };
 
 export default V2Table;
+
+export { Table, TableColumn };
 
 if (typeof window !== undefined && window.Vue) {
     window.Vue.use(V2Table);
