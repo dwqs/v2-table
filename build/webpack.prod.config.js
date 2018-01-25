@@ -95,8 +95,6 @@ module.exports = Object.assign({}, prodConfig, {
         filename: '[name].[chunkhash:8].js',
         path: config.build.assetsRoot,
         publicPath: config.build.assetsPublicPath,
-        sourceMapFilename: '[file].map',
         chunkFilename: '[name].[chunkhash:8].js'
-    },
-    devtool: 'source-map'
+    }
 });
