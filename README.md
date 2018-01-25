@@ -2,11 +2,6 @@
 
 # v2-table
 A simple table component based Vue 2.x.
-
-![npm-version](https://img.shields.io/npm/v/v2-datepicker.svg) ![license](https://img.shields.io/npm/l/v2-datepicker.svg)
-# v2-datepicker
-A simple datepicker component based Vue 2.x.
-
 ## Installation
 
 Install the pkg with npm:
