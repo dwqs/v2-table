@@ -1,0 +1,108 @@
+@import './var.less';
+
+.v2-table {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+    background-color: @background-color-white;
+    font-size: @normal-font-size;
+    font-weight: @font-weight-normal;
+    color: @color-primary;
+    *, *::after, *::before {
+        position: relative;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+.table-component__table-wrapper {
+    width: 100%;
+    overflow: hidden;
+}
+
+.v2-table__table-content {
+    width: 100%;
+    overflow: auto;
+    
+}
+
+.v2-table__table {
+    table-layout: fixed;
+    width: 100%;
+    text-align: @text-align-center;
+    border-left: 1px solid @border-primary-color;
+    border-top: 1px solid @border-primary-color;
+    th, td {
+        padding: 12px 6px;
+        vertical-align: middle;
+        white-space: normal;
+        word-wrap: break-word;
+        word-break: break-all;
+        user-select: none;
+    }
+}
+
+.v2-table__table-thead {
+    color: @color-thead;
+    th {
+        background-color: @background-color-white;
+        border-right: 1px solid @border-regular-color;
+        border-bottom: 1px solid @border-regular-color;
+        cursor: default;
+        &.sortable {
+            cursor: pointer;
+        }
+        &.descending .descending-caret {
+            border-top: 5px solid @background-color-light
+        }
+        &.ascending .ascending-caret {
+            border-bottom: 5px solid @background-color-light
+        }
+    }
+}
+
+.v2-table__caret-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 10px;
+    height: 16px;
+    cursor: pointer;
+    margin-left: 2px;
+    vertical-align: middle;
+}
+
+.v2-table__sort-caret {
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: 0;
+    content: "";
+    z-index: @z-index-min;
+    border: 5px solid transparent;
+    &.ascending-caret {
+        border-bottom: 5px solid @border-light-color;
+        top: -3px;
+    }
+    &.descending-caret {
+        border-top: 5px solid @border-light-color;
+        bottom: -3px;
+    }
+}
+
+.v2-table__table-tbody {
+
+}
+
+.v2-table__body-row {
+    background-color: @background-color-white;
+    transition: @all-transition;
+    &:hover {
+        background-color: @background-color-hover;
+    }
+    td {
+        border-bottom: 1px solid @border-regular-color;
+        border-right: 1px solid @border-regular-color;
+    }
+}
