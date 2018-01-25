@@ -14,6 +14,10 @@
           date: '2018-01-02',
           name: 'test3',
           address: 'Shaoyang,Hunan'
+        }, {
+          date: '2017-10-02',
+          name: 'test4',
+          address: 'Changsha,Hunan'
         }]
       }
     },
@@ -56,6 +60,50 @@ Basic table is just for data display./基础的表格展示用法。
           date: '2018-01-02',
           name: 'test3',
           address: 'Shaoyang,Hunan'
+        }, {
+          date: '2017-10-02',
+          name: 'test4',
+          address: 'Changsha,Hunan'
+        }]
+      }
+    }
+  }
+</script>
+```
+:::
+
+## Table with border/带边框表格
+:::demo 设置 Table 组件的 `border` 属性为 `true`。
+
+```html
+<template>
+  <v2-table :data="list" border>
+    <v2-table-column label="Name" prop="name"></v2-table-column>
+    <v2-table-column label="Date" prop="date"></v2-table-column>
+    <v2-table-column label="Address" prop="address"></v2-table-column>  
+  </v2-table>  
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        list: [{
+          date: '2017-12-02',
+          name: 'test1',
+          address: 'Shenzhen,China'
+        }, {
+          date: '2017-11-02',
+          name: 'test2',
+          address: 'Guangzhou,China'
+        }, {
+          date: '2018-01-02',
+          name: 'test3',
+          address: 'Shaoyang,Hunan'
+        }, {
+          date: '2017-10-02',
+          name: 'test4',
+          address: 'Changsha,Hunan'
         }]
       }
     }
