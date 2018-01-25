@@ -2,7 +2,12 @@
     <div class="v2-table">
         <div class="v2-table__table-wrapper">
             <div class="v2-table__table-content">
-                <table class="v2-table__table" cellspacing="0" cellpadding="0" border="0">
+                <table :class="[
+                    'v2-table__table',
+                    {
+                        'v2-table__table-border': border
+                    }
+                ]" cellspacing="0" cellpadding="0" border="0">
                     <table-header :columns="columns"></table-header>
                     <tbody class="v2-table__table-tbody">
                         <table-row 
@@ -32,7 +37,8 @@
         props: {
             data: {
                 type: Array,
-                default: () => []
+                default: () => [],
+                required: true
             },
 
             defaultSort: {
@@ -43,6 +49,11 @@
                         order: 'ascending' // ['ascending', 'descending']
                     };
                 }
+            },
+
+            border: {
+                type: Boolean,
+                default: false
             }
         },
 
