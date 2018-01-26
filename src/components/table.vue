@@ -8,7 +8,7 @@
                         'v2-table__table-border': border
                     }
                 ]" :style="{width: contentWidth + 'px'}">
-                    <table-header :columns="columns"></table-header>
+                    <table-header :columns="columns" :sort="sort"></table-header>
                     <div class="v2-table__table-tbody">
                         <table-row 
                             v-for="(row, index) in rows" 
@@ -73,7 +73,11 @@
             return {
                 rows: [],
                 columns: [],
-                containerWith: 0
+                containerWith: 0,
+                sort: {
+                    prop: '',
+                    order: ''
+                }
             };
         },
 
@@ -89,15 +93,51 @@
             }
         },
 
+        watch: {
+            data (val) {
+                this.rows = [].concat(val);
+            }
+        },
+
+        methods: {
+            sortChange (col) {
+                const { prop } = col;
+                let order = 'ascending';
+
+                if (this.sort.prop === prop) {
+                    order = this.sort.order === 'descending' ? 'ascending' : 'descending';
+                }
+
+                this.sort = Object.assign({}, {
+                    prop: prop,
+                    order: order
+                });
+            },
+
+            resetDataOrder (prop, order) {
+                // reset data order
+                this.$emit('sort-change', { prop, order });
+            }
+        },
+
+        created () {
+            this.sort = Object.assign({}, this.defaultSort, {
+                order: this.defaultSort.order || 'ascending'
+            });
+        },
+
         mounted () {
             this.containerWith = this.$el.clientWidth;
             const columnComponents = this.$slots.default
                 .filter(column => column.componentInstance)
                 .map(column => column.componentInstance);
 
-            console.log('22222', columnComponents);
+            console.log('22222', columnComponents, this.defaultSort);
             this.columns = [].concat(columnComponents);
             this.rows = [].concat(this.data);
+            // this.$nextTick(() => {
+            //     this.table.resetDataOrder(col.prop, order);
+            // });
         },
 
         components: {
