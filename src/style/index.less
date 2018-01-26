@@ -15,51 +15,64 @@
         margin: 0;
         padding: 0;
     }
+    .v2-table__placeholder-fix {
+        width: 0;
+        height: 0;
+        padding: 0;
+        margin: 0;
+    }
 }
 
-.table-component__table-wrapper {
+.table-component__table-wrapper{
     width: 100%;
     overflow: hidden;
 }
 
-.v2-table__table-content {
+.v2-table__table-container {
     width: 100%;
     overflow: auto;
-    
 }
 
-.v2-table__table {
+.v2-table__table-content {
+    font-size: 0;
+    display: table;
     table-layout: fixed;
-    width: 100%;
-    text-align: @text-align-center;
-    th, td {
-        padding: 12px 6px;
-        vertical-align: middle;
-        white-space: normal;
-        word-wrap: break-word;
-        word-break: break-all;
-        user-select: none;
-    }
-}
-
-.v2-table__table-border {
-    border-left: 1px solid @border-primary-color;
-    border-top: 1px solid @border-primary-color;
-    .v2-table__table-thead th {
-        border-right: 1px solid @border-regular-color;
-    }
-    .v2-table__row td {
-        border-right: 1px solid @border-regular-color;
+    &.v2-table__table-border {
+        border-left: 1px solid @border-primary-color;
+        border-top: 1px solid @border-primary-color;
+        .v2-table__cell {
+            border-right: 1px solid @border-regular-color;
+        }
     }
 }
 
 .v2-table__table-thead {
-    color: @color-thead;
-    th {
+    display: table-header-group;
+}
+
+.v2-table__header-row {
+    display: table-row;
+}
+
+.v2-table__table-tbody {
+    display: table-row-group;
+}
+
+.v2-table__cell {
+    border-bottom: 1px solid @border-regular-color;
+    cursor: default;
+    font-size: 14px;
+    padding: 10px 5px;
+    user-select: none;
+    vertical-align: middle;
+    display: table-cell;
+    overflow: hidden;
+    &.v2-table__column-cell {
+        color: @color-thead;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         background-color: @background-color-white;
-        border-bottom: 1px solid @border-regular-color;
-        cursor: default;
-        text-align: center;
         &.sortable {
             cursor: pointer;
         }
@@ -69,6 +82,12 @@
         &.ascending .ascending-caret {
             border-bottom: 5px solid @background-color-light
         }
+    }
+    &.v2-table__row-cell {
+        color: @color-primary;
+        white-space: normal;
+        word-wrap: break-word;
+        word-break: break-all;
     }
 }
 
@@ -100,19 +119,13 @@
     }
 }
 
-.v2-table__table-tbody {
-
-}
-
 .v2-table__row {
     background-color: @background-color-white;
     transition: @all-transition;
+    font-size: 0;
+    display: table-row;
     &:hover {
         background-color: @background-color-hover;
-    }
-    td {
-        border-bottom: 1px solid @border-regular-color;
-        text-align: center;
     }
     &.v2-table__row-striped {
         background-color: @background-color-stripe;

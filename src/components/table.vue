@@ -1,15 +1,15 @@
 <template>
-    <div class="v2-table">
+    <div class="v2-table" ref="table">
         <div class="v2-table__table-wrapper">
-            <div class="v2-table__table-content">
-                <table :class="[
-                    'v2-table__table',
+            <div class="v2-table__table-container">
+                <div :class="[
+                    'v2-table__table-content',
                     {
                         'v2-table__table-border': border
                     }
-                ]" cellspacing="0" cellpadding="0" border="0">
+                ]" :style="{width: contentWidth + 'px'}">
                     <table-header :columns="columns"></table-header>
-                    <tbody class="v2-table__table-tbody">
+                    <div class="v2-table__table-tbody">
                         <table-row 
                             v-for="(row, index) in rows" 
                             :key="index" 
@@ -17,8 +17,8 @@
                             :index="index" 
                             :columns="columns">
                         </table-row>
-                    </tbody>
-                </table>
+                    </div>
+                </div>
             </div>
         </div>
         <div v-show="false">
@@ -72,11 +72,25 @@
         data () {
             return {
                 rows: [],
-                columns: []
+                columns: [],
+                containerWith: 0
             };
         },
 
+        computed: {
+            contentWidth () {
+                let bodyMinWidth = 0;
+                this.columns.forEach(column => {
+                    const colWidth = isNaN(parseInt(column.width)) ? 95 : parseInt(column.width);
+                    bodyMinWidth = bodyMinWidth + colWidth;
+                });
+
+                return bodyMinWidth < this.containerWith ? this.containerWith : bodyMinWidth;
+            }
+        },
+
         mounted () {
+            this.containerWith = this.$el.clientWidth;
             const columnComponents = this.$slots.default
                 .filter(column => column.componentInstance)
                 .map(column => column.componentInstance);

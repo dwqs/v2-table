@@ -1,12 +1,12 @@
 <template>
-    <tr :class="getRowClass()">
+    <div role="row" :class="getRowClass()">
         <table-cell
             v-for="(column, index) in columns"
             :row="row"
             :column="column"
             :key="index">
         </table-cell>
-    </tr>
+    </div>
 </template>
 
 <script>

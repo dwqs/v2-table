@@ -16,10 +16,15 @@
                 type: String,
                 required: true
             },
-            width: Number,
+            width: [Number, String],
             sortable: {
                 type: Boolean,
                 default: false
+            },
+            align: {
+                type: String,
+                default: 'center',
+                validator: (val) => ['left', 'center', 'right'].indexOf(val) > -1
             }
         }
     };
