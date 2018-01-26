@@ -32,6 +32,37 @@
           city: 'Shaoyang',
           country: 'China',
           age: 20
+        }],
+        list2: [{
+          date: '2017-12-02',
+          name: 'test1',
+          address: 'Shenzhen,China',
+          birthDay: '1988-09-08',
+          songs: 100,
+          province: 'Guangdong',
+          city: 'Shenzhen',
+          country: 'China',
+          age: 30
+        }, {
+          date: '2017-11-02',
+          name: 'test2',
+          address: 'Guangzhou,China',
+          birthDay: '1978-09-08',
+          songs: 98,
+          province: 'Guangdong',
+          city: 'Guangzhou',
+          country: 'China',
+          age: 40
+        }, {
+          date: '2018-01-02',
+          name: 'test3',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20
         }]
       }
     },
@@ -39,6 +70,35 @@
     filters: {
       formatDate (val) {
         return val.replace(/\-/g, '/');
+      }
+    },
+
+    methods: {
+      handleSortChange( {prop, order}) {
+        // Customize your sorting method.
+        const list = this.list2.sort((item1, item2) => {
+          let val1 = '';
+          let val2 = '';
+
+          if (prop === 'date') {
+            val1 = new Date(item1[prop]).getTime();
+            val2 = new Date(item2[prop]).getTime();
+            if (order === 'descending') {
+              return val2 < val1 ? -1 : 1
+            }
+            return val1 < val2 ? -1 : 1
+          }
+
+          if (prop === 'songs' || prop === 'age') {
+            val1 = item1[prop];
+            val2 = item2[prop]
+            if (order === 'descending') {
+              return val2 < val1 ? -1 : 1
+            }
+            return val1 < val2 ? -1 : 1
+          }
+        });
+        this.list2 = [].concat(list);
       }
     }
   }
@@ -367,6 +427,97 @@ Custom the display content of the column/自定义列表的显示内容
         return val.replace(/\-/g, '/');
       }
     }
+  }
+</script>
+```
+:::
+
+## Sorting/排序
+Sort the data to find or compare data quickly./对表格进行排序，可快速查找或对比数据。
+
+:::demo 设置 Column 组件的 `sortable` 属性为 `true`, 同时在 Table 上监听 `sort-change` 事件, 在事件回调中可以获取当前排序的字段名和排序顺序.
+
+```html
+<template>
+  <v2-table :data="list2" border :default-sort='{prop: "date", order: "descending"}' @sort-change="handleSortChange">
+    <v2-table-column label="Name" prop="name"></v2-table-column>
+    <v2-table-column label="Date" prop="date" sortable></v2-table-column>
+    <v2-table-column label="Address" prop="address" width="150" align="right"></v2-table-column>
+    <v2-table-column label="Birthday" prop="birthDay"></v2-table-column>
+    <v2-table-column label="Songs" prop="songs" sortable></v2-table-column>
+    <v2-table-column label="Province" prop="province"></v2-table-column>
+    <v2-table-column label="City" prop="city"></v2-table-column>
+    <v2-table-column label="Country" prop="country" align="left"></v2-table-column>
+    <v2-table-column label="Age" prop="age" sortable></v2-table-column>
+  </v2-table>  
+</template>
+
+<script>
+  export default {
+    data () {
+      return {
+        list2: [{
+          date: '2017-12-02',
+          name: 'test1',
+          address: 'Shenzhen,China',
+          birthDay: '1988-09-08',
+          songs: 100,
+          province: 'Guangdong',
+          city: 'Shenzhen',
+          country: 'China',
+          age: 30
+        }, {
+          date: '2017-11-02',
+          name: 'test2',
+          address: 'Guangzhou,China',
+          birthDay: '1978-09-08',
+          songs: 98,
+          province: 'Guangdong',
+          city: 'Guangzhou',
+          country: 'China',
+          age: 40
+        }, {
+          date: '2018-01-02',
+          name: 'test3',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20
+        }]
+      }
+    },
+
+    methods: {
+      handleSortChange( {prop, order}) {
+        // Customize your sorting method. Maybe it will get data from server.
+        const list = this.list2.sort((item1, item2) => {
+          let val1 = '';
+          let val2 = '';
+
+          if (prop === 'date') {
+            val1 = new Date(item1[prop]).getTime();
+            val2 = new Date(item2[prop]).getTime();
+            if (order === 'descending') {
+              return val2 < val1 ? -1 : 1
+            }
+            return val1 < val2 ? -1 : 1
+          }
+
+          if (prop === 'songs' || prop === 'age') {
+            val1 = item1[prop];
+            val2 = item2[prop]
+            if (order === 'descending') {
+              return val2 < val1 ? -1 : 1
+            }
+            return val1 < val2 ? -1 : 1
+          }
+        });
+        this.list2 = [].concat(list);
+      }
+    }    
   }
 </script>
 ```
