@@ -5,19 +5,33 @@
         list: [{
           date: '2017-12-02',
           name: 'test1',
-          address: 'Shenzhen,China'
+          address: 'Shenzhen,China',
+          birthDay: '1988-09-08',
+          songs: 100,
+          province: 'Guangdong',
+          city: 'Shenzhen',
+          country: 'China',
+          age: 30
         }, {
           date: '2017-11-02',
           name: 'test2',
-          address: 'Guangzhou,China'
+          address: 'Guangzhou,China',
+          birthDay: '1978-09-08',
+          songs: 98,
+          province: 'Guangdong',
+          city: 'Guangzhou',
+          country: 'China',
+          age: 40
         }, {
           date: '2018-01-02',
           name: 'test3',
-          address: 'Shaoyang,Hunan'
-        }, {
-          date: '2017-10-02',
-          name: 'test4',
-          address: 'Changsha,Hunan'
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20
         }]
       }
     },
@@ -33,8 +47,6 @@
 <style>
   .custom-display-date {
     width: 100px;
-    margin-left: 50%;
-    transform: translateX(-50%);
     padding: 2px;
     border: 1px solid #dcdfe6;
     border-radius: 4px;
@@ -51,30 +63,50 @@ Basic table is just for data display./基础的表格展示用法。
   <v2-table :data="list">
     <v2-table-column label="Name" prop="name"></v2-table-column>
     <v2-table-column label="Date" prop="date"></v2-table-column>
-    <v2-table-column label="Address" prop="address"></v2-table-column>  
+    <v2-table-column label="Address" prop="address"></v2-table-column>
+    <v2-table-column label="Birthday" prop="birthDay"></v2-table-column>
+    <v2-table-column label="Songs" prop="songs"></v2-table-column>
+    <v2-table-column label="Province" prop="province"></v2-table-column>
+    <v2-table-column label="City" prop="city"></v2-table-column>
+    <v2-table-column label="Country" prop="country"></v2-table-column>
+    <v2-table-column label="Age" prop="age"></v2-table-column>
   </v2-table>  
 </template>
 
 <script>
   export default {
-    data() {
+    data () {
       return {
         list: [{
           date: '2017-12-02',
           name: 'test1',
-          address: 'Shenzhen,China'
+          address: 'Shenzhen,China',
+          birthDay: '1988-09-08',
+          songs: 100,
+          province: 'Guangdong',
+          city: 'Shenzhen',
+          country: 'China',
+          age: 30
         }, {
           date: '2017-11-02',
           name: 'test2',
-          address: 'Guangzhou,China'
+          address: 'Guangzhou,China',
+          birthDay: '1978-09-08',
+          songs: 98,
+          province: 'Guangdong',
+          city: 'Guangzhou',
+          country: 'China',
+          age: 40
         }, {
           date: '2018-01-02',
           name: 'test3',
-          address: 'Shaoyang,Hunan'
-        }, {
-          date: '2017-10-02',
-          name: 'test4',
-          address: 'Changsha,Hunan'
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20
         }]
       }
     }
@@ -83,6 +115,66 @@ Basic table is just for data display./基础的表格展示用法。
 ```
 :::
 
+## Column with width and align/设置列表的宽度和对齐方式
+
+:::demo 设置 `Column` 组件的 `align` 和 `width`
+
+```html
+<template>
+  <v2-table :data="list">
+    <v2-table-column label="Name" prop="name"></v2-table-column>
+    <v2-table-column label="Date" prop="date"></v2-table-column>
+    <v2-table-column label="Address" prop="address" width="150" align="right"></v2-table-column>
+    <v2-table-column label="Birthday" prop="birthDay"></v2-table-column>
+    <v2-table-column label="Songs" prop="songs"></v2-table-column>
+    <v2-table-column label="Province" prop="province"></v2-table-column>
+    <v2-table-column label="City" prop="city"></v2-table-column>
+    <v2-table-column label="Country" prop="country" align="left"></v2-table-column>
+    <v2-table-column label="Age" prop="age"></v2-table-column>
+  </v2-table>  
+</template>
+
+<script>
+  export default {
+    data () {
+      return {
+        list: [{
+          date: '2017-12-02',
+          name: 'test1',
+          address: 'Shenzhen,China',
+          birthDay: '1988-09-08',
+          songs: 100,
+          province: 'Guangdong',
+          city: 'Shenzhen',
+          country: 'China',
+          age: 30
+        }, {
+          date: '2017-11-02',
+          name: 'test2',
+          address: 'Guangzhou,China',
+          birthDay: '1978-09-08',
+          songs: 98,
+          province: 'Guangdong',
+          city: 'Guangzhou',
+          country: 'China',
+          age: 40
+        }, {
+          date: '2018-01-02',
+          name: 'test3',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20
+        }]
+      }
+    }
+  }
+</script>
+```
+:::
 ## Table with border/带边框表格
 :::demo 设置 Table 组件的 `border` 属性为 `true`。
 
@@ -91,30 +183,50 @@ Basic table is just for data display./基础的表格展示用法。
   <v2-table :data="list" border>
     <v2-table-column label="Name" prop="name"></v2-table-column>
     <v2-table-column label="Date" prop="date"></v2-table-column>
-    <v2-table-column label="Address" prop="address"></v2-table-column>  
+    <v2-table-column label="Address" prop="address" width="150" align="right"></v2-table-column>
+    <v2-table-column label="Birthday" prop="birthDay"></v2-table-column>
+    <v2-table-column label="Songs" prop="songs"></v2-table-column>
+    <v2-table-column label="Province" prop="province"></v2-table-column>
+    <v2-table-column label="City" prop="city"></v2-table-column>
+    <v2-table-column label="Country" prop="country" align="left"></v2-table-column>
+    <v2-table-column label="Age" prop="age"></v2-table-column>
   </v2-table>  
 </template>
 
 <script>
   export default {
-    data() {
+    data () {
       return {
         list: [{
           date: '2017-12-02',
           name: 'test1',
-          address: 'Shenzhen,China'
+          address: 'Shenzhen,China',
+          birthDay: '1988-09-08',
+          songs: 100,
+          province: 'Guangdong',
+          city: 'Shenzhen',
+          country: 'China',
+          age: 30
         }, {
           date: '2017-11-02',
           name: 'test2',
-          address: 'Guangzhou,China'
+          address: 'Guangzhou,China',
+          birthDay: '1978-09-08',
+          songs: 98,
+          province: 'Guangdong',
+          city: 'Guangzhou',
+          country: 'China',
+          age: 40
         }, {
           date: '2018-01-02',
           name: 'test3',
-          address: 'Shaoyang,Hunan'
-        }, {
-          date: '2017-10-02',
-          name: 'test4',
-          address: 'Changsha,Hunan'
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20
         }]
       }
     }
@@ -133,30 +245,50 @@ Using striped table can distinguish different rows./使用斑马纹表格可以�
   <v2-table :data="list" border stripe>
     <v2-table-column label="Name" prop="name"></v2-table-column>
     <v2-table-column label="Date" prop="date"></v2-table-column>
-    <v2-table-column label="Address" prop="address"></v2-table-column>  
+    <v2-table-column label="Address" prop="address" width="150" align="right"></v2-table-column>
+    <v2-table-column label="Birthday" prop="birthDay"></v2-table-column>
+    <v2-table-column label="Songs" prop="songs"></v2-table-column>
+    <v2-table-column label="Province" prop="province"></v2-table-column>
+    <v2-table-column label="City" prop="city"></v2-table-column>
+    <v2-table-column label="Country" prop="country" align="left"></v2-table-column>
+    <v2-table-column label="Age" prop="age"></v2-table-column>
   </v2-table>  
 </template>
 
 <script>
   export default {
-    data() {
+    data () {
       return {
         list: [{
           date: '2017-12-02',
           name: 'test1',
-          address: 'Shenzhen,China'
+          address: 'Shenzhen,China',
+          birthDay: '1988-09-08',
+          songs: 100,
+          province: 'Guangdong',
+          city: 'Shenzhen',
+          country: 'China',
+          age: 30
         }, {
           date: '2017-11-02',
           name: 'test2',
-          address: 'Guangzhou,China'
+          address: 'Guangzhou,China',
+          birthDay: '1978-09-08',
+          songs: 98,
+          province: 'Guangdong',
+          city: 'Guangzhou',
+          country: 'China',
+          age: 40
         }, {
           date: '2018-01-02',
           name: 'test3',
-          address: 'Shaoyang,Hunan'
-        }, {
-          date: '2017-10-02',
-          name: 'test4',
-          address: 'Changsha,Hunan'
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20
         }]
       }
     }
@@ -172,41 +304,64 @@ Custom the display content of the column/自定义列表的显示内容
 
 ```html
 <template>
-  <v2-table :data="list" border>
+  <v2-table :data="list" border stripe>
     <v2-table-column label="Name" prop="name"></v2-table-column>
-    <v2-table-column label="Date" prop="date">
+    <v2-table-column label="Date" prop="date" width="110">
       <template slot-scope="row">
         <div class="custom-display-date">{{row.date | formatDate}}</div> 
       </template>
     </v2-table-column>
-    <v2-table-column label="Address" prop="address"></v2-table-column>  
+    <v2-table-column label="Address" prop="address" width="150" align="right"></v2-table-column>
+    <v2-table-column label="Birthday" prop="birthDay" width="110">
+      <template slot-scope="row">
+        <div class="custom-display-date">{{row.birthDay | formatDate}}</div> 
+      </template>
+    </v2-table-column>
+    <v2-table-column label="Songs" prop="songs"></v2-table-column>
+    <v2-table-column label="Province" prop="province"></v2-table-column>
+    <v2-table-column label="City" prop="city"></v2-table-column>
+    <v2-table-column label="Country" prop="country" align="left"></v2-table-column>
+    <v2-table-column label="Age" prop="age"></v2-table-column>
   </v2-table>  
 </template>
 
 <script>
   export default {
-    data() {
+    data () {
       return {
         list: [{
           date: '2017-12-02',
           name: 'test1',
-          address: 'Shenzhen,China'
+          address: 'Shenzhen,China',
+          birthDay: '1988-09-08',
+          songs: 100,
+          province: 'Guangdong',
+          city: 'Shenzhen',
+          country: 'China',
+          age: 30
         }, {
           date: '2017-11-02',
           name: 'test2',
-          address: 'Guangzhou,China'
+          address: 'Guangzhou,China',
+          birthDay: '1978-09-08',
+          songs: 98,
+          province: 'Guangdong',
+          city: 'Guangzhou',
+          country: 'China',
+          age: 40
         }, {
           date: '2018-01-02',
           name: 'test3',
-          address: 'Shaoyang,Hunan'
-        }, {
-          date: '2017-10-02',
-          name: 'test4',
-          address: 'Changsha,Hunan'
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20
         }]
       }
     },
-
     filters: {
       formatDate (val) {
         return val.replace(/\-/g, '/');
