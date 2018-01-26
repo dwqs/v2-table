@@ -7,7 +7,7 @@
             </div>
         </div>
         <div class="demo-block-control" @click="isExpanded = !isExpanded">
-            {{ isExpanded ? 'Expand' : 'Hide' }}
+            {{ isExpanded ? 'Hide' : 'Expand' }}
         </div>
     </div>
 </template>
