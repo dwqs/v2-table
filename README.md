@@ -71,6 +71,24 @@ More demo to visit [here](https://dwqs.github.io/v2-table).
 | data | Array | - | [] | table data |
 | border | Boolean | - | false | whether show table border |
 | stripe | Boolean | - | false | whether table is striped |
+| loading | Boolean | - | false | show loading component |
+| empty-text | String | - | No Data | Displayed text when data is empty. You can customize this area with `slot="empty"` |
+| default-sort | Object | `order`: ascending/descending |if `prop` is set, and `order` is not set, then `order` is default to `ascending`| set the default sort column and order. property `prop` is used to set default sort column, property `order` is used to set default sort order |
+| row-class-name | String/Function({row, rowIndex}) | - | - | function that returns custom class names for a row, or a string assigning class names for every row |
+
+
+### Table Events
+
+|  Event Name  |  Description  |  Parameters |
+|  :--:  |  :--:  |  :--: |
+| sort-change | triggers when Table's sorting changes | { prop, order } |
+
+### Table Slot
+
+|  Name  |  Description  |
+|  :--:  |  :--:  |
+| empty| custom empty component, it's will show when data is empty |
+| loading | custom loading component, it's will show when `loading` property of table is true 
 
 ### The v2-table-column component
 
@@ -78,12 +96,9 @@ More demo to visit [here](https://dwqs.github.io/v2-table).
 |  :--:  |  :--:  |  :--:  |  :--:  |  :--:  |
 | label | String | - | - | column label |
 | prop | String | - | - | field name |
-
-<!-- ## Event
-
-|  Event Name  |  Description  |  Parameters |
-|  :--:  |  :--:  |  :--: |
-| change | triggers when the selected value changes | component's binding value | -->
+| width | String/Number | - | - | column width |
+| sortable | Boolean | true/false | false | whether column can be sorted. |
+| align | String | left/center/right | center | alignment |
 
 ## Development
 
