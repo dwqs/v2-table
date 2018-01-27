@@ -2,6 +2,7 @@
   export default {
     data () {
       return {
+        loading: false,
         list: [{
           date: '2017-12-02',
           name: 'test1',
@@ -117,7 +118,9 @@
     methods: {
       handleSortChange( {prop, order}) {
         // Customize your sorting method.
-        const list = this.list2.sort((item1, item2) => {
+        this.loading = true;
+        let list = [].concat(this.list2);
+        list.sort((item1, item2) => {
           let val1 = '';
           let val2 = '';
 
@@ -139,7 +142,10 @@
             return val1 < val2 ? -1 : 1
           }
         });
-        this.list2 = [].concat(list);
+        setTimeout (() => {
+          this.loading = false;
+          this.list2 = [].concat(list);
+        }, 2000);
       },
 
       getRowClassName ({row, rowIndex}) {
@@ -175,7 +181,7 @@
 
 ```html
 <template>
-  <v2-table :data="list2" border :default-sort='{prop: "date", order: "descending"}' @sort-change="handleSortChange">
+  <v2-table :data="list2" border :loading="loading" :default-sort='{prop: "date", order: "descending"}' @sort-change="handleSortChange">
     <v2-table-column label="Name" prop="name"></v2-table-column>
     <v2-table-column label="Date" prop="date" sortable></v2-table-column>
     <v2-table-column label="Address" prop="address" width="150"></v2-table-column>
@@ -229,7 +235,7 @@
 </script>
 ```
 :::
-<!-- ## Basic table/基础表格
+## Basic table/基础表格
 
 Basic table is just for data display./基础的表格展示用法。
 
@@ -556,7 +562,7 @@ Sort the data to find or compare data quickly./对表格进行排序，可快速
 
 ```html
 <template>
-  <v2-table :data="list2" border :default-sort='{prop: "date", order: "descending"}' @sort-change="handleSortChange">
+  <v2-table :data="list2" border :loading="loading" :default-sort='{prop: "date", order: "descending"}' @sort-change="handleSortChange">
     <v2-table-column label="Name" prop="name"></v2-table-column>
     <v2-table-column label="Date" prop="date" sortable></v2-table-column>
     <v2-table-column label="Address" prop="address" width="150" align="right"></v2-table-column>
@@ -573,6 +579,7 @@ Sort the data to find or compare data quickly./对表格进行排序，可快速
   export default {
     data () {
       return {
+        loading: false,
         list2: [{
           date: '2017-12-02',
           name: 'test1',
@@ -610,7 +617,9 @@ Sort the data to find or compare data quickly./对表格进行排序，可快速
     methods: {
       handleSortChange( {prop, order}) {
         // Customize your sorting method. Maybe it will get data from server.
-        const list = this.list2.sort((item1, item2) => {
+        this.loading = true;
+        let list = [].concat(this.list2);
+        list.sort((item1, item2) => {
           let val1 = '';
           let val2 = '';
 
@@ -632,7 +641,10 @@ Sort the data to find or compare data quickly./对表格进行排序，可快速
             return val1 < val2 ? -1 : 1
           }
         });
-        this.list2 = [].concat(list);
+        setTimeout (() => {
+          this.loading = false;
+          this.list2 = [].concat(list);
+        }, 2000);
       }
     }    
   }
@@ -724,12 +736,13 @@ Sort the data to find or compare data quickly./对表格进行排序，可快速
 
 ## Empty Data/空数据
 
-:::demo 默认的空数据形态，可以通过 `empty slot` 来自定义 -->
+:::demo 默认的空数据形态，可以通过 `empty slot` 来自定义
 
 ```html
 <template>
   <v2-table :data="[]" border>
-    <!-- <div slot="empty">custom empty</div> -->
+    <!-- <div slot="empty">custom empty component</div> -->
+    <!-- <div slot="loading">custom loading component</div>  -->
     <v2-table-column label="Name" prop="name"></v2-table-column>
     <v2-table-column label="Date" prop="date"></v2-table-column>
     <v2-table-column label="Address" prop="address" width="150"></v2-table-column>
@@ -742,4 +755,4 @@ Sort the data to find or compare data quickly./对表格进行排序，可快速
   </v2-table>  
 </template>
 ```
-<!-- ::: -->
+:::
