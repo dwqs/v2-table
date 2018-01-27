@@ -9,7 +9,7 @@
                     }
                 ]" :style="{width: contentWidth + 'px'}">
                     <table-header :columns="columns" :sort="sort"></table-header>
-                    <div class="v2-table__table-tbody">
+                    <div class="v2-table__table-tbody" v-if="data && data.length">
                         <table-row 
                             v-for="(row, index) in rows" 
                             :key="index" 
@@ -17,6 +17,14 @@
                             :rowIndex="index" 
                             :columns="columns">
                         </table-row>
+                    </div>
+                    <div class="v2-table__empty-data" v-if="!data || !data.length" :style="{width: (contentWidth - 1) + 'px'}">
+                        <slot name="empty">
+                            <div class="v2-table__empty-default">
+                                <empty-icon></empty-icon>
+                                <span class="v2-table__empty-text" v-text="emptyText"></span>
+                            </div>
+                        </slot>
                     </div>
                 </div>
             </div>
@@ -32,6 +40,7 @@
 
     import TableHeader from './table-header.vue';
     import TableRow from './table-row.vue';
+    import EmptyIcon from './empty-icon.vue';
 
     export default {
         name: 'v2-table',
@@ -62,7 +71,11 @@
                 default: false
             },
 
-            rowClassName: [String, Function]
+            rowClassName: [String, Function],
+            emptyText: {
+                type: String,
+                default: 'No Data'
+            }
         },
 
         provide () {
@@ -96,8 +109,12 @@
         },
 
         watch: {
-            data (val) {
-                this.rows = [].concat(val);
+            data: {
+                deep: true,
+                immediate: true,
+                handler (val) {
+                    this.rows = [].concat(val);
+                }
             }
         },
 
@@ -144,7 +161,8 @@
 
         components: {
             TableHeader,
-            TableRow
+            TableRow,
+            EmptyIcon
         }
     };
 </script>

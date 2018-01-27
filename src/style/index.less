@@ -43,6 +43,10 @@
         .v2-table__cell {
             border-right: 1px solid @border-regular-color;
         }
+        .v2-table__empty-data {
+            border-right: 1px solid @border-primary-color;
+            border-bottom: 1px solid @border-primary-color;
+        }
     }
 }
 
@@ -129,5 +133,24 @@
     }
     &.v2-table__row-striped {
         background-color: @background-color-stripe;
+    }
+}
+
+.v2-table__empty-data {
+    position: relative;
+    min-height: 175px;
+    box-sizing: border-box;
+    font-size: @normal-font-size;
+    color: @color-thead;
+    text-align: center;
+    .v2-table__empty-default {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+
+    }
+    .v2-table__empty-text {
+        display: block;
     }
 }
