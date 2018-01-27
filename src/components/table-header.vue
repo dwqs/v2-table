@@ -32,7 +32,7 @@
         methods: {
             getColumnClass (col) {
                 const cls = ['v2-table__cell', 'v2-table__column-cell'];
-                
+
                 if (col.sortable) {
                     cls.push('sortable');
                 }
@@ -51,7 +51,7 @@
                 const style = {};
 
                 if (typeof col.width !== undefined && !isNaN(parseInt(col.width))) {
-                    style.width = `${parseInt(col.width)}px`;
+                    style.width = `${parseInt(col.width, 10)}px`;
                 }
                 style.textAlign = ['left', 'center', 'right'].indexOf(col.align) > -1 ? col.align : 'center';
                 
