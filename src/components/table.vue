@@ -14,7 +14,7 @@
                             v-for="(row, index) in rows" 
                             :key="index" 
                             :row="row"
-                            :index="index" 
+                            :rowIndex="index" 
                             :columns="columns">
                         </table-row>
                     </div>
@@ -60,7 +60,9 @@
             stripe: {
                 type: Boolean,
                 default: false
-            }
+            },
+
+            rowClassName: [String, Function]
         },
 
         provide () {
