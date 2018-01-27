@@ -113,7 +113,7 @@
             contentWidth () {
                 let bodyMinWidth = 0;
                 this.columns.forEach(column => {
-                    const colWidth = isNaN(parseInt(column.width, 10) ? 95 : parseInt(column.width);
+                    const colWidth = isNaN(parseInt(column.width, 10)) ? 95 : parseInt(column.width);
                     bodyMinWidth = bodyMinWidth + colWidth;
                 });
 
