@@ -1,13 +1,13 @@
 <template>
     <div class="v2-table" ref="table">
         <div class="v2-table__table-wrapper">
-            <div class="v2-table__table-container">
+            <div class="v2-table__table-container" ref="container">
                 <div :class="[
                     'v2-table__table-content',
                     {
                         'v2-table__table-border': border
                     }
-                ]" :style="{width: contentWidth + 'px'}">
+                ]" :style="{width: contentWidth + 'px'}" ref="content">
                     <table-header :columns="columns" :sort="sort"></table-header>
                     <div class="v2-table__table-tbody" v-if="data && data.length">
                         <table-row 
@@ -44,6 +44,8 @@
 
 <script>
     import '../style/index.less';
+
+    import ScrollBar from '../scrollbar/index';
 
     import TableHeader from './table-header.vue';
     import TableRow from './table-row.vue';
@@ -105,7 +107,8 @@
                 sort: {
                     prop: '',
                     order: ''
-                }
+                },
+                scrollbar: null
             };
         },
 
@@ -164,9 +167,18 @@
                 .filter(column => column.componentInstance)
                 .map(column => column.componentInstance);
 
-            console.log('22222', columnComponents, this.defaultSort);
+            console.log('22222', columnComponents, this.containerWith);
             this.columns = [].concat(columnComponents);
             this.rows = [].concat(this.data);
+            this.$nextTick(() => {
+                const scrollWidth = Math.max(this.$refs.content.clientWidth, this.$refs.content.scrollWidth);
+                const scrollHeight = Math.max(this.$refs.content.clientHeight, this.$refs.content.scrollHeight);
+
+                this.scrollbar = new ScrollBar(this.$refs.container, {
+                    contentWidth: scrollWidth,
+                    contentHeight: scrollHeight
+                });
+            });
         },
 
         components: {
