@@ -175,7 +175,7 @@
   }
 </style>
 
-## Dev demo
+<!-- ## Dev demo
 
 :::demo 当 `v2-table` 元素中注入 `data` 对象数组后，在 `v2-table-column` 中用 `prop` 属性来对应对象中的键名即可填入数据，用 `label` 属性来定义表格的列名。
 
@@ -188,6 +188,9 @@
     <v2-table-column label="Birthday" prop="birthDay" sortable></v2-table-column>
     <v2-table-column label="Songs" prop="songs"></v2-table-column>
     <v2-table-column label="Province" prop="province"></v2-table-column>
+    <v2-table-column label="City" prop="city"></v2-table-column>
+    <v2-table-column label="Country" prop="country"></v2-table-column>
+    <v2-table-column label="Age" prop="age" sortable></v2-table-column>
     <v2-table-column label="City" prop="city"></v2-table-column>
     <v2-table-column label="Country" prop="country"></v2-table-column>
     <v2-table-column label="Age" prop="age" sortable></v2-table-column>
@@ -234,7 +237,7 @@
   }
 </script>
 ```
-:::
+::: -->
 ## Basic table/基础表格
 
 Basic table is just for data display./基础的表格展示用法。
@@ -558,11 +561,12 @@ Custom the display content of the column/自定义列表的显示内容
 ## Sorting/排序
 Sort the data to find or compare data quickly./对表格进行排序，可快速查找或对比数据。
 
-:::demo 设置 Column 组件的 `sortable` 属性为 `true`, 同时在 Table 上监听 `sort-change` 事件, 在事件回调中可以获取当前排序的字段名和排序顺序.
+:::demo 设置 Column 组件的 `sortable` 属性为 `true`, 同时在 Table 上监听 `sort-change` 事件, 在事件回调中可以获取当前排序的字段名和排序顺序. 可以通过 `loading slot` 来自定义就 Loading 组件
 
 ```html
 <template>
   <v2-table :data="list2" border :loading="loading" :default-sort='{prop: "date", order: "descending"}' @sort-change="handleSortChange">
+    <!-- <div slot="loading">custom loading component</div> -->
     <v2-table-column label="Name" prop="name"></v2-table-column>
     <v2-table-column label="Date" prop="date" sortable></v2-table-column>
     <v2-table-column label="Address" prop="address" width="150" align="right"></v2-table-column>
@@ -742,7 +746,6 @@ Sort the data to find or compare data quickly./对表格进行排序，可快速
 <template>
   <v2-table :data="[]" border>
     <!-- <div slot="empty">custom empty component</div> -->
-    <!-- <div slot="loading">custom loading component</div>  -->
     <v2-table-column label="Name" prop="name"></v2-table-column>
     <v2-table-column label="Date" prop="date"></v2-table-column>
     <v2-table-column label="Address" prop="address" width="150"></v2-table-column>
