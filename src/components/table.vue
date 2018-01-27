@@ -167,7 +167,6 @@
             console.log('22222', columnComponents, this.defaultSort);
             this.columns = [].concat(columnComponents);
             this.rows = [].concat(this.data);
-
         },
 
         components: {
