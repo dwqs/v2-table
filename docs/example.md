@@ -63,6 +63,47 @@
           city: 'Shaoyang',
           country: 'China',
           age: 20
+        }],
+        list3: [{
+          date: '2017-12-02',
+          name: 'test1',
+          address: 'Shenzhen,China',
+          birthDay: '1988-09-08',
+          songs: 100,
+          province: 'Guangdong',
+          city: 'Shenzhen',
+          country: 'China',
+          age: 30
+        }, {
+          date: '2017-11-02',
+          name: 'test2',
+          address: 'Guangzhou,China',
+          birthDay: '1978-09-08',
+          songs: 98,
+          province: 'Guangdong',
+          city: 'Guangzhou',
+          country: 'China',
+          age: 40
+        }, {
+          date: '2018-01-02',
+          name: 'test3',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20
+        }, {
+          date: '2017-10-10',
+          name: 'test4',
+          address: 'Changsha,Hunan',
+          birthDay: '1997-12-08',
+          songs: 20,
+          province: 'Hunan',
+          city: 'Changsha',
+          country: 'China',
+          age: 25
         }]
       }
     },
@@ -99,6 +140,15 @@
           }
         });
         this.list2 = [].concat(list);
+      },
+
+      getRowClassName ({row, rowIndex}) {
+        if (rowIndex === 1) {
+          return 'warning-row';
+        } else if (rowIndex === 3) {
+          return 'success-row';
+        }
+        return '';
       }
     }
   }
@@ -111,7 +161,74 @@
     border: 1px solid #dcdfe6;
     border-radius: 4px;
   }
+  .warning-row {
+    background: oldlace;
+  }
+  .success-row {
+    background: #f0f9eb;
+  }
 </style>
+
+## Dev demo
+
+:::demo 当 `v2-table` 元素中注入 `data` 对象数组后，在 `v2-table-column` 中用 `prop` 属性来对应对象中的键名即可填入数据，用 `label` 属性来定义表格的列名。
+
+```html
+<template>
+  <v2-table :data="list3" border :row-class-name="getRowClassName">
+    <v2-table-column label="Name" prop="name"></v2-table-column>
+    <v2-table-column label="Date" prop="date"></v2-table-column>
+    <v2-table-column label="Address" prop="address" width="150"></v2-table-column>
+    <v2-table-column label="Birthday" prop="birthDay"></v2-table-column>
+    <v2-table-column label="Songs" prop="songs"></v2-table-column>
+    <v2-table-column label="Province" prop="province"></v2-table-column>
+    <v2-table-column label="City" prop="city"></v2-table-column>
+    <v2-table-column label="Country" prop="country"></v2-table-column>
+    <v2-table-column label="Age" prop="age"></v2-table-column>
+  </v2-table>  
+</template>
+
+<script>
+  export default {
+    data () {
+      return {
+        list: [{
+          date: '2017-12-02',
+          name: 'test1',
+          address: 'Shenzhen,China',
+          birthDay: '1988-09-08',
+          songs: 100,
+          province: 'Guangdong',
+          city: 'Shenzhen',
+          country: 'China',
+          age: 30
+        }, {
+          date: '2017-11-02',
+          name: 'test2',
+          address: 'Guangzhou,China',
+          birthDay: '1978-09-08',
+          songs: 98,
+          province: 'Guangdong',
+          city: 'Guangzhou',
+          country: 'China',
+          age: 40
+        }, {
+          date: '2018-01-02',
+          name: 'test3',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20
+        }]
+      }
+    }
+  }
+</script>
+```
+:::
 ## Basic table/基础表格
 
 Basic table is just for data display./基础的表格展示用法。
@@ -518,6 +635,88 @@ Sort the data to find or compare data quickly./对表格进行排序，可快速
         this.list2 = [].concat(list);
       }
     }    
+  }
+</script>
+```
+:::
+
+## Table with status/带状态表格
+
+:::demo 指定 Table 组件的 `row-class-name` 属性来为 Table 中的某一行添加 class，表明该行处于某种状态。
+
+```html
+<template>
+  <v2-table :data="list3" border :row-class-name="getRowClassName">
+    <v2-table-column label="Name" prop="name"></v2-table-column>
+    <v2-table-column label="Date" prop="date"></v2-table-column>
+    <v2-table-column label="Address" prop="address" width="150"></v2-table-column>
+    <v2-table-column label="Birthday" prop="birthDay"></v2-table-column>
+    <v2-table-column label="Songs" prop="songs"></v2-table-column>
+    <v2-table-column label="Province" prop="province"></v2-table-column>
+    <v2-table-column label="City" prop="city"></v2-table-column>
+    <v2-table-column label="Country" prop="country"></v2-table-column>
+    <v2-table-column label="Age" prop="age"></v2-table-column>
+  </v2-table>  
+</template>
+
+<script>
+  export default {
+    data () {
+      return {
+        list3: [{
+          date: '2017-12-02',
+          name: 'test1',
+          address: 'Shenzhen,China',
+          birthDay: '1988-09-08',
+          songs: 100,
+          province: 'Guangdong',
+          city: 'Shenzhen',
+          country: 'China',
+          age: 30
+        }, {
+          date: '2017-11-02',
+          name: 'test2',
+          address: 'Guangzhou,China',
+          birthDay: '1978-09-08',
+          songs: 98,
+          province: 'Guangdong',
+          city: 'Guangzhou',
+          country: 'China',
+          age: 40
+        }, {
+          date: '2018-01-02',
+          name: 'test3',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20
+        }, {
+          date: '2017-10-10',
+          name: 'test4',
+          address: 'Changsha,Hunan',
+          birthDay: '1997-12-08',
+          songs: 20,
+          province: 'Hunan',
+          city: 'Changsha',
+          country: 'China',
+          age: 25
+        }]
+      }
+    },
+    methods: {
+      getRowClassName ({row, rowIndex}) {
+        // should return a string
+        if (rowIndex === 1) {
+          return 'warning-row';
+        } else if (rowIndex === 3) {
+          return 'success-row';
+        }
+        return '';
+      }
+    }
   }
 </script>
 ```
