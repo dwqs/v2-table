@@ -175,16 +175,16 @@
 
 ```html
 <template>
-  <v2-table :data="list3" border :row-class-name="getRowClassName">
+  <v2-table :data="list2" border :default-sort='{prop: "date", order: "descending"}' @sort-change="handleSortChange">
     <v2-table-column label="Name" prop="name"></v2-table-column>
-    <v2-table-column label="Date" prop="date"></v2-table-column>
+    <v2-table-column label="Date" prop="date" sortable></v2-table-column>
     <v2-table-column label="Address" prop="address" width="150"></v2-table-column>
-    <v2-table-column label="Birthday" prop="birthDay"></v2-table-column>
+    <v2-table-column label="Birthday" prop="birthDay" sortable></v2-table-column>
     <v2-table-column label="Songs" prop="songs"></v2-table-column>
     <v2-table-column label="Province" prop="province"></v2-table-column>
     <v2-table-column label="City" prop="city"></v2-table-column>
     <v2-table-column label="Country" prop="country"></v2-table-column>
-    <v2-table-column label="Age" prop="age"></v2-table-column>
+    <v2-table-column label="Age" prop="age" sortable></v2-table-column>
   </v2-table>  
 </template>
 
@@ -229,7 +229,7 @@
 </script>
 ```
 :::
-## Basic table/基础表格
+<!-- ## Basic table/基础表格
 
 Basic table is just for data display./基础的表格展示用法。
 
@@ -721,3 +721,25 @@ Sort the data to find or compare data quickly./对表格进行排序，可快速
 </script>
 ```
 :::
+
+## Empty Data/空数据
+
+:::demo 默认的空数据形态，可以通过 `empty slot` 来自定义 -->
+
+```html
+<template>
+  <v2-table :data="[]" border>
+    <!-- <div slot="empty">custom empty</div> -->
+    <v2-table-column label="Name" prop="name"></v2-table-column>
+    <v2-table-column label="Date" prop="date"></v2-table-column>
+    <v2-table-column label="Address" prop="address" width="150"></v2-table-column>
+    <v2-table-column label="Birthday" prop="birthDay"></v2-table-column>
+    <v2-table-column label="Songs" prop="songs"></v2-table-column>
+    <v2-table-column label="Province" prop="province"></v2-table-column>
+    <v2-table-column label="City" prop="city"></v2-table-column>
+    <v2-table-column label="Country" prop="country"></v2-table-column>
+    <v2-table-column label="Age" prop="age"></v2-table-column>
+  </v2-table>  
+</template>
+```
+<!-- ::: -->
