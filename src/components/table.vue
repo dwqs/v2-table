@@ -171,12 +171,12 @@
             this.columns = [].concat(columnComponents);
             this.rows = [].concat(this.data);
             this.$nextTick(() => {
-                const scrollWidth = Math.max(this.$refs.content.clientWidth, this.$refs.content.scrollWidth);
-                const scrollHeight = Math.max(this.$refs.content.clientHeight, this.$refs.content.scrollHeight);
+                const contentWidth = Math.max(this.$refs.content.offsetWidth, this.$refs.content.scrollWidth);
+                const contentHeight = Math.max(this.$refs.content.offsetHeight, this.$refs.content.scrollHeight);
 
                 this.scrollbar = new ScrollBar(this.$refs.container, {
-                    contentWidth: scrollWidth,
-                    contentHeight: scrollHeight
+                    contentWidth,
+                    contentHeight
                 });
             });
         },
