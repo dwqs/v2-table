@@ -3,6 +3,11 @@
     data () {
       return {
         loading: false,
+        currentPage: 1,
+        total: 98,
+        paginationInfo: {
+          text: '<span>Total of <strong>22</strong>, <strong>10</strong> per page</span>'
+        },
         devList: [{
           date: '2017-12-02',
           name: 'test1',
@@ -30,6 +35,90 @@
         }, {
           date: '2018-01-02',
           name: 'test3',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20,
+          salary: 30000,
+          desc: 'no desc'
+        },{
+          date: '2018-01-02',
+          name: 'test4',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20,
+          salary: 30000,
+          desc: 'no desc'
+        }, {
+          date: '2018-01-02',
+          name: 'test5',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20,
+          salary: 30000,
+          desc: 'no desc'
+        }, {
+          date: '2018-01-02',
+          name: 'test6',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20,
+          salary: 30000,
+          desc: 'no desc'
+        }, {
+          date: '2018-01-02',
+          name: 'test7',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20,
+          salary: 30000,
+          desc: 'no desc'
+        }, {
+          date: '2018-01-02',
+          name: 'test8',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20,
+          salary: 30000,
+          desc: 'no desc'
+        }, {
+          date: '2018-01-02',
+          name: 'test9',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20,
+          salary: 30000,
+          desc: 'no desc'
+        }, {
+          date: '2018-01-02',
+          name: 'test10',
           address: 'Shaoyang,Hunan',
           birthDay: '1998-12-08',
           songs: 80,
@@ -153,6 +242,53 @@
     },
 
     methods: {
+      handleDevPageChange (page) {
+        this.currentPage = page;
+        this.loading = true;
+        let start = (page - 1) * 10 + 1;
+
+        const list = this.devList.map(item => {
+          return Object.assign({}, item, {
+            name: `test${start++}`
+          });
+        });
+
+        setTimeout(() => {
+          this.loading = false;
+          this.devList = [].concat(list);
+        }, 2000);        
+      },
+      handleDevSortChange ({prop, order}) {
+        this.loading = true;
+        let list = [].concat(this.devList);
+        list.sort((item1, item2) => {
+          let val1 = '';
+          let val2 = '';
+
+          if (prop === 'date') {
+            val1 = new Date(item1[prop]).getTime();
+            val2 = new Date(item2[prop]).getTime();
+            if (order === 'descending') {
+              return val2 < val1 ? -1 : 1
+            }
+            return val1 < val2 ? -1 : 1
+          }
+
+          if (prop === 'songs' || prop === 'age') {
+            val1 = item1[prop];
+            val2 = item2[prop]
+            if (order === 'descending') {
+              return val2 < val1 ? -1 : 1
+            }
+            return val1 < val2 ? -1 : 1
+          }
+        });
+        setTimeout (() => {
+          this.loading = false;
+          this.devList = [].concat(list);
+        }, 2000);
+      },
+
       handleSortChange( {prop, order}) {
         // Customize your sorting method.
         this.loading = true;
@@ -210,6 +346,9 @@
   .success-row {
     background: #f0f9eb;
   }
+  strong {
+    color: #333;
+  }
 </style>
 
 ## Dev demo
@@ -218,7 +357,12 @@
 
 ```html
 <template>
-  <v2-table :data="devList" border :loading="loading" :default-sort='{prop: "date", order: "descending"}' @sort-change="handleSortChange">
+  <v2-table :data="devList" border 
+    :loading="loading" 
+    :total="total"
+    :pagination-info="paginationInfo"
+    @page-change="handleDevPageChange"
+    @sort-change="handleDevSortChange">
     <v2-table-column label="Name" prop="name"></v2-table-column>
     <v2-table-column label="Date" prop="date" sortable></v2-table-column>
     <v2-table-column label="Address" prop="address" width="150"></v2-table-column>
