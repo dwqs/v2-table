@@ -3,6 +3,43 @@
     data () {
       return {
         loading: false,
+        devList: [{
+          date: '2017-12-02',
+          name: 'test1',
+          address: 'Shenzhen,China',
+          birthDay: '1988-09-08',
+          songs: 100,
+          province: 'Guangdong',
+          city: 'Shenzhen',
+          country: 'China',
+          age: 30,
+          salary: 12000,
+          desc: 'no desc'
+        }, {
+          date: '2017-11-02',
+          name: 'test2',
+          address: 'Guangzhou,China',
+          birthDay: '1978-09-08',
+          songs: 98,
+          province: 'Guangdong',
+          city: 'Guangzhou',
+          country: 'China',
+          age: 40,
+          salary: 10000,
+          desc: 'no desc'
+        }, {
+          date: '2018-01-02',
+          name: 'test3',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20,
+          salary: 30000,
+          desc: 'no desc'
+        }],
         list: [{
           date: '2017-12-02',
           name: 'test1',
@@ -181,7 +218,7 @@
 
 ```html
 <template>
-  <v2-table :data="list2" border :loading="loading" :default-sort='{prop: "date", order: "descending"}' @sort-change="handleSortChange">
+  <v2-table :data="devList" border :loading="loading" :default-sort='{prop: "date", order: "descending"}' @sort-change="handleSortChange">
     <v2-table-column label="Name" prop="name"></v2-table-column>
     <v2-table-column label="Date" prop="date" sortable></v2-table-column>
     <v2-table-column label="Address" prop="address" width="150"></v2-table-column>
@@ -191,9 +228,8 @@
     <v2-table-column label="City" prop="city"></v2-table-column>
     <v2-table-column label="Country" prop="country"></v2-table-column>
     <v2-table-column label="Age" prop="age" sortable></v2-table-column>
-    <v2-table-column label="City" prop="city"></v2-table-column>
-    <v2-table-column label="Country" prop="country"></v2-table-column>
-    <v2-table-column label="Age" prop="age" sortable></v2-table-column>
+    <v2-table-column label="Salary" prop="salary"></v2-table-column>
+    <v2-table-column label="Desc" prop="desc"></v2-table-column>
   </v2-table>  
 </template>
 
