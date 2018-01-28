@@ -164,7 +164,7 @@
         mounted () {
             this.containerWith = this.$el.clientWidth;
             const columnComponents = this.$slots.default
-                .filter(column => column.componentInstance)
+                .filter(column => column.componentInstance && column.componentInstance.$options.name === 'v2-table-column')
                 .map(column => column.componentInstance);
 
             console.log('22222', columnComponents, this.containerWith);
