@@ -200,3 +200,63 @@
         stroke-linecap: round;
     }
 }
+
+.v2-table__pagination-box {
+    position: relative;
+    width: 100%;
+    margin-top: 20px; 
+    text-align: right;
+    font-size: 0;
+    .pagination-text-info {
+        position: absolute;
+        left: 0;
+        top: 0;
+        font-size: @normal-font-size;
+        color: @color-regular2;
+        line-height: 32px;
+    }
+}
+
+.v2-table__pagination {
+    font-size: 0;
+    display: inline-block;
+    .page {
+        cursor: pointer;
+        display: inline-block;
+        padding: 0 10px;
+        height: 32px;
+        line-height: 32px;
+        margin-left: 5px;
+        font-size: @normal-font-size;
+        color: @color-regular;
+        border: 1px solid @border-light-color3;
+        background: @background-color-white;
+        &:hover {
+            border-color: @color-light;
+            color: @color-light;
+        }
+        &.disabled {
+            cursor: not-allowed;
+            color: @color-regular2;
+            &:hover {
+                border-color: @border-light-color4;
+            }
+        }
+    }
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        font-size: 0;
+        display: inline-block;
+        .cur-page {
+            border-color: @color-light;
+            background-color: @color-light;
+            color: @background-color-white;
+            &:hover {
+                color: @background-color-white;
+                border-color: @color-light;
+            }
+        }
+    }
+}

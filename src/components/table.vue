@@ -35,6 +35,47 @@
                     </slot>
                 </div>
             </div>
+            <div class="v2-table__pagination-box" v-if="shownPagination">
+                <div class="pagination-text-info" v-if="paginationInfo.text" v-html="paginationInfo.text"></div>
+                <div class="v2-table__pagination" @click="changeCurPage">
+                    <span 
+                        :class="[
+                            'page prev-page',
+                            {
+                                'disabled': curPage === 1
+                            }
+                        ]"  
+                        data-page="prev"
+                    >
+                        {{paginationInfo.prevPageText || 'Prev'}}
+                    </span>
+                    <ul>
+                        <li v-for="(item, index) in renderPages" 
+                            :key="index" 
+                            :data-page="item.page"
+                            :class="[
+                                'page',
+                                {
+                                    'cur-page': curPage === item.page
+                                }
+                            ]"
+                        >
+                            {{item.text}}
+                        </li>
+                    </ul>
+                    <span 
+                        :class="[
+                            'page next-page',
+                            {
+                                'disabled': curPage === totalPage
+                            }
+                        ]" 
+                        data-page="next"
+                    >
+                        {{paginationInfo.nextPageText || 'Next'}}
+                    </span>
+                </div>
+            </div>
         </div>
         <div v-show="false">
             <slot></slot>
@@ -90,6 +131,33 @@
                 default: 'No Data'
             },
 
+            paginationInfo: {
+                type: Object,
+                default: () => {
+                    return {
+                        text: '',
+                        pageSize: 10,
+                        nextPageText: 'Next',
+                        prePageText: 'Prev'
+                    };
+                }
+            },
+
+            currentPage: {
+                type: Number,
+                default: 1
+            },
+
+            total: {
+                type: Number,
+                default: 0
+            },
+
+            shownPagination: {
+                type: Boolean,
+                default: true
+            },
+
             rowClassName: [String, Function]
         },
 
@@ -108,7 +176,10 @@
                     prop: '',
                     order: ''
                 },
-                scrollbar: null
+                scrollbar: null,
+                curPage: 1,
+                totalPage: 1,
+                renderPages: []
             };
         },
 
@@ -131,6 +202,10 @@
                 handler (val) {
                     this.rows = [].concat(val);
                 }
+            },
+
+            total (val) {
+                this.computedTotalPage();
             }
         },
 
@@ -152,6 +227,50 @@
             resetDataOrder (prop, order) {
                 // reset data order
                 this.$emit('sort-change', { prop, order });
+            },
+
+            changeCurPage (e) {
+                let page = e.target.dataset ? e.target.dataset.page : e.target.getAttribute('data-page');
+
+                if (!page) {
+                    return;
+                }
+                if (page === 'prev') {
+                    page = (this.curPage - 1) >= 1 ? this.curPage - 1 : 1;
+                }
+
+                if (page === 'next') {
+                    page = (this.curPage + 1) <= this.totalPage ? (this.curPage + 1) : this.totalPage;
+                }
+
+                if (page === this.curPage) {
+                    return;
+                }
+
+                this.curPage = parseInt(page, 10);
+                this.$emit('page-change', parseInt(page, 10));
+            },
+
+            computedTotalPage () {
+                if (isNaN(parseInt(this.total, 10))) {
+                    return;
+                }
+                
+                const totalPage = Math.ceil(parseInt(this.total, 10) / (this.paginationInfo.pageSize || 10));
+                this.totalPage = totalPage > 1 ? totalPage : 1;
+                this.getRenderPages();
+            },
+
+            getRenderPages () {
+                const pages = [];
+                
+                for (let i = 0; i < this.totalPage; i++) {
+                    pages.push({
+                        page: i + 1,
+                        text: i + 1
+                    });
+                }
+                this.renderPages = [].concat(pages);   
             }
         },
 
@@ -170,6 +289,8 @@
             console.log('22222', columnComponents, this.containerWith);
             this.columns = [].concat(columnComponents);
             this.rows = [].concat(this.data);
+            this.computedTotalPage();
+            
             this.$nextTick(() => {
                 const contentWidth = Math.max(this.$refs.content.offsetWidth, this.$refs.content.scrollWidth);
                 const contentHeight = Math.max(this.$refs.content.offsetHeight, this.$refs.content.scrollHeight);
