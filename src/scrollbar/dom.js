@@ -4,8 +4,23 @@ function createDiv (className) {
     return div;
 };
 
-function css (node, prop) {
-    return window.getComputedStyle(node, null).getPropertyValue(prop);
+function getCSS (element, prop) {
+    return window.getComputedStyle(element, null).getPropertyValue(prop);
+}
+
+function setCSS (element, props) {
+    if (typeof props !== 'object') {
+        return;
+    }
+
+    for (const key in props) {
+        let val = props[key];
+        if (typeof val === 'number') {
+            val = `${val}px`;
+        }
+        element.style[key] = val;
+    }
+    return element;
 }
 
 // reference from perfect scrollbar
@@ -42,6 +57,7 @@ function getDeltaFromEvent (e) {
 
 export {
     createDiv,
-    css,
+    getCSS,
+    setCSS,
     getDeltaFromEvent
 };
