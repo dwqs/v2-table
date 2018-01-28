@@ -26,13 +26,13 @@
                             </div>
                         </slot>
                     </div>
-                    <div class="v2-table__data-loading" v-if="loading">
-                        <slot name="loading">
-                            <div class="v2-table__loading-spinner">
-                                <svg viewBox="25 25 50 50" class="circular"><circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg>
-                            </div>
-                        </slot>
-                    </div>
+                </div>
+                <div class="v2-table__data-loading" v-if="loading" :style="{left: this.scrollbar ? this.scrollbar.element.scrollLeft + 'px' : 0}">
+                    <slot name="loading">
+                        <div class="v2-table__loading-spinner">
+                            <svg viewBox="25 25 50 50" class="circular"><circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg>
+                        </div>
+                    </slot>
                 </div>
             </div>
         </div>
