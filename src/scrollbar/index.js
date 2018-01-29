@@ -90,7 +90,7 @@ export default class ScrollBar {
     wheelEventHandler (e) {
         // avoid triggering browser scroll
         e.stopPropagation();
-        e.preventDefault();
+        // e.preventDefault();
         // e.currentTarget, e.target
         const [deltaX, deltaY] = getDeltaFromEvent(e);
 
