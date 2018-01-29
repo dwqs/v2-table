@@ -314,7 +314,6 @@
                 .filter(column => column.componentInstance && column.componentInstance.$options.name === 'v2-table-column')
                 .map(column => column.componentInstance);
 
-            console.log('22222', columnComponents, this.containerWith);
             this.columns = [].concat(columnComponents);
             this.rows = [].concat(this.data);
 
