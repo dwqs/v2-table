@@ -4,7 +4,8 @@ import {
     createDiv,
     getCSS,
     setCSS,
-    getDeltaFromEvent
+    getDeltaFromEvent,
+    remove
 } from './dom';
 
 export default class ScrollBar {
@@ -133,5 +134,26 @@ export default class ScrollBar {
         }
 
         return true;
+    }
+
+    removeAllEventListener () {
+        this.element.removeEventListener('wheel');
+        this.element.removeEventListener('mousewheel');
+    }
+
+    destroy () {
+        this.removeAllEventListener();
+
+        this.element = null;
+
+        this.yBar && remove(this.yBar);
+        this.xBar && remove(this.xBar);
+
+        this.xBar = null;
+        this.xThumb = null;
+        this.xThumbWidth = null;
+        this.yBar = null;
+        this.yThumb = null;
+        this.yThumbHeight = null;
     }
 };

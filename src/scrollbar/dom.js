@@ -4,6 +4,16 @@ function createDiv (className) {
     return div;
 };
 
+function remove (element) {
+    if (element.remove) {
+        element.remove();
+    } else {
+        if (element.parentNode) {
+            element.parentNode.removeChild(element);
+        }
+    }
+};
+
 function getCSS (element, prop) {
     return window.getComputedStyle(element, null).getPropertyValue(prop);
 }
@@ -59,5 +69,6 @@ export {
     createDiv,
     getCSS,
     setCSS,
-    getDeltaFromEvent
+    getDeltaFromEvent,
+    remove
 };

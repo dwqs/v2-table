@@ -337,6 +337,10 @@
             TableHeader,
             TableRow,
             EmptyIcon
+        },
+
+        beforeDestroy () {
+            this.scrollbar && this.scrollbar.destroy();
         }
     };
 </script>
