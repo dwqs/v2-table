@@ -75,6 +75,9 @@ More demo to visit [here](https://dwqs.github.io/v2-table).
 | empty-text | String | - | No Data | Displayed text when data is empty. You can customize this area with `slot="empty"` |
 | default-sort | Object | `order`: ascending/descending |if `prop` is set, and `order` is not set, then `order` is default to `ascending`| set the default sort column and order. property `prop` is used to set default sort column, property `order` is used to set default sort order |
 | row-class-name | String/Function({row, rowIndex}) | - | - | function that returns custom class names for a row, or a string assigning class names for every row |
+| pagination-info | Object | - | { text: '', pageSize: 10, nextPageText: 'Next', prevPageText: 'Prev' } | pagination info for table data |
+| shown-pagination | Boolean | - | false | whether showing pagination of table data |
+| total | Number | - | 0 | all data of table, it\'s needed when `shown-pagination` is true |
 
 
 ### Table Events
@@ -82,6 +85,7 @@ More demo to visit [here](https://dwqs.github.io/v2-table).
 |  Event Name  |  Description  |  Parameters |
 |  :--:  |  :--:  |  :--: |
 | sort-change | triggers when Table's sorting changes | { prop, order } |
+| page-change | triggers when Table's page changes | currentPage |
 
 ### Table Slot
 
