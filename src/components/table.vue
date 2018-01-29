@@ -155,7 +155,7 @@
 
             shownPagination: {
                 type: Boolean,
-                default: true
+                default: false
             },
 
             rowClassName: [String, Function]
@@ -206,7 +206,9 @@
             },
 
             total (val) {
-                this.computedTotalPage();
+                if (val > 0 && this.shownPagination) {
+                    this.computedTotalPage();
+                }
             }
         },
 
@@ -273,8 +275,8 @@
                 let start = (middlePage - this.pageDiff) > 1 ? middlePage - this.pageDiff : 1;
                 let end = (middlePage + this.pageDiff) < this.totalPage ? middlePage + this.pageDiff : this.totalPage;
 
-                end = end <= 6 ? 6 : end;
-                start = (this.totalPage - middlePage) < 3 ? (this.totalPage - 5) : start;
+                start = ((this.totalPage - middlePage) < 3 && this.totalPage - middlePage >= 0) ? (this.totalPage - 5) : start;
+                end = (end <= 6 && this.totalPage >= 6) ? 6 : end;
 
                 for (let i = start; i <= end; i++) {
                     pages.push({
@@ -315,7 +317,10 @@
             console.log('22222', columnComponents, this.containerWith);
             this.columns = [].concat(columnComponents);
             this.rows = [].concat(this.data);
-            this.computedTotalPage();
+
+            if (this.total > 0 && this.shownPagination) {
+                this.computedTotalPage();
+            }
             
             this.$nextTick(() => {
                 const contentWidth = Math.max(this.$refs.content.offsetWidth, this.$refs.content.scrollWidth);
