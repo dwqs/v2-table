@@ -8,6 +8,8 @@ import {
     remove
 } from './dom';
 
+import throttle from './throttle';
+
 export default class ScrollBar {
     constructor (element, props = {}) {
         this.element = element;
@@ -20,6 +22,18 @@ export default class ScrollBar {
         this.yBar = null;
         this.yThumb = null;
         this.yThumbHeight = null;
+
+        // for mouse drag
+        this.startingMousePageY = 0;
+        this.startingMousePageX = 0;
+        this.yScrollFactor = 0;
+        this.xScrollFactor = 0;
+        this.dragDirect = '';
+
+        // event binding
+        this.wheelEventHandler = this._wheelEventHandler.bind(this);
+        this.mouseMoveHandler = this._mouseMoveHandler.bind(this); // throttle(this._mouseMoveHandler.bind(this), 20, 10);
+        this.mouseUpHandler = this._mouseUpHandler.bind(this);
 
         if (this.element.classList) {
             this.element.classList.add('v2-scroll-container');
@@ -36,10 +50,6 @@ export default class ScrollBar {
         this.maxScrollLeft = this.contentWidth - this.containerWidth;
         this.maxScrollTop = this.contentHeight - this.containerHeight;
 
-        console.log('22222 ScrollBar content', this.contentWidth, this.contentHeight);
-        console.log('22222 ScrollBar container', this.containerWidth, this.containerHeight);
-        console.log('22222 ScrollBar max', this.maxScrollLeft, this.maxScrollTop);
-
         this.createBarEle();
         this.bindWheelEvent();
     }
@@ -55,6 +65,9 @@ export default class ScrollBar {
             this.yBar.appendChild(this.yThumb);
             this.yThumbHeight = parseInt(this.containerHeight * this.containerHeight / this.contentHeight, 10);
             setCSS(this.yThumb, { top: 0, height: this.yThumbHeight });
+            
+            this.yScrollFactor = (this.contentHeight - this.containerHeight) / (this.containerHeight - this.yThumbHeight);
+            this.yThumb.addEventListener('mousedown', this.mouseDownHandler.bind(this, 'y'), false);
         }
 
         if (this.maxScrollLeft > 0) {
@@ -67,15 +80,59 @@ export default class ScrollBar {
             this.xBar.appendChild(this.xThumb);
             this.xThumbWidth = parseInt(this.containerWidth * this.containerWidth / this.contentWidth, 10);
             setCSS(this.xThumb, { left: 0, width: this.xThumbWidth });
+
+            this.xScrollFactor = (this.contentWidth - this.containerWidth) / (this.containerWidth - this.xThumbWidth);
+            this.xThumb.addEventListener('mousedown', this.mouseDownHandler.bind(this, 'x'), false);
         }
     }
 
     bindWheelEvent () {
         if (typeof window.onwheel !== 'undefined') {
-            this.element.addEventListener('wheel', this.wheelEventHandler.bind(this), false);
+            this.element.addEventListener('wheel', this.wheelEventHandler, false);
         } else if (typeof window.onmousewheel !== 'undefined') {
-            this.element.addEventListener('mousewheel', this.wheelEventHandler.bind(this), false);
+            this.element.addEventListener('mousewheel', this.wheelEventHandler, false);
         }
+    }
+
+    _mouseMoveHandler (e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        if (this.dragDirect === 'x') {
+            // this.element.scrollLeft + 
+            const scrollLeft = this.xScrollFactor * (e.pageX - this.startingMousePageX);
+            this.element.scrollLeft = scrollLeft > this.maxScrollLeft ? this.maxScrollLeft : scrollLeft;
+        } else if (this.dragDirect === 'y') {
+            // this.element.scrollTop + 
+            const scrollTop = this.yScrollFactor * (e.pageY - this.startingMousePageY);
+            this.element.scrollTop = scrollTop > this.maxScrollTop ? this.maxScrollTop : scrollTop;
+        }
+
+        this.updateScrollBarStyle();
+    }
+
+    _mouseUpHandler (e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        this.element.ownerDocument.removeEventListener('mousemove', this.mouseMoveHandler);
+        this.element.ownerDocument.removeEventListener('mouseup', this.mouseUpHandler);
+    }
+
+    mouseDownHandler (direct, e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        if (direct === 'x') {
+            this.startingMousePageX = e.pageX;
+        }
+
+        if (direct === 'y') {
+            this.startingMousePageY = e.pageY;
+        }
+        this.dragDirect = direct;
+        this.element.ownerDocument.addEventListener('mousemove', this.mouseMoveHandler, false);
+        this.element.ownerDocument.addEventListener('mouseup', this.mouseUpHandler, false);
     }
 
     updateScrollBarStyle () {
@@ -88,10 +145,14 @@ export default class ScrollBar {
         this.xThumb && setCSS(this.xThumb, { left: xThumbLeft, width: this.xThumbWidth });
     }
 
-    wheelEventHandler (e) {
+    _wheelEventHandler (e) {
         // avoid triggering browser scroll
         e.stopPropagation();
-        // e.preventDefault();
+
+        if (this.maxScrollTop > 0) {
+            e.preventDefault();
+        }
+
         // e.currentTarget, e.target
         const [deltaX, deltaY] = getDeltaFromEvent(e);
 
@@ -137,12 +198,22 @@ export default class ScrollBar {
     }
 
     removeAllEventListener () {
-        this.element.removeEventListener('wheel');
-        this.element.removeEventListener('mousewheel');
+        this.element.removeEventListener('wheel', this.wheelEventHandler);
+        this.element.removeEventListener('mousewheel', this.wheelEventHandler);
+        this.xThumb.removeAllEventListener('mousedown');
+        this.yThumb.removeAllEventListener('mousedown');
+    }
+
+    removeClasses () {
+        this.element.className = this.element.className
+            .split(' ')
+            .filter(name => !name.match(/^v2\-scroll\-container$/))
+            .join(' ');
     }
 
     destroy () {
         this.removeAllEventListener();
+        this.removeClasses();
 
         this.element = null;
 
@@ -155,5 +226,9 @@ export default class ScrollBar {
         this.yBar = null;
         this.yThumb = null;
         this.yThumbHeight = null;
+
+        this.wheelEventHandler = null;
+        this.mouseMoveHandler = null;
+        this.mouseUpHandler = null;
     }
 };
