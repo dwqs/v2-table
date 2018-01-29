@@ -179,7 +179,8 @@
                 scrollbar: null,
                 curPage: 1,
                 totalPage: 1,
-                renderPages: []
+                renderPages: [],
+                pageDiff: 2
             };
         },
 
@@ -249,6 +250,10 @@
 
                 this.curPage = parseInt(page, 10);
                 this.$emit('page-change', parseInt(page, 10));
+                
+                if (this.totalPage > 7) {
+                    this.getRenderPages();
+                }
             },
 
             computedTotalPage () {
@@ -263,13 +268,34 @@
 
             getRenderPages () {
                 const pages = [];
-                
-                for (let i = 0; i < this.totalPage; i++) {
+                const middlePage = this.curPage;
+
+                let start = (middlePage - this.pageDiff) > 1 ? middlePage - this.pageDiff : 1;
+                let end = (middlePage + this.pageDiff) < this.totalPage ? middlePage + this.pageDiff : this.totalPage;
+
+                end = end <= 6 ? 6 : end;
+                start = (this.totalPage - middlePage) < 3 ? (this.totalPage - 5) : start;
+
+                for (let i = start; i <= end; i++) {
                     pages.push({
-                        page: i + 1,
-                        text: i + 1
+                        page: i,
+                        text: i
                     });
                 }
+                if (start !== 1) {
+                    pages.unshift({
+                        page: 1,
+                        text: start - 1 > 1 ? `...1` : 1
+                    });
+                }
+
+                if (end !== this.totalPage) {
+                    pages.push({
+                        page: this.totalPage,
+                        text: this.totalPage - end > 1 ? `...${this.totalPage}` : this.totalPage
+                    });
+                }
+
                 this.renderPages = [].concat(pages);   
             }
         },
