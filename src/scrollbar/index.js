@@ -143,6 +143,10 @@ export default class ScrollBar {
         this.xBar && setCSS(this.xBar, { left: this.element.scrollLeft, width: this.containerWidth, bottom: -this.element.scrollTop });
         const xThumbLeft = parseInt(this.element.scrollLeft * (this.containerWidth - this.xThumbWidth) / this.maxScrollLeft, 10);
         this.xThumb && setCSS(this.xThumb, { left: xThumbLeft, width: this.xThumbWidth });
+
+        if (typeof this.props.callBack === 'function') {
+            this.props.callBack(this.element.scrollLeft);
+        }
     }
 
     _wheelEventHandler (e) {
