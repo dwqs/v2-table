@@ -2,32 +2,57 @@
     <div class="v2-table" ref="table">
         <div class="v2-table__table-wrapper">
             <div class="v2-table__table-container" ref="container">
-                <div :class="[
-                    'v2-table__table-content',
-                    {
-                        'v2-table__table-border': border
-                    }
-                ]" :style="{width: contentWidth + 'px'}" ref="content">
-                    <table-header :columns="columns" :sort="sort"></table-header>
-                    <div class="v2-table__table-tbody" v-if="data && data.length">
-                        <table-row 
-                            v-for="(row, index) in rows" 
-                            :key="index" 
-                            :row="row"
-                            :rowIndex="index" 
-                            :columns="columns">
-                        </table-row>
-                    </div>
-                    <div class="v2-table__empty-data" v-if="!data || !data.length" :style="{width: (contentWidth - 1) + 'px'}">
-                        <slot name="empty">
-                            <div class="v2-table__empty-default">
-                                <empty-icon></empty-icon>
-                                <span class="v2-table__empty-text" v-text="emptyText"></span>
-                            </div>
-                        </slot>
+                <div class="v2-table__header-wrapper" ref="header" :style="{width: bodyHeight <= 100 ? (contentWidth - 1) + 'px' : '100%'}">
+                    <div :class="[
+                        'v2-table__header',
+                        {
+                            'v2-table__border': border,
+                            'v2-table__header-border': border
+                        }
+                    ]" 
+                    :style="{width: bodyHeight > 100 ? (contentWidth - 1) + 'px' : '100%'}">
+                        <table-col-group :columns="columns"></table-col-group>
+                        <table-header :columns="columns" :sort="sort"></table-header>
                     </div>
                 </div>
-                <div class="v2-table__data-loading" v-if="loading" :style="{left: this.scrollbar ? this.scrollbar.element.scrollLeft + 'px' : 0}">
+
+                <div class="v2-table__body-wrapper" ref="body" :style="{width: bodyHeight <= 100 ? (contentWidth - 1) + 'px' : '100%', height: bodyHeight > 100 ? bodyHeight + 'px' : 'auto'}">
+                    <div :class="[
+                        'v2-table__body',
+                        {
+                            'v2-table__border': border,
+                            'v2-table__body-border': border
+                        }
+                    ]" 
+                    ref="content" 
+                    :style="{width: bodyHeight > 100 ? (contentWidth - 1) + 'px' : '100%'}">
+                        <table-col-group :columns="columns" v-if="data && data.length"></table-col-group>
+                        <div class="v2-table__table-tbody" v-if="data && data.length">
+                            <table-row 
+                                v-for="(row, index) in rows" 
+                                :key="index" 
+                                :row="row"
+                                :rowIndex="index" 
+                                :columns="columns">
+                            </table-row>
+                        </div>
+
+                        <!-- Empty data -->
+                        <div class="v2-table__empty-data" 
+                            v-if="!data || !data.length" 
+                            :style="{width: (contentWidth - 2) + 'px', minHeight: bodyHeight <= 100 ? '175px' : bodyHeight + 'px'}">
+                            <slot name="empty">
+                                <div class="v2-table__empty-default">
+                                    <empty-icon></empty-icon>
+                                    <span class="v2-table__empty-text" v-text="emptyText"></span>
+                                </div>
+                            </slot>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- :style="{left: this.scrollbar ? this.scrollbar.element.scrollLeft + 'px' : 0}" -->
+                <div class="v2-table__data-loading" v-if="loading">
                     <slot name="loading">
                         <div class="v2-table__loading-spinner">
                             <svg viewBox="25 25 50 50" class="circular"><circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg>
@@ -35,7 +60,7 @@
                     </slot>
                 </div>
             </div>
-            <div class="v2-table__pagination-box" v-if="shownPagination">
+            <div class="v2-table__pagination-box" v-if="shownPagination && total > 0">
                 <div class="pagination-text-info" v-if="paginationInfo.text" v-html="paginationInfo.text"></div>
                 <div class="v2-table__pagination" @click="changeCurPage">
                     <span 
@@ -89,6 +114,7 @@
     import ScrollBar from '../scrollbar/index';
 
     import TableHeader from './table-header.vue';
+    import TableColGroup from './table-col-group.vue';
     import TableRow from './table-row.vue';
     import EmptyIcon from './empty-icon.vue';
 
@@ -158,6 +184,11 @@
                 default: false
             },
 
+            height: {
+                type: [Number, String],
+                default: 0
+            },
+
             rowClassName: [String, Function]
         },
 
@@ -172,6 +203,7 @@
                 rows: [],
                 columns: [],
                 containerWith: 0,
+                bodyHeight: 100,
                 sort: {
                     prop: '',
                     order: ''
@@ -264,7 +296,7 @@
                 }
                 
                 const totalPage = Math.ceil(parseInt(this.total, 10) / (this.paginationInfo.pageSize || 10));
-                this.totalPage = totalPage > 1 ? totalPage : 1;
+                this.totalPage = totalPage > 1 ? totalPage : 1;                
                 this.getRenderPages();
             },
 
@@ -277,6 +309,8 @@
 
                 start = ((this.totalPage - middlePage) < 3 && this.totalPage - middlePage >= 0) ? (this.totalPage - 5) : start;
                 end = (end <= 6 && this.totalPage >= 6) ? 6 : end;
+
+                start = start > 0 ? start : 1;
 
                 for (let i = start; i <= end; i++) {
                     pages.push({
@@ -294,11 +328,18 @@
                 if (end !== this.totalPage) {
                     pages.push({
                         page: this.totalPage,
-                        text: this.totalPage - end > 1 ? `...${this.totalPage}` : this.totalPage
+                        text: (this.totalPage - end > 1 && this.totalPage > 7) ? `...${this.totalPage}` : this.totalPage
                     });
                 }
 
                 this.renderPages = [].concat(pages);   
+            },
+
+            // 固定头部时更改头部的 scroll left
+            updateHeaderWrapScrollLeft (scrollLeft) {
+                if (this.bodyHeight > 100 && scrollLeft >= 0) {
+                    this.$refs.header.scrollLeft = scrollLeft;
+                }
             }
         },
 
@@ -306,6 +347,10 @@
             this.sort = Object.assign({}, this.defaultSort, {
                 order: this.defaultSort.order || 'ascending'
             });
+
+            if (!isNaN(parseInt(this.height))) {
+                this.bodyHeight = parseInt(this.height) > 100 ? parseInt(this.height) : 101;
+            }
         },
 
         mounted () {
@@ -322,12 +367,14 @@
             }
             
             this.$nextTick(() => {
+                const container = this.bodyHeight > 100 ? this.$refs.body : this.$refs.container;
                 const contentWidth = Math.max(this.$refs.content.offsetWidth, this.$refs.content.scrollWidth);
                 const contentHeight = Math.max(this.$refs.content.offsetHeight, this.$refs.content.scrollHeight);
 
-                this.scrollbar = new ScrollBar(this.$refs.container, {
+                this.scrollbar = new ScrollBar(container, {
                     contentWidth,
-                    contentHeight
+                    contentHeight,
+                    callBack: this.updateHeaderWrapScrollLeft
                 });
             });
         },
@@ -335,7 +382,8 @@
         components: {
             TableHeader,
             TableRow,
-            EmptyIcon
+            EmptyIcon,
+            TableColGroup
         },
 
         beforeDestroy () {
