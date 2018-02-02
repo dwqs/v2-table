@@ -186,7 +186,7 @@
 
             height: {
                 type: [Number, String],
-                default: 0
+                default: 'auto'
             },
 
             rowClassName: [String, Function]
@@ -348,7 +348,7 @@
                 order: this.defaultSort.order || 'ascending'
             });
 
-            if (!isNaN(parseInt(this.height))) {
+            if (this.height !== 'auto' && !isNaN(parseInt(this.height))) {
                 this.bodyHeight = parseInt(this.height) > 100 ? parseInt(this.height) : 100;
             }
         },
