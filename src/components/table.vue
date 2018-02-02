@@ -349,7 +349,7 @@
             });
 
             if (!isNaN(parseInt(this.height))) {
-                this.bodyHeight = parseInt(this.height) > 100 ? parseInt(this.height) : 101;
+                this.bodyHeight = parseInt(this.height) > 100 ? parseInt(this.height) : 100;
             }
         },
 
