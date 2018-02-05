@@ -204,8 +204,8 @@ export default class ScrollBar {
     removeAllEventListener () {
         this.element.removeEventListener('wheel', this.wheelEventHandler);
         this.element.removeEventListener('mousewheel', this.wheelEventHandler);
-        this.xThumb.removeAllEventListener('mousedown');
-        this.yThumb.removeAllEventListener('mousedown');
+        this.xThumb && this.xThumb.removeAllEventListener('mousedown');
+        this.yThumb && this.yThumb.removeAllEventListener('mousedown');
     }
 
     removeClasses () {
