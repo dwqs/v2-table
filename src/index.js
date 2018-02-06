@@ -14,6 +14,6 @@ export default V2Table;
 
 export { Table, TableColumn };
 
-if (typeof window !== undefined && window.Vue) {
+if (typeof window !== 'undefined' && window.Vue) {
     window.Vue.use(V2Table);
 }
