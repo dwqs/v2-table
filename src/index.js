@@ -1,3 +1,5 @@
+import './style/index.less';
+
 import Table from './components/table.vue';
 import TableColumn from './components/table-column.vue';
 
