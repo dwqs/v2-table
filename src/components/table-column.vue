@@ -16,14 +16,15 @@
                 type: String,
                 required: true
             },
-            width: {
-                type: [Number, String],
-                default: 90
-            },
+            width: [Number, String],
             sortable: {
                 type: Boolean,
                 default: false
             },
+            fixed: {
+                type: String,
+                default: '' // left/right
+            }, 
             align: {
                 type: String,
                 default: 'center',
