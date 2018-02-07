@@ -1,4 +1,5 @@
 @import './var.less';
+@import './fixed.less';
 
 .v2-table {
     position: relative;
@@ -14,6 +15,19 @@
         box-sizing: border-box;
         margin: 0;
         padding: 0;
+    }
+    .v2-table-fixed {
+        position: absolute;
+        z-index: @z-index-min;
+        top: 0;
+        bottom: 0;
+        overflow: hidden;
+        &.v2-table__fixed-left {
+            left: 0;
+        }
+        &.v2-table__fixed-right {
+            right: 0;
+        }
     }
 }
 
@@ -40,12 +54,17 @@
     width: 100%;
     &.v2-table__border {
         border-left: 1px solid @border-primary-color;
+        border-right: 1px solid @border-primary-color;
         .v2-table__cell {
             border-right: 1px solid @border-regular-color;
+            &:last-child {
+                border-right: none; 
+            }
         }
     }
     &.v2-table__header-border {
         border-top: 1px solid @border-primary-color;
+        border-right: 1px solid @border-primary-color;
     }
     &.v2-table__body-border {
         .v2-table__empty-data {
@@ -112,9 +131,12 @@
     }
     &.v2-table__row-cell {
         color: @color-primary;
-        white-space: normal;
-        word-wrap: break-word;
-        word-break: break-all;
+        // white-space: normal;
+        // word-wrap: break-word;
+        // word-break: break-all;
+        /** 简化列的固定，后续提供类似 rowHeight/colHeight 等属性来设置行高 **/
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 }
 

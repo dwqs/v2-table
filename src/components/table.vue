@@ -2,7 +2,7 @@
     <div class="v2-table" ref="table">
         <div class="v2-table__table-wrapper">
             <div class="v2-table__table-container" ref="container">
-                <div class="v2-table__header-wrapper" ref="header" :style="{width: bodyHeight <= 100 ? (contentWidth - 1) + 'px' : '100%'}">
+                <div class="v2-table__header-wrapper" ref="header" :style="{width: isContainerScroll ? contentWidth + 'px' : '100%'}">
                     <div :class="[
                         'v2-table__header',
                         {
@@ -10,13 +10,13 @@
                             'v2-table__header-border': border
                         }
                     ]" 
-                    :style="{width: bodyHeight > 100 ? (contentWidth - 1) + 'px' : '100%'}">
+                    :style="{width: !isContainerScroll ? contentWidth + 'px' : '100%'}">
                         <table-col-group :columns="columns"></table-col-group>
                         <table-header :columns="columns" :sort="sort"></table-header>
                     </div>
                 </div>
 
-                <div class="v2-table__body-wrapper" ref="body" :style="{width: bodyHeight <= 100 ? (contentWidth - 1) + 'px' : '100%', height: bodyHeight > 100 ? bodyHeight + 'px' : 'auto'}">
+                <div class="v2-table__body-wrapper" ref="body" :style="{width: isContainerScroll ? contentWidth + 'px' : '100%', height: bodyHeight > 100 ? bodyHeight + 'px' : 'auto'}">
                     <div :class="[
                         'v2-table__body',
                         {
@@ -25,7 +25,7 @@
                         }
                     ]" 
                     ref="content" 
-                    :style="{width: bodyHeight > 100 ? (contentWidth - 1) + 'px' : '100%'}">
+                    :style="{width: !isContainerScroll ? contentWidth + 'px' : '100%'}">
                         <table-col-group :columns="columns" v-if="data && data.length"></table-col-group>
                         <div class="v2-table__table-tbody" v-if="data && data.length">
                             <table-row 
@@ -51,7 +51,83 @@
                     </div>
                 </div>
 
-                <!-- :style="{left: this.scrollbar ? this.scrollbar.element.scrollLeft + 'px' : 0}" -->
+                <div :class="[
+                    'v2-table-fixed',
+                    'v2-table__fixed-left'
+                ]" v-if="leftColumns.length > 0" :style="{width: leftContainerWidth + 'px'}">
+                    <div class="v2-table-fixed__header-wrapper">
+                        <div :class="[
+                            'v2-table__header',
+                            {
+                                'v2-table__border': border,
+                                'v2-table__header-border': border
+                            }
+                        ]">
+                            <table-col-group :columns="leftColumns"></table-col-group>
+                            <table-header :columns="leftColumns" :sort="sort"></table-header>
+                        </div>
+                    </div>
+                    <div class="v2-table-fixed__body-wrapper">
+                        <div :class="[
+                            'v2-table__body',
+                            {
+                                'v2-table__border': border,
+                                'v2-table__body-border': border
+                            }
+                        ]">
+                            <table-col-group :columns="leftColumns"></table-col-group>
+                            <div class="v2-table__table-tbody">
+                                <table-row 
+                                    v-for="(row, index) in rows" 
+                                    :key="index" 
+                                    :row="row"
+                                    :rowIndex="index" 
+                                    :columns="leftColumns">
+                                </table-row>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div :class="[
+                    'v2-table-fixed',
+                    'v2-table__fixed-right'
+                ]" v-if="rightColumns.length > 0" :style="{width: (rightContainerWidth + 2) + 'px'}">
+                    <div class="v2-table-fixed__header-wrapper">
+                        <div :class="[
+                            'v2-table__header',
+                            {
+                                'v2-table__border': border,
+                                'v2-table__header-border': border
+                            }
+                        ]">
+                            <table-col-group :columns="rightColumns"></table-col-group>
+                            <table-header :columns="rightColumns" :sort="sort"></table-header>
+                        </div>
+                    </div>
+                    <div class="v2-table-fixed__body-wrapper">
+                        <div :class="[
+                            'v2-table__body',
+                            {
+                                'v2-table__border': border,
+                                'v2-table__body-border': border
+                            }
+                        ]">
+                            <table-col-group :columns="rightColumns"></table-col-group>
+                            <div class="v2-table__table-tbody">
+                                <table-row 
+                                    v-for="(row, index) in rows" 
+                                    :key="index" 
+                                    :row="row"
+                                    :rowIndex="index" 
+                                    :columns="rightColumns">
+                                </table-row>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table loading -->
                 <div class="v2-table__data-loading" v-if="loading">
                     <slot name="loading">
                         <div class="v2-table__loading-spinner">
@@ -109,8 +185,6 @@
 </template>
 
 <script>
-    import '../style/index.less';
-
     import ScrollBar from '../scrollbar/index';
 
     import TableHeader from './table-header.vue';
@@ -202,13 +276,19 @@
             return {
                 rows: [],
                 columns: [],
+                leftColumns: [],
+                rightColumns: [],
+
                 containerWith: 0,
                 bodyHeight: 100,
                 sort: {
                     prop: '',
                     order: ''
                 },
+
                 scrollbar: null,
+                isContainerScroll: true, // Whether scroll event binding table-container element or table-body element
+
                 curPage: 1,
                 totalPage: 1,
                 renderPages: [],
@@ -220,11 +300,19 @@
             contentWidth () {
                 let bodyMinWidth = 0;
                 this.columns.forEach(column => {
-                    const colWidth = isNaN(parseInt(column.width, 10)) ? 90 : parseInt(column.width);
+                    const colWidth = isNaN(parseInt(column.width, 10)) ? 90 : parseInt(column.width, 10);
                     bodyMinWidth = bodyMinWidth + colWidth;
                 });
 
                 return bodyMinWidth < this.containerWith ? this.containerWith : bodyMinWidth;
+            },
+
+            leftContainerWidth () {
+                return this.getFixedContainerWidth(this.leftColumns);
+            },
+
+            rightContainerWidth () {
+                return this.getFixedContainerWidth(this.rightColumns);
             }
         },
 
@@ -245,6 +333,17 @@
         },
 
         methods: {
+            getFixedContainerWidth (columns) {
+                let containerWidth = 0;
+
+                columns.forEach(column => {
+                    const colWidth = isNaN(parseInt(column.width, 10)) ? 90 : parseInt(column.width, 10);
+                    containerWidth = containerWidth + colWidth;
+                });
+
+                return containerWidth;
+            },
+
             sortChange (col) {
                 const { prop } = col;
                 let order = 'ascending';
@@ -336,10 +435,14 @@
             },
 
             // 固定头部时更改头部的 scroll left
-            updateHeaderWrapScrollLeft (scrollLeft) {
-                if (this.bodyHeight > 100 && scrollLeft >= 0) {
+            updateHeaderWrapScrollLeft ({ scrollLeft, scrollTop }) {
+                if (!this.isContainerScroll && scrollLeft >= 0) {
                     this.$refs.header.scrollLeft = scrollLeft;
                 }
+            },
+
+            isValidNumber (number) {
+                return isNaN(parseInt(number, 10));
             }
         },
 
@@ -348,8 +451,8 @@
                 order: this.defaultSort.order || 'ascending'
             });
 
-            if (this.height !== 'auto' && !isNaN(parseInt(this.height))) {
-                this.bodyHeight = parseInt(this.height) > 100 ? parseInt(this.height) : 100;
+            if (this.height !== 'auto' && !isNaN(parseInt(this.height, 10))) {
+                this.bodyHeight = parseInt(this.height, 10) > 100 ? parseInt(this.height, 10) : 100;
             }
         },
 
@@ -358,23 +461,35 @@
             const columnComponents = this.$slots.default
                 .filter(column => column.componentInstance && column.componentInstance.$options.name === 'v2-table-column')
                 .map(column => column.componentInstance);
+            
+            const normalColumnComponents = columnComponents.filter(column => (!['left', 'right'].includes(column.fixed) || this.isValidNumber(column.width)));
+            const fixedLeftColumnComponents = columnComponents.filter(column => (column.fixed === 'left' && !this.isValidNumber(column.width)));
+            const fixedRightColumnComponents = columnComponents.filter(column => (column.fixed === 'right' && !this.isValidNumber(column.width)));
 
-            this.columns = [].concat(columnComponents);
+            this.columns = [].concat(fixedLeftColumnComponents, normalColumnComponents, fixedRightColumnComponents);
+            this.leftColumns = [].concat(fixedLeftColumnComponents);
+            this.rightColumns = [].concat(fixedRightColumnComponents);
             this.rows = [].concat(this.data);
+
+            // Whether scroll event binding table-container element or table-body element
+            if (this.leftColumns.length || this.rightColumns.length || (this.bodyHeight > 100 && this.height !== 'auto')) {
+                this.isContainerScroll = false;
+            }
 
             if (this.total > 0 && this.shownPagination) {
                 this.computedTotalPage();
             }
             
             this.$nextTick(() => {
-                const container = this.bodyHeight > 100 ? this.$refs.body : this.$refs.container;
+                const container = this.isContainerScroll ? this.$refs.container : this.$refs.body;
                 const contentWidth = Math.max(this.$refs.content.offsetWidth, this.$refs.content.scrollWidth);
                 const contentHeight = Math.max(this.$refs.content.offsetHeight, this.$refs.content.scrollHeight);
 
                 this.scrollbar = new ScrollBar(container, {
                     contentWidth,
                     contentHeight,
-                    callBack: this.updateHeaderWrapScrollLeft
+                    callBack: this.updateHeaderWrapScrollLeft,
+                    fixedColumnWidth: this.leftContainerWidth
                 });
             });
         },
