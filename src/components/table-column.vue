@@ -16,7 +16,10 @@
                 type: String,
                 required: true
             },
-            width: [Number, String],
+            width: {
+                type: [Number, String],
+                default: 90
+            },
             sortable: {
                 type: Boolean,
                 default: false

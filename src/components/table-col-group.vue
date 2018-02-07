@@ -23,7 +23,10 @@
 
                 if (typeof col.width !== undefined && !isNaN(parseInt(col.width))) {
                     style.width = `${parseInt(col.width, 10)}px`;
+                } else {
+                    style.width = '90px';
                 }
+                
                 style.textAlign = ['left', 'center', 'right'].indexOf(col.align) > -1 ? col.align : 'center';
                 
                 return style;
