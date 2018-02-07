@@ -47,6 +47,7 @@ export default class ScrollBar {
 
         this.containerWidth = element.clientWidth;
         this.containerHeight = element.clientHeight;
+
         this.maxScrollLeft = this.contentWidth - this.containerWidth;
         this.maxScrollTop = this.contentHeight - this.containerHeight;
 
@@ -145,7 +146,10 @@ export default class ScrollBar {
         this.xThumb && setCSS(this.xThumb, { left: xThumbLeft, width: this.xThumbWidth });
 
         if (typeof this.props.callBack === 'function') {
-            this.props.callBack(this.element.scrollLeft);
+            this.props.callBack({
+                scrollLeft: this.element.scrollLeft,
+                scrollTop: this.element.scrollTop
+            });
         }
     }
 
