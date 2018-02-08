@@ -41,7 +41,7 @@
                         <!-- Empty data -->
                         <div class="v2-table__empty-data" 
                             v-if="!data || !data.length" 
-                            :style="{width: (contentWidth - 2) + 'px', minHeight: bodyHeight <= 100 ? '175px' : bodyHeight + 'px'}">
+                            :style="{width: contentWidth + 'px', minHeight: bodyHeight <= 100 ? '175px' : bodyHeight + 'px'}">
                             <slot name="empty">
                                 <div class="v2-table__empty-default">
                                     <empty-icon></empty-icon>
@@ -52,6 +52,7 @@
                     </div>
                 </div>
 
+                <!-- fixed left -->
                 <div :class="[
                     'v2-table-fixed',
                     'v2-table__fixed-left'
@@ -68,7 +69,15 @@
                             <table-header :columns="leftColumns" :sort="sort"></table-header>
                         </div>
                     </div>
-                    <div class="v2-table-fixed__body-wrapper" ref="leftBody" :style="{ height: bodyHeight > 100 ? bodyHeight + 'px' : 'auto'}">
+                    <div :class="[
+                        'v2-table-fixed__body-wrapper',
+                        {
+                            'v2-table-fixed__left-empty-border': border && !data.length
+                        }
+                    ]" 
+                    ref="leftBody" 
+                    :style="{ height: bodyHeight > 100 ? bodyHeight + 'px' : !data.length ? '175px' : 'auto'}"
+                    >
                         <div :class="[
                             'v2-table__body',
                             {
@@ -91,6 +100,7 @@
                     </div>
                 </div>
 
+                <!-- fixed right -->
                 <div :class="[
                     'v2-table-fixed',
                     'v2-table__fixed-right'
@@ -107,7 +117,15 @@
                             <table-header :columns="rightColumns" :sort="sort"></table-header>
                         </div>
                     </div>
-                    <div class="v2-table-fixed__body-wrapper" ref="rightBody" :style="{ height: bodyHeight > 100 ? bodyHeight + 'px' : 'auto'}">
+                    <div :class="[
+                        'v2-table-fixed__body-wrapper', 
+                        {
+                            'v2-table-fixed__right-empty-border': border && !data.length
+                        }
+                    ]" 
+                    ref="rightBody" 
+                    :style="{ height: bodyHeight > 100 ? bodyHeight + 'px' : !data.length ? '175px' : 'auto'}"
+                    >
                         <div :class="[
                             'v2-table__body',
                             {
