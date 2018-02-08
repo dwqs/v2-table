@@ -68,7 +68,7 @@
                             <table-header :columns="leftColumns" :sort="sort"></table-header>
                         </div>
                     </div>
-                    <div class="v2-table-fixed__body-wrapper">
+                    <div class="v2-table-fixed__body-wrapper" ref="leftBody" :style="{ height: bodyHeight > 100 ? bodyHeight + 'px' : 'auto'}">
                         <div :class="[
                             'v2-table__body',
                             {
@@ -107,7 +107,7 @@
                             <table-header :columns="rightColumns" :sort="sort"></table-header>
                         </div>
                     </div>
-                    <div class="v2-table-fixed__body-wrapper">
+                    <div class="v2-table-fixed__body-wrapper" ref="rightBody" :style="{ height: bodyHeight > 100 ? bodyHeight + 'px' : 'auto'}">
                         <div :class="[
                             'v2-table__body',
                             {
@@ -443,6 +443,14 @@
                 if (!this.isContainerScroll && scrollLeft >= 0) {
                     this.$refs.header.scrollLeft = scrollLeft;
                 }
+
+                if (this.leftColumns.length && scrollTop >= 0) {
+                    this.$refs.leftBody.scrollTop = scrollTop;
+                }
+
+                if (this.rightColumns.length > 0 && scrollTop >= 0) {
+                    this.$refs.rightBody.scrollTop = scrollTop;
+                }
             },
 
             isValidNumber (number) {
@@ -476,7 +484,7 @@
             this.rows = [].concat(this.data);
 
             // Whether scroll event binding table-container element or table-body element
-            if (this.leftColumns.length || this.rightColumns.length || (this.bodyHeight > 100 && this.height !== 'auto')) {
+            if (this.leftColumns.length || this.rightColumns.length || this.bodyHeight > 100) {
                 this.isContainerScroll = false;
             }
 
