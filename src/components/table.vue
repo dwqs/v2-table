@@ -486,14 +486,11 @@
             
             this.$nextTick(() => {
                 const container = this.isContainerScroll ? this.$refs.container : this.$refs.body;
-                const contentWidth = Math.max(this.$refs.content.offsetWidth, this.$refs.content.scrollWidth);
-                const contentHeight = Math.max(this.$refs.content.offsetHeight, this.$refs.content.scrollHeight);
 
                 this.scrollbar = new ScrollBar(container, {
-                    contentWidth,
-                    contentHeight,
-                    callBack: this.updateHeaderWrapScrollLeft,
-                    fixedColumnWidth: this.leftContainerWidth
+                    contentWidth: this.$refs.content.scrollWidth,
+                    contentHeight: this.$refs.content.scrollHeight,
+                    callBack: this.updateHeaderWrapScrollLeft
                 });
             });
         },
