@@ -352,7 +352,7 @@
 
 Basic table is just for data display./基础的表格展示用法。
 
-:::demo  当 `v2-table`元素中注入 `data` 对象数组后，在 `v2-table-column` 中用 `prop` 属性来对应对象中的键名即可填入数据，用 `label` 属性来定义表格的列名。
+:::demo  After setting attribute `data` of `v2-table` with an object array, you can use `prop` in `v2-table-column` to insert data to table columns, and set the attribute `label` to define the column name. / 当 `v2-table`元素中注入 `data` 对象数组后，在 `v2-table-column` 中用 `prop` 属性来对应对象中的键名即可填入数据，用 `label` 属性来定义表格的列名。\n sdas
 
 ```html
 <template>
@@ -413,7 +413,7 @@ Basic table is just for data display./基础的表格展示用法。
 
 ## Column with width and align/设置列表的宽度和对齐方式
 
-:::demo  设置 `Column` 组件的 `align` 和 `width`
+:::demo  Set attribute `width` and `align` of `v2-table-column` / 设置 `Column` 组件的 `align` 和 `width`
 
 ```html
 <template>
@@ -472,7 +472,7 @@ Basic table is just for data display./基础的表格展示用法。
 ```
 :::
 ## Table with border/带边框表格
-:::demo 设置 Table 组件的 `border` 属性为 `true`。
+:::demo  Set attribute `border` of `v2-table` to `true`. / 设置 Table 组件的 `border` 属性为 `true`。
 
 ```html
 <template>
@@ -534,7 +534,7 @@ Basic table is just for data display./基础的表格展示用法。
 ## Striped Table/带斑马纹表格
 Using striped table can distinguish different rows./使用斑马纹表格可以区分不同的数据。
 
-:::demo 设置 Table 组件的 `stripe` 属性为 `true`。
+:::demo Set attribute `stripe` of `v2-table` to `true`. / 设置 Table 组件的 `stripe` 属性为 `true`。
 
 ```html
 <template>
@@ -596,7 +596,7 @@ Using striped table can distinguish different rows./使用斑马纹表格可以�
 ## Custom column template/自定义列模板
 Custom the display content of the column/自定义列表的显示内容
 
-:::demo 通过 `Scoped slot` 可以获取到 `row` 的数据，用法参考 demo。。
+:::demo You have access to the following data: row by [Scoped slot](https://vuejs.org/v2/guide/components.html#Scoped-Slots). / 通过 `Scoped slot` 可以获取到 `row` 的数据，用法参考 demo。
 
 ```html
 <template>
@@ -671,7 +671,7 @@ Custom the display content of the column/自定义列表的显示内容
 ## Sorting/排序
 Sort the data to find or compare data quickly./对表格进行排序，可快速查找或对比数据。
 
-:::demo 设置 Column 组件的 `sortable` 属性为 `true`, 同时在 Table 上监听 `sort-change` 事件, 在事件回调中可以获取当前排序的字段名和排序顺序. 可以通过 `loading slot` 来自定义就 Loading 组件
+:::demo Set attribute `sortable` of `v2-table-column`, and listen to `sort-change` event on Table. In event handler, you have access to the sorting column and sorting order so that you can fetch sorted table data from API. And custom loading component by `loading slot`. / 设置 Column 组件的 `sortable` 属性为 `true`, 同时在 Table 上监听 `sort-change` 事件, 在事件回调中可以获取当前排序的字段名和排序顺序. 可以通过 `loading slot` 来自定义就 Loading 组件
 
 ```html
 <template>
@@ -768,7 +768,7 @@ Sort the data to find or compare data quickly./对表格进行排序，可快速
 
 ## Table with status/带状态表格
 
-:::demo 指定 Table 组件的 `row-class-name` 属性来为 Table 中的某一行添加 class，表明该行处于某种状态。
+:::demo Use `row-class-name` in `v2-table` to add custom classes to a certain row. / 指定 Table 组件的 `row-class-name` 属性来为 Table 中的某一行添加 class，表明该行处于某种状态。
 
 ```html
 <template>
@@ -850,7 +850,7 @@ Sort the data to find or compare data quickly./对表格进行排序，可快速
 
 ## Empty Data/空数据
 
-:::demo 默认的空数据形态，可以通过 `empty slot` 来自定义
+:::demo Default mode when data is empty, and you can custom empty component by `empty slot`. / 默认的空数据形态，可以通过 `empty slot` 来自定义
 
 ```html
 <template>
@@ -872,7 +872,7 @@ Sort the data to find or compare data quickly./对表格进行排序，可快速
 
 ## Pagination/分页
 
-:::demo 对 Table 数据进行分页展示, 需要设置 Table 组件的 `shownPagination` 属性为 `true`，并将总数据量传给 `total` 属性.
+:::demo Paging through the table data, and set attribute `shownPagination` and `total` of `v2-table`,  / 对 Table 数据进行分页展示, 需要设置 Table 组件的 `shownPagination` 属性为 `true`，并将总数据量传给 `total` 属性.
 
 ```html
 <template>
@@ -1055,7 +1055,7 @@ Sort the data to find or compare data quickly./对表格进行排序，可快速
 
 ## Fixed Header/固定表头
 
-:::demo 给 Table 组件设置一个 `height` 属性即可.
+:::demo Set attribute `height` of `v2-table`. / 给 Table 组件设置一个 `height` 属性即可.
 
 ```html
 <template>
@@ -1209,7 +1209,7 @@ Sort the data to find or compare data quickly./对表格进行排序，可快速
 
 ## Fixed columns and header/固定列和表头
 
-:::demo 固定列需要使用 `fixed` 属性，它接 `left` 或者 `right`，表示左边固定还是右边固定。Width prop required for fixed column。
+:::demo Set attribute `fixed` of `v2-table-column`, it accepts `left` or `right` as its value, showing the column on the left or on the right. Attribute `width` of  `v2-table-column` is required for fixed column. / 固定列需要使用 `fixed` 属性，它接受 `left` 或者 `right`，表示左边固定还是右边固定。固定的列需要指定宽度。
 
 ```html
 <template>

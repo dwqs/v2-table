@@ -33,6 +33,7 @@
         .docs-demo-meta {
             p {
                 padding: 0 24px;
+                line-height: 25px;
             }
             pre, .hljs, code {
                 margin-bottom: 0;
