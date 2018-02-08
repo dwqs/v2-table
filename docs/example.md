@@ -472,7 +472,7 @@ Basic table is just for data display./基础的表格展示用法。
 ```
 :::
 ## Table with border/带边框表格
-:::demo  Set attribute `border` of `v2-table` to `true`. / 设置 Table 组件的 `border` 属性为 `true`。
+:::demo  Set attribute `border` of `v2-table`. / 设置 Table 组件的 `border` 属性为 `true`。
 
 ```html
 <template>
@@ -534,7 +534,7 @@ Basic table is just for data display./基础的表格展示用法。
 ## Striped Table/带斑马纹表格
 Using striped table can distinguish different rows./使用斑马纹表格可以区分不同的数据。
 
-:::demo Set attribute `stripe` of `v2-table` to `true`. / 设置 Table 组件的 `stripe` 属性为 `true`。
+:::demo Set attribute `stripe` of `v2-table`. / 设置 Table 组件的 `stripe` 属性为 `true`。
 
 ```html
 <template>
