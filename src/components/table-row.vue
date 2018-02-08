@@ -1,5 +1,10 @@
 <template>
-    <div role="row" :class="getRowClass()">
+    <div role="row" :class="[
+        getRowClass(), 
+        {
+            'row-hover': hoverRowIndex === rowIndex
+        }
+    ]" @mouseenter="handleRowHover" @mouseleave="handleRowLeave">
         <table-cell
             v-for="(column, index) in columns"
             :row="row"
@@ -24,7 +29,8 @@
                 default: () => {}
             },
 
-            rowIndex: [String, Number]
+            rowIndex: [String, Number],
+            hoverRowIndex: [String, Number]
         },
 
         inject: ['table'],
@@ -37,12 +43,20 @@
                 }
 
                 // custom row class
-                if (typeof this.table.rowClassName !== undefined) {
+                if (typeof this.table.rowClassName !== 'undefined') {
                     const customRowClass = typeof this.table.rowClassName === 'function' ? this.table.rowClassName({ row: this.row, rowIndex: this.rowIndex }) : this.table.rowClassName;
                     cls.push(typeof customRowClass === 'string' ? customRowClass : '');
                 }
 
                 return cls.join(' ');
+            },
+
+            handleRowHover (e) {
+                this.table.hoverRowIndex = this.rowIndex;
+            },
+
+            handleRowLeave () {
+                this.table.hoverRowIndex = -1;
             }
         },
 

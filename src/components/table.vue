@@ -32,7 +32,8 @@
                                 v-for="(row, index) in rows" 
                                 :key="index" 
                                 :row="row"
-                                :rowIndex="index" 
+                                :rowIndex="index"
+                                :hoverRowIndex="hoverRowIndex" 
                                 :columns="columns">
                             </table-row>
                         </div>
@@ -82,6 +83,7 @@
                                     :key="index" 
                                     :row="row"
                                     :rowIndex="index" 
+                                    :hoverRowIndex="hoverRowIndex" 
                                     :columns="leftColumns">
                                 </table-row>
                             </div>
@@ -120,6 +122,7 @@
                                     :key="index" 
                                     :row="row"
                                     :rowIndex="index" 
+                                    :hoverRowIndex="hoverRowIndex" 
                                     :columns="rightColumns">
                                 </table-row>
                             </div>
@@ -278,6 +281,7 @@
                 columns: [],
                 leftColumns: [],
                 rightColumns: [],
+                hoverRowIndex: -1,
 
                 containerWith: 0,
                 bodyHeight: 100,
