@@ -6,17 +6,20 @@
                 :style="getColStyle(column)"
                 @click="changeSortRule(column)" 
                 :class="getColumnClass(column)">
-                {{column.label}}
-                <span v-if="column.sortable" class="v2-table__caret-wrapper">
+                {{column.label || ''}}
+                <span v-if="column.sortable && !column.type" class="v2-table__caret-wrapper">
                     <i class="v2-table__sort-caret ascending-caret"></i>
                     <i class="v2-table__sort-caret descending-caret"></i>
                 </span>
+                <check-box v-if="column.type === 'selection'" :select-index="-1"></check-box>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import CheckBox from './checkbox.vue';
+
     export default {
         props: {
             columns: {
@@ -33,7 +36,7 @@
             getColumnClass (col) {
                 const cls = ['v2-table__cell', 'v2-table__column-cell'];
 
-                if (col.sortable) {
+                if (col.sortable && !col.type) {
                     cls.push('sortable');
                 }
                 if (this.sort.prop === col.prop) {
@@ -59,10 +62,14 @@
             },
 
             changeSortRule (col) {
-                if (col.sortable) {
+                if (col.sortable && !col.type) {
                     this.table.sortChange(col);
                 }
             }
+        },
+
+        components: {
+            CheckBox
         }
     };
 </script>

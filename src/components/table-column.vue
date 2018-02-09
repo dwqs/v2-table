@@ -8,15 +8,10 @@
     export default {
         name: 'v2-table-column',
         props: {
-            label: {
-                type: String,
-                required: true
-            },
-            prop: {
-                type: String,
-                required: true
-            },
+            label: String,
+            prop: String,
             width: [Number, String],
+            type: String,
             sortable: {
                 type: Boolean,
                 default: false
