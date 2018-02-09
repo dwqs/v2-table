@@ -4,7 +4,7 @@
         {
             'row-hover': hoverRowIndex === rowIndex
         }
-    ]" @mouseenter="handleRowHover" @mouseleave="handleRowLeave">
+    ]" :style="getRowStyle()" @mouseenter="handleRowHover" @mouseleave="handleRowLeave">
         <table-cell
             v-for="(column, index) in columns"
             :row="row"
@@ -49,6 +49,16 @@
                 }
 
                 return cls.join(' ');
+            },
+
+            getRowStyle () {
+                const style = {};
+
+                if (!isNaN(parseInt(this.table.rowHeight, 10))) {
+                    style.height = parseInt(this.table.rowHeight, 10) + 'px';
+                }
+
+                return style;
             },
 
             handleRowHover (e) {

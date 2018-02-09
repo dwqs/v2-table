@@ -274,6 +274,11 @@
                 default: 0
             },
 
+            rowHeight: {
+                type: [Number, String],
+                default: 40
+            },
+
             shownPagination: {
                 type: Boolean,
                 default: false
