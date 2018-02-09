@@ -9,6 +9,7 @@
             v-for="(column, index) in columns"
             :row="row"
             :column="column"
+            :rowIndex="rowIndex"
             :key="index">
         </table-cell>
     </div>

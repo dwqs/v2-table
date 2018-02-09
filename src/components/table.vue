@@ -206,7 +206,8 @@
 </template>
 
 <script>
-    import ScrollBar from '../scrollbar/index';
+    import ScrollBar from '../scrollbar/index.js';
+    import Bus from '../bus.js';
 
     import TableHeader from './table-header.vue';
     import TableColGroup from './table-col-group.vue';
@@ -304,6 +305,11 @@
                 columns: [],
                 leftColumns: [],
                 rightColumns: [],
+
+                // row select status
+                selectedIndex: [],
+                isAll: false,
+                isIndeterminate: false,
                 hoverRowIndex: -1,
 
                 containerWith: 0,
@@ -313,6 +319,7 @@
                     order: ''
                 },
 
+                eventBus: null,
                 scrollbar: null,
                 isContainerScroll: true, // Whether scroll event binding table-container element or table-body element
 
@@ -478,6 +485,47 @@
 
             isValidNumber (number) {
                 return isNaN(parseInt(number, 10));
+            },
+
+            getColumnComponentsByType (columns, type) {
+                let cols = [];
+                switch (type) {
+                    case 'selection':
+                        cols = columns.filter(column => column.type === 'selection');
+                        cols = cols.length > 1 ? [cols[0]] : cols; 
+                        break;
+                    case 'left':
+                        cols = columns.filter(column => (column.fixed === 'left' && !this.isValidNumber(column.width) && column.type !== 'selection'));
+                        break;
+                    case 'right':
+                        cols = columns.filter(column => (column.fixed === 'right' && !this.isValidNumber(column.width) && column.type !== 'selection'));
+                        break;  
+                    default:
+                        cols = columns.filter(column => {
+                            return (!['left', 'right'].includes(column.fixed) || this.isValidNumber(column.width)) && column.type !== 'selection';
+                        });
+                        break;  
+                }
+
+                return cols;
+            },
+
+            handleRowSelect (isChecked, rowIndex) {
+                if (isChecked) {
+                    this.selectedIndex.push(rowIndex);
+                } else {
+                    const delIndex = this.selectedIndex.indexOf(rowIndex);
+                    this.selectedIndex.splice(delIndex, 1);
+                }
+            
+                this.isAll = this.selectedIndex.length === this.rows.length;
+                this.isIndeterminate = this.selectedIndex.length > 0 && !this.isAll;
+            },
+
+            handleRowSelectAll (isChecked) {
+                this.isAll = isChecked;
+                this.isIndeterminate = false;
+                this.selectedIndex = isChecked ? Array.from(Array(this.rows.length).keys()) : [];
             }
         },
 
@@ -492,19 +540,28 @@
         },
 
         mounted () {
+            if (!Bus._Vue) {
+                throw new Error('[v2-table]: Must be call Vue.use(v2-table) before used');
+            }
+
             this.containerWith = this.$el.clientWidth;
             const columnComponents = this.$slots.default
                 .filter(column => column.componentInstance && column.componentInstance.$options.name === 'v2-table-column')
                 .map(column => column.componentInstance);
             
-            const normalColumnComponents = columnComponents.filter(column => (!['left', 'right'].includes(column.fixed) || this.isValidNumber(column.width)));
-            const fixedLeftColumnComponents = columnComponents.filter(column => (column.fixed === 'left' && !this.isValidNumber(column.width)));
-            const fixedRightColumnComponents = columnComponents.filter(column => (column.fixed === 'right' && !this.isValidNumber(column.width)));
+            const selectionColumnComponents = this.getColumnComponentsByType(columnComponents, 'selection');
+            const normalColumnComponents = this.getColumnComponentsByType(columnComponents, 'normal');
+            const fixedLeftColumnComponents = this.getColumnComponentsByType(columnComponents, 'left');
+            const fixedRightColumnComponents = this.getColumnComponentsByType(columnComponents, 'right');
 
-            this.columns = [].concat(fixedLeftColumnComponents, normalColumnComponents, fixedRightColumnComponents);
-            this.leftColumns = [].concat(fixedLeftColumnComponents);
+            this.columns = [].concat(selectionColumnComponents, fixedLeftColumnComponents, normalColumnComponents, fixedRightColumnComponents);
+            this.leftColumns = fixedLeftColumnComponents.length > 0 ? [].concat(selectionColumnComponents, fixedLeftColumnComponents) : [].concat(fixedLeftColumnComponents);
             this.rightColumns = [].concat(fixedRightColumnComponents);
             this.rows = [].concat(this.data);
+
+            console.log('ssssssss', selectionColumnComponents);
+            console.log('ccccccc', normalColumnComponents);
+            console.log('fffffff left', fixedLeftColumnComponents, 'rrrr', fixedRightColumnComponents);
 
             // Whether scroll event binding table-container element or table-body element
             if (this.leftColumns.length || this.rightColumns.length || this.bodyHeight > 100) {
@@ -513,6 +570,13 @@
 
             if (this.total > 0 && this.shownPagination) {
                 this.computedTotalPage();
+            }
+
+            // Listen row click selected event
+            if (selectionColumnComponents.length > 0) {
+                this.eventBus = Bus.createEventBus();
+                this.eventBus.$on('row-select', this.handleRowSelect);
+                this.eventBus.$on('row-select-all', this.handleRowSelectAll);
             }
             
             this.$nextTick(() => {
