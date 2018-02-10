@@ -121,5 +121,10 @@ npm i
 npm run dev
 ```
 
+## Thanks
+
+* [Element UI](http://element.eleme.io/2.0/#/en-US).
+* [浅谈表格组件的实现：固定表头和固定列](https://zhuanlan.zhihu.com/p/33280304)
+
 ## LICENSE
 MIT
