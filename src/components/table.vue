@@ -290,6 +290,12 @@
                 default: 'auto'
             },
 
+            updatedSelection: {
+                // whether updated selection row when data is changed.
+                type: Boolean,
+                default: false
+            },
+
             rowClassName: [String, Function]
         },
 
@@ -356,6 +362,15 @@
                 immediate: true,
                 handler (val) {
                     this.rows = [].concat(val);
+                    if (this.updatedSelection && this.selectedIndex.length > 0) {
+                        this.emitSelectChange();
+                        return;
+                    } 
+
+                    if (this.selectedIndex.length > 0) {
+                        // reset selection status.
+                        this.resetSelection();
+                    }
                 }
             },
 
@@ -363,6 +378,10 @@
                 if (val > 0 && this.shownPagination) {
                     this.computedTotalPage();
                 }
+            },
+
+            curPage () {
+                this.resetSelection();
             }
         },
 
@@ -510,6 +529,22 @@
                 return cols;
             },
 
+            resetSelection () {
+                this.selectedIndex = [];
+                this.isAll = false;
+                this.isIndeterminate = false;
+                this.emitSelectChange();
+            },
+
+            emitSelectChange () {
+                const rows = [];
+                this.selectedIndex.forEach(item => {
+                    rows.push(this.rows[item]);
+                });
+
+                this.$emit('select-change', rows);
+            },
+
             handleRowSelect (isChecked, rowIndex) {
                 if (isChecked) {
                     this.selectedIndex.push(rowIndex);
@@ -520,12 +555,14 @@
             
                 this.isAll = this.selectedIndex.length === this.rows.length;
                 this.isIndeterminate = this.selectedIndex.length > 0 && !this.isAll;
+                this.emitSelectChange();
             },
 
             handleRowSelectAll (isChecked) {
                 this.isAll = isChecked;
                 this.isIndeterminate = false;
                 this.selectedIndex = isChecked ? Array.from(Array(this.rows.length).keys()) : [];
+                this.emitSelectChange();
             }
         },
 
@@ -558,10 +595,6 @@
             this.leftColumns = fixedLeftColumnComponents.length > 0 ? [].concat(selectionColumnComponents, fixedLeftColumnComponents) : [].concat(fixedLeftColumnComponents);
             this.rightColumns = [].concat(fixedRightColumnComponents);
             this.rows = [].concat(this.data);
-
-            console.log('ssssssss', selectionColumnComponents);
-            console.log('ccccccc', normalColumnComponents);
-            console.log('fffffff left', fixedLeftColumnComponents, 'rrrr', fixedRightColumnComponents);
 
             // Whether scroll event binding table-container element or table-body element
             if (this.leftColumns.length || this.rightColumns.length || this.bodyHeight > 100) {
