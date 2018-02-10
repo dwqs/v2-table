@@ -15,8 +15,7 @@ yarn:
 ```
 yarn add  v2-table
 ```
-
-## Get Started
+## 快速开始
 
 ```
 import Vue from 'vue';
