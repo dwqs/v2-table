@@ -1,5 +1,6 @@
 ![npm-version](https://img.shields.io/npm/v/v2-table.svg) ![license](https://img.shields.io/npm/l/v2-table.svg)
 
+[中文 README](./README_CN.md);
 # v2-table
 A simple table component based Vue 2.x.
 ## Installation
