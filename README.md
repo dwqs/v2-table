@@ -85,8 +85,9 @@ More demo to visit [here](https://dwqs.github.io/v2-table).
 
 |  Event Name  |  Description  |  Parameters |
 |  :--:  |  :--:  |  :--: |
-| sort-change | triggers when Table's sorting changes | { prop, order } |
-| page-change | triggers when Table's page changes | currentPage |
+| sort-change | triggers when table's sorting changes | { prop, order } |
+| page-change | triggers when table's page changes | currentPage |
+| select-change | triggers when selection changes | rows |
 
 ### Table Slot
 
@@ -105,6 +106,7 @@ More demo to visit [here](https://dwqs.github.io/v2-table).
 | sortable | Boolean | true/false | false | whether column can be sorted. |
 | align | String | left/center/right | center | alignment |
 | fixed | String | left/right | - | fixed column to left or right |
+| type | String | - | - | type of the column |
 
 ## Development
 
