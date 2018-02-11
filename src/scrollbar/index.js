@@ -1,4 +1,4 @@
-import './scrollbar.less';
+import '../style/scrollbar.less';
 
 import {
     createDiv,

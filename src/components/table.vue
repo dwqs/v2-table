@@ -157,7 +157,7 @@
                     </slot>
                 </div>
             </div>
-            <div class="v2-table__pagination-box" v-if="shownPagination && total > 0">
+            <div class="v2-table__pagination-box" v-if="shownPagination" v-show="total > 0">
                 <div class="pagination-text-info" v-if="paginationInfo.text" v-html="paginationInfo.text"></div>
                 <div class="v2-table__pagination" @click="changeCurPage">
                     <span 
