@@ -36,7 +36,7 @@
     overflow: hidden;
 }
 
-.v2-table__header-wrapper, .v2-table__body-wrapper {
+.v2-table__header-wrapper, .v2-table__body-wrapper, .v2-table__footer-wrapper {
     width: 100%;
     overflow: hidden;
 }
@@ -48,7 +48,7 @@
     }
 }
 
-.v2-table__body, .v2-table__header {
+.v2-table__body, .v2-table__header, .v2-table__footer {
     display: table;
     table-layout: fixed;
     width: 100%;
@@ -68,6 +68,9 @@
             border-right: 1px solid @border-primary-color;
             border-left: 1px solid @border-primary-color;
         }
+    }
+    &.v2-table__footer-border {
+
     }
 }
 
@@ -116,6 +119,9 @@
         /** 简化列的固定，后续提供类似 rowHeight/colHeight 等属性来设置行高 **/
         white-space: nowrap;
         text-overflow: ellipsis;
+    }
+    &.v2-table__footer-cell {
+        background-color: @background-color-hover;
     }
 }
 
