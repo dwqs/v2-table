@@ -80,6 +80,7 @@ More demo to visit [here](https://dwqs.github.io/v2-table).
 | shown-pagination | Boolean | - | false | whether showing pagination of table data |
 | total | Number | - | 0 | all data of table, it\'s needed when `shown-pagination` is true |
 | height | Number/String | - | auto | table\'s height |
+| row-height | Number/String | - | 40 | row\'s height |
 
 
 ### Table Events
