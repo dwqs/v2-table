@@ -331,26 +331,16 @@
 
 ```html
 <template>
-  <v2-table :data="list4" border
-    :total="total"
-    :loading="loading"
-    @page-change="handlePageChange"
-    :pagination-info="paginationInfo"
-    @select-change="handleSelectChange"
-    :shown-pagination="true">
-    <v2-table-column
-      type="selection"
-      width="45">
-    </v2-table-column>
+  <v2-table :data="list4" border :show-summary="true" height="300">
     <v2-table-column label="Date" prop="date" ></v2-table-column>
-    <v2-table-column label="Name" prop="name" width="100"></v2-table-column>
+    <v2-table-column label="Name" prop="name" width="100" fixed="left"></v2-table-column>
     <v2-table-column label="Address" prop="address" width="150"></v2-table-column>
     <v2-table-column label="Birthday" prop="birthDay"></v2-table-column>
-    <v2-table-column label="Songs" prop="songs" width="100"></v2-table-column>
+    <v2-table-column label="Songs" prop="songs" width="100" fixed="right"></v2-table-column>
     <v2-table-column label="Province" prop="province" width="120"></v2-table-column>
     <v2-table-column label="City" prop="city"></v2-table-column>
     <v2-table-column label="Country" prop="country"></v2-table-column>
-    <v2-table-column label="Age" prop="age"></v2-table-column>
+    <v2-table-column label="Age" prop="age" width="90"></v2-table-column>
     <v2-table-column label="Salary" prop="salary"></v2-table-column>
     <v2-table-column label="Desc" prop="desc"></v2-table-column>
   </v2-table> 
@@ -1558,6 +1548,159 @@ Sort the data to find or compare data quickly./对表格进行排序，可快速
     methods: {
       handleSelectChange (rows) {
         console.log(rows);
+      }
+    }
+  }
+</script> 
+```
+:::
+
+## Summary row/表尾合计行
+
+:::demo You can add the summary row by setting `show-summary` to `true`. / 将 `show-summary`设置为 `true` 就会在表格尾部展示合计行。
+
+```html
+<template>
+  <v2-table :data="list4" border :show-summary="true" height="300">
+    <v2-table-column label="Date" prop="date" ></v2-table-column>
+    <v2-table-column label="Name" prop="name" width="100" fixed="left"></v2-table-column>
+    <v2-table-column label="Address" prop="address" width="150"></v2-table-column>
+    <v2-table-column label="Birthday" prop="birthDay"></v2-table-column>
+    <v2-table-column label="Songs" prop="songs" width="100" fixed="right"></v2-table-column>
+    <v2-table-column label="Province" prop="province" width="120"></v2-table-column>
+    <v2-table-column label="City" prop="city"></v2-table-column>
+    <v2-table-column label="Country" prop="country"></v2-table-column>
+    <v2-table-column label="Age" prop="age" width="90"></v2-table-column>
+    <v2-table-column label="Salary" prop="salary"></v2-table-column>
+    <v2-table-column label="Desc" prop="desc"></v2-table-column>
+  </v2-table> 
+</template>
+
+<script>
+  export default {
+    data () {
+      return {
+        list4: [{
+          date: '2017-12-02',
+          name: 'test1',
+          address: 'Shenzhen,China',
+          birthDay: '1988-09-08',
+          songs: 100,
+          province: 'Guangdong',
+          city: 'Shenzhen',
+          country: 'China',
+          age: 30,
+          salary: 12000,
+          desc: 'no desc'
+        }, {
+          date: '2017-11-02',
+          name: 'test2',
+          address: 'Guangzhou,China',
+          birthDay: '1978-09-08',
+          songs: 98,
+          province: 'Guangdong',
+          city: 'Guangzhou',
+          country: 'China',
+          age: 40,
+          salary: 10000,
+          desc: 'no desc'
+        }, {
+          date: '2018-01-02',
+          name: 'test3',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20,
+          salary: 30000,
+          desc: 'no desc'
+        },{
+          date: '2018-01-02',
+          name: 'test4',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20,
+          salary: 30000,
+          desc: 'no desc'
+        }, {
+          date: '2018-01-02',
+          name: 'test5',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20,
+          salary: 30000,
+          desc: 'no desc'
+        }, {
+          date: '2018-01-02',
+          name: 'test6',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20,
+          salary: 30000,
+          desc: 'no desc'
+        }, {
+          date: '2018-01-02',
+          name: 'test7',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20,
+          salary: 30000,
+          desc: 'no desc'
+        }, {
+          date: '2018-01-02',
+          name: 'test8',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20,
+          salary: 30000,
+          desc: 'no desc'
+        }, {
+          date: '2018-01-02',
+          name: 'test9',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20,
+          salary: 30000,
+          desc: 'no desc'
+        }, {
+          date: '2018-01-02',
+          name: 'test10',
+          address: 'Shaoyang,Hunan',
+          birthDay: '1998-12-08',
+          songs: 80,
+          province: 'Hunan',
+          city: 'Shaoyang',
+          country: 'China',
+          age: 20,
+          salary: 30000,
+          desc: 'no desc'
+        }]
       }
     }
   }
