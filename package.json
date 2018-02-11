@@ -28,11 +28,12 @@
   ],
   "scripts": {
     "prepush": "npm run ilint -q",
-    "prepublishOnly": "npx webpack --config ./webpack.build.config.js --hide-modules",
+    "prepublishOnly": "npm run build",
     "ilint": "npx eslint src/**/*.js src/**/*.vue",
     "fix": "npx eslint --fix src/**/*.js src/**/*.vue",
     "commitmsg": "npx commitlint -e",
     "dev": "npx cross-env NODE_ENV=development node ./build/dev-server.js",
+    "build": "npx webpack --config ./webpack.build.config.js --hide-modules",
     "build:docs": "npx cross-env NODE_ENV=production npx webpack --config ./build/webpack.prod.config.js --hide-modules && mv ./docs/dist/index.html ./docs/"
   },
   "dependencies": {},
