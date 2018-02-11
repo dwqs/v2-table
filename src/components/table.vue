@@ -2,6 +2,7 @@
     <div class="v2-table" ref="table">
         <div class="v2-table__table-wrapper">
             <div class="v2-table__table-container" ref="container">
+                <!-- header -->
                 <div class="v2-table__header-wrapper" ref="header" :style="{width: isContainerScroll ? contentWidth + 'px' : '100%'}">
                     <div :class="[
                         'v2-table__header',
@@ -16,6 +17,7 @@
                     </div>
                 </div>
 
+                <!-- body -->
                 <div class="v2-table__body-wrapper" ref="body" :style="{width: isContainerScroll ? contentWidth + 'px' : '100%', height: bodyHeight > 100 ? bodyHeight + 'px' : 'auto'}">
                     <div :class="[
                         'v2-table__body',
@@ -26,8 +28,8 @@
                     ]" 
                     ref="content" 
                     :style="{width: !isContainerScroll ? contentWidth + 'px' : '100%'}">
-                        <table-col-group :columns="columns" v-if="data && data.length"></table-col-group>
-                        <div class="v2-table__table-tbody" v-if="data && data.length">
+                        <table-col-group :columns="columns" v-if="data && data.length > 0"></table-col-group>
+                        <div class="v2-table__table-tbody" v-if="data && data.length > 0">
                             <table-row 
                                 v-for="(row, index) in rows" 
                                 :key="index" 
@@ -51,12 +53,18 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- footer -->
+                <div class="v2-table__footer-wrapper" ref="footer" :style="{width: isContainerScroll ? contentWidth + 'px' : '100%'}">
+                    <table-footer type="normal" :cols="columns" v-if="showSummary" v-show="data && data.length > 0"></table-footer>
+                </div>
 
                 <!-- fixed left -->
                 <div :class="[
                     'v2-table-fixed',
                     'v2-table__fixed-left'
                 ]" v-if="leftColumns.length > 0" :style="{width: leftContainerWidth + 'px'}">
+                    <!-- header -->
                     <div class="v2-table-fixed__header-wrapper">
                         <div :class="[
                             'v2-table__header',
@@ -69,6 +77,8 @@
                             <table-header :columns="leftColumns" :sort="sort"></table-header>
                         </div>
                     </div>
+
+                    <!-- body -->
                     <div :class="[
                         'v2-table-fixed__body-wrapper',
                         {
@@ -98,6 +108,11 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- footer -->
+                    <div class="v2-table-fixed__footer-wrapper">
+                        <table-footer type="left" :cols="leftColumns" v-if="showSummary" v-show="data && data.length > 0"></table-footer>
+                    </div>
                 </div>
 
                 <!-- fixed right -->
@@ -105,6 +120,7 @@
                     'v2-table-fixed',
                     'v2-table__fixed-right'
                 ]" v-if="rightColumns.length > 0" :style="{width: (rightContainerWidth + 2) + 'px'}">
+                    <!-- header -->
                     <div class="v2-table-fixed__header-wrapper">
                         <div :class="[
                             'v2-table__header',
@@ -117,6 +133,8 @@
                             <table-header :columns="rightColumns" :sort="sort"></table-header>
                         </div>
                     </div>
+
+                    <!-- body -->
                     <div :class="[
                         'v2-table-fixed__body-wrapper', 
                         {
@@ -145,6 +163,11 @@
                                 </table-row>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- footer -->
+                    <div class="v2-table-fixed__footer-wrapper">
+                        <table-footer type="right" :cols="rightColumns" v-if="showSummary" v-show="data && data.length > 0"></table-footer>
                     </div>
                 </div>
 
@@ -213,6 +236,7 @@
     import TableColGroup from './table-col-group.vue';
     import TableRow from './table-row.vue';
     import EmptyIcon from './empty-icon.vue';
+    import TableFooter from './table-footer.vue';
 
     export default {
         name: 'v2-table',
@@ -296,6 +320,17 @@
                 default: false
             },
 
+            showSummary: {
+                type: Boolean,
+                default: false
+            },
+
+            sumText: {
+                type: String,
+                default: 'Sum'
+            },
+
+            summaryMethod: Function,
             rowClassName: [String, Function]
         },
 
@@ -500,6 +535,10 @@
                 if (this.rightColumns.length > 0 && scrollTop >= 0) {
                     this.$refs.rightBody.scrollTop = scrollTop;
                 }
+
+                if (this.$refs.footer && scrollLeft >= 0) {
+                    this.$refs.footer.scrollLeft = scrollLeft;
+                }
             },
 
             isValidNumber (number) {
@@ -627,7 +666,8 @@
             TableHeader,
             TableRow,
             EmptyIcon,
-            TableColGroup
+            TableColGroup,
+            TableFooter
         },
 
         beforeDestroy () {
