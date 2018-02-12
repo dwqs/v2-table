@@ -24,9 +24,10 @@ module.exports = config => {
             'karma-webpack',
             'karma-mocha-reporter',
             'karma-chai',
-            'karma-coverage'
+            'karma-coverage',
+            'karma-coveralls'
         ],
-        reporters: ['progress', 'mocha', 'coverage'],
+        reporters: ['progress', 'mocha', 'coverage', 'coveralls'],
         singleRun: true,
         autoRun: true,
         mochaReporter: {
@@ -46,8 +47,7 @@ module.exports = config => {
         coverageReporter: {
             dir: './coverage',
             reporters: [
-              { type: 'lcovonly', subdir: '.' },
-              {type: 'json', subdir: '.'},
+              { type: 'lcov', subdir: '.' },
               { type: 'text-summary', subdir: '.' }
             ]
         },
