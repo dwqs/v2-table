@@ -1,5 +1,10 @@
 <template>
-    <div class="v2-table" ref="table">
+    <div :class="[
+        'v2-table',
+        {
+            'v2-table__striped': stripe
+        }
+    ]" ref="table">
         <div class="v2-table__table-wrapper">
             <div class="v2-table__table-container" ref="container">
                 <!-- header -->
