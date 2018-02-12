@@ -47,6 +47,9 @@
                     });
                 }
 
+                col.align === 'left' && cls.push('text-left');
+                col.align === 'right' && cls.push('text-right');
+
                 return cls.join(' ');
             },
 
@@ -56,7 +59,7 @@
                 if (typeof col.width !== undefined && !isNaN(parseInt(col.width))) {
                     style.width = `${parseInt(col.width, 10)}px`;
                 }
-                style.textAlign = ['left', 'center', 'right'].indexOf(col.align) > -1 ? col.align : 'center';
+                // style.textAlign = ['left', 'center', 'right'].indexOf(col.align) > -1 ? col.align : 'center';
                 
                 return style;
             },

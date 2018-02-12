@@ -12,11 +12,13 @@ export default {
         const data = {
             class: {
                 'v2-table__cell': true,
-                'v2-table__row-cell': true
-            },
-            style: {
-                textAlign: ['left', 'center', 'right'].indexOf(column.align) > -1 ? column.align : 'center'
+                'v2-table__row-cell': true,
+                'text-left': column.align === 'left',
+                'text-right': column.align === 'right'
             }
+            // style: {
+            //     textAlign: ['left', 'center', 'right'].indexOf(column.align) > -1 ? column.align : 'center'
+            // }
         };
 
         if (column.type === 'selection') {
