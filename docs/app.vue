@@ -9,7 +9,7 @@
             <p>OR</p>
             <pre>yarn add v2-table</pre>
             <h4>Global Register</h4>
-            <pre>import Vue from 'vue';<br><br>import V2Table from 'v2-table';<br><br>Vue.use(V2Table);<br></pre>
+            <pre>import Vue from 'vue';<br><br>import 'v2-table/dist/index.css';<br/>import V2Table from 'v2-table';<br><br>Vue.use(V2Table);<br></pre>
         </header>
         <div class="docs-content-wrap">
             <example class="docs-content"></example>
