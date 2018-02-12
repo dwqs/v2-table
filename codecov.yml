@@ -1,0 +1,5 @@
+coverage:
+  round: up
+  range: 0..10
+  branch: master
+  precision: 2
