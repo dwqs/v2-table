@@ -46,11 +46,7 @@ module.exports = config => {
         coverageReporter: {
             dir: './coverage',
             reporters: [
-<<<<<<< HEAD
               { type: 'lcovonly', subdir: '.' },
-=======
-              { type: 'lcov', subdir: '.' },
->>>>>>> 80259e8ca54c1c85dfc862d7d08677f110583f83
               { type: 'text-summary', subdir: '.' }
             ]
         },
