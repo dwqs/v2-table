@@ -19,4 +19,6 @@ node_js:
   - '8'
 script:
   - npm test
-  - ./node_modules/.bin/codecov
+  - npm run codecov
+after-success:
+  - cat ./test/coverage/lcov.info | ./node_modules/.bin/codecov  

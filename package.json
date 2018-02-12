@@ -34,7 +34,7 @@
     "commitmsg": "npx commitlint -e",
     "dev": "npx cross-env NODE_ENV=development node ./build/dev-server.js",
     "test": "npx karma start test/karma.conf.js --single-run",
-    "report-coverage": "npx codecov",
+    "codecov": "npx codecov",
     "build": "rm -rf dist && npx webpack --config ./webpack.build.config.js --hide-modules",
     "build:docs": "npx cross-env NODE_ENV=production npx webpack --config ./build/webpack.prod.config.js --hide-modules && mv ./docs/dist/index.html ./docs/"
   },
