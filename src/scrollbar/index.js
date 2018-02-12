@@ -1,5 +1,3 @@
-import '../style/scrollbar.less';
-
 import {
     createDiv,
     getCSS,

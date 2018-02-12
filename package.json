@@ -33,7 +33,7 @@
     "fix": "npx eslint --fix src/**/*.js src/**/*.vue",
     "commitmsg": "npx commitlint -e",
     "dev": "npx cross-env NODE_ENV=development node ./build/dev-server.js",
-    "build": "npx webpack --config ./webpack.build.config.js --hide-modules",
+    "build": "rm -rf dist && npx webpack --config ./webpack.build.config.js --hide-modules",
     "build:docs": "npx cross-env NODE_ENV=production npx webpack --config ./build/webpack.prod.config.js --hide-modules && mv ./docs/dist/index.html ./docs/"
   },
   "dependencies": {},
@@ -59,7 +59,7 @@
     "eslint": "^4.8.0",
     "eslint-config-vue": "^2.0.2",
     "eslint-plugin-vue": "^2.1.0",
-    "extract-text-webpack-plugin": "^3.0.1",
+    "extract-text-webpack-plugin": "^3.0.2",
     "github-markdown-css": "^2.10.0",
     "html-webpack-plugin": "^2.30.1",
     "husky": "^0.14.3",

@@ -11,8 +11,6 @@
 </template>
 
 <script>
-    import '../style/icon.less';
-
     export default {
         name: 'empty-icon'
     };
