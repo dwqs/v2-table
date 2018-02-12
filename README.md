@@ -20,6 +20,8 @@ yarn add  v2-table
 
 ```
 import Vue from 'vue';
+
+import 'v2-table/dist/index.css'; 
 import V2Table from 'v2-table';
 
 Vue.use(V2Table)
