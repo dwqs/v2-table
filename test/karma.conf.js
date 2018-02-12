@@ -51,7 +51,8 @@ module.exports = config => {
             ]
         },
         preprocessors: {
-            './table.spec.js': ['webpack', 'sourcemap']
+            './table.spec.js': ['webpack', 'sourcemap'],
+            // './table.spec.js': ['webpack', 'coverage'] //generate coverage reports on codecov.io
         },
         logLevel: config.LOG_INFO,
         colors: true,
