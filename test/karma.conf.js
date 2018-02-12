@@ -24,10 +24,9 @@ module.exports = config => {
             'karma-webpack',
             'karma-mocha-reporter',
             'karma-chai',
-            'karma-coverage',
-            'karma-coveralls'
+            'karma-coverage'
         ],
-        reporters: ['progress', 'mocha', 'coverage', 'coveralls'],
+        reporters: ['progress', 'mocha', 'coverage'],
         singleRun: true,
         autoRun: true,
         mochaReporter: {
