@@ -36,6 +36,14 @@ module.exports = {
             }
         ]
     },
+    externals: {
+        'beautify-scrollbar': {
+            root: 'BeautifyScrollbar',
+            commonjs2: 'beautify-scrollbar',
+            commonjs: 'beautify-scrollbar',
+            amd: 'beautify-scrollbar'
+        }
+    },
     plugins: [
         new ExtractTextPlugin({
             filename: '[name].css'
