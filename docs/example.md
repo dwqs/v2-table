@@ -2,6 +2,7 @@
   export default {
     data () {
       return {
+        list5: [],
         loading: false,
         currentPage: 1,
         total: 198,
@@ -303,6 +304,32 @@
       handleSelectChange (rows) {
         console.log(rows);
       }
+    },
+
+    mounted () {
+      const item = {
+          date: '2017-12-02',
+          name: '',
+          address: 'Shenzhen,China',
+          birthDay: '1988-09-08',
+          songs: 0,
+          province: 'Guangdong',
+          city: 'Shenzhen',
+          country: 'China',
+          age: 30,
+          salary: 12000,
+          desc: 'no desc'
+      };
+      const list5 = [];
+
+      for(let i = 0; i < 50; i++) {
+        list5.push(Object.assign({}, item, {
+          name: `test${i+1}`,
+          songs: i+1
+        }));
+      }
+
+      this.list5 = [].concat(list5);
     }
   }
 </script>
@@ -331,7 +358,7 @@
 
 ```html
 <template>
-  <v2-table :data="list4" border :show-summary="true" height="300">
+  <v2-table :data="list5" border :lazy-load="true" height="300">
     <v2-table-column label="Date" prop="date" ></v2-table-column>
     <v2-table-column label="Name" prop="name" width="100" fixed="left"></v2-table-column>
     <v2-table-column label="Address" prop="address" width="150"></v2-table-column>
@@ -352,7 +379,7 @@
 
 Basic table is just for data display./基础的表格展示用法。
 
-:::demo  After setting attribute `data` of `v2-table` with an object array, you can use `prop` in `v2-table-column` to insert data to table columns, and set the attribute `label` to define the column name. / 当 `v2-table`元素中注入 `data` 对象数组后，在 `v2-table-column` 中用 `prop` 属性来对应对象中的键名即可填入数据，用 `label` 属性来定义表格的列名。\n sdas
+:::demo  After setting attribute `data` of `v2-table` with an object array, you can use `prop` in `v2-table-column` to insert data to table columns, and set the attribute `label` to define the column name. / 当 `v2-table`元素中注入 `data` 对象数组后，在 `v2-table-column` 中用 `prop` 属性来对应对象中的键名即可填入数据，用 `label` 属性来定义表格的列名。
 
 ```html
 <template>
@@ -525,6 +552,64 @@ Basic table is just for data display./基础的表格展示用法。
           age: 20
         }]
       }
+    }
+  }
+</script>
+```
+:::
+
+## Lazy-load/懒加载
+:::demo Set attribute `lazy-load` of v2-table to true, and set the height(it should be gt 100) of table. / 设置 Table 组件的 `lazy-load` 属性为 true，并为 Table 设置一个高度(需大于100)。
+
+```html
+<template>
+  <v2-table :data="list5" border :lazy-load="true" height="300">
+    <v2-table-column label="Date" prop="date" ></v2-table-column>
+    <v2-table-column label="Name" prop="name" width="100" fixed="left"></v2-table-column>
+    <v2-table-column label="Address" prop="address" width="150"></v2-table-column>
+    <v2-table-column label="Birthday" prop="birthDay"></v2-table-column>
+    <v2-table-column label="Songs" prop="songs" width="100" fixed="right"></v2-table-column>
+    <v2-table-column label="Province" prop="province" width="120"></v2-table-column>
+    <v2-table-column label="City" prop="city"></v2-table-column>
+    <v2-table-column label="Country" prop="country"></v2-table-column>
+    <v2-table-column label="Age" prop="age" width="90"></v2-table-column>
+    <v2-table-column label="Salary" prop="salary"></v2-table-column>
+    <v2-table-column label="Desc" prop="desc"></v2-table-column>
+  </v2-table> 
+</template>
+
+<script>
+  export default {
+    data () {
+      return {
+        list5: []
+      }
+    },
+
+    mounted () {
+      const item = {
+          date: '2017-12-02',
+          name: '',
+          address: 'Shenzhen,China',
+          birthDay: '1988-09-08',
+          songs: 0,
+          province: 'Guangdong',
+          city: 'Shenzhen',
+          country: 'China',
+          age: 30,
+          salary: 12000,
+          desc: 'no desc'
+      };
+      const list5 = [];
+
+      for(let i = 0; i < 50; i++) {
+        list5.push(Object.assign({}, item, {
+          name: `test${i+1}`,
+          songs: i+1
+        }));
+      }
+
+      this.list5 = [].concat(list5);
     }
   }
 </script>
