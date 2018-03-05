@@ -234,7 +234,7 @@
 </template>
 
 <script>
-    import ScrollBar from '../scrollbar/index.js';
+    import BeautifyScrollbar from 'beautify-scrollbar';
     import Bus from '../bus.js';
 
     import TableHeader from './table-header.vue';
@@ -528,21 +528,22 @@
             },
 
             // 固定头部时更改头部的 scroll left
-            updateHeaderWrapScrollLeft ({ scrollLeft, scrollTop }) {
-                if (!this.isContainerScroll && scrollLeft >= 0) {
-                    this.$refs.header.scrollLeft = scrollLeft;
+            updateHeaderWrapScrollLeft () {
+                const ele = this.scrollbar.element;
+                if (!this.isContainerScroll) {
+                    this.$refs.header.scrollLeft = ele.scrollLeft;
                 }
 
-                if (this.leftColumns.length && scrollTop >= 0) {
-                    this.$refs.leftBody.scrollTop = scrollTop;
+                if (this.leftColumns.length) {
+                    this.$refs.leftBody.scrollTop = ele.scrollTop;
                 }
 
-                if (this.rightColumns.length > 0 && scrollTop >= 0) {
-                    this.$refs.rightBody.scrollTop = scrollTop;
+                if (this.rightColumns.length > 0) {
+                    this.$refs.rightBody.scrollTop = ele.scrollTop;
                 }
 
-                if (this.$refs.footer && scrollLeft >= 0) {
-                    this.$refs.footer.scrollLeft = scrollLeft;
+                if (this.$refs.footer) {
+                    this.$refs.footer.scrollLeft = ele.scrollLeft;
                 }
             },
 
@@ -657,13 +658,13 @@
             }
             
             this.$nextTick(() => {
-                const container = this.isContainerScroll ? this.$refs.container : this.$refs.body;
+                this.container = this.isContainerScroll ? this.$refs.container : this.$refs.body;
 
-                this.scrollbar = new ScrollBar(container, {
+                this.scrollbar = new BeautifyScrollbar(this.container, {
                     contentWidth: this.$refs.content.scrollWidth,
-                    contentHeight: this.$refs.content.scrollHeight,
-                    callBack: this.updateHeaderWrapScrollLeft
+                    contentHeight: this.$refs.content.scrollHeight
                 });
+                this.container.addEventListener('bs-update-scroll-value', this.updateHeaderWrapScrollLeft, false);
             });
         },
 
@@ -677,6 +678,7 @@
 
         beforeDestroy () {
             this.scrollbar && this.scrollbar.destroy();
+            this.container.removeEventListener('bs-update-scroll-value', this.updateHeaderWrapScrollLeft, false);
         }
     };
 </script>
