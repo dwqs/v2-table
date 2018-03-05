@@ -48,7 +48,7 @@
                         <!-- Empty data -->
                         <div class="v2-table__empty-data" 
                             v-if="!data || !data.length" 
-                            :style="{width: contentWidth + 'px', minHeight: bodyHeight <= 100 ? '175px' : bodyHeight + 'px'}">
+                            :style="{width: contentWidth + 'px', minHeight: bodyHeight <= VOEWPORT_MIN_HEIGHT ? '175px' : bodyHeight + 'px'}">
                             <slot name="empty">
                                 <div class="v2-table__empty-default">
                                     <empty-icon></empty-icon>
