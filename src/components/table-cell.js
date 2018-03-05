@@ -34,7 +34,7 @@ export default {
         }
 
         data.domProps = {};
-        data.domProps.innerHTML = row[column.prop] ? row[column.prop] : '';
+        data.domProps.innerHTML = typeof row[column.prop] !== 'undefined' ? row[column.prop] : '';
 
         return createElement('div', data);
     }
