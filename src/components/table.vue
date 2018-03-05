@@ -23,7 +23,7 @@
                 </div>
 
                 <!-- body -->
-                <div class="v2-table__body-wrapper" ref="body" :style="{width: isContainerScroll ? contentWidth + 'px' : '100%', height: bodyHeight > 100 ? bodyHeight + 'px' : 'auto'}">
+                <div class="v2-table__body-wrapper" ref="body" :style="{width: isContainerScroll ? contentWidth + 'px' : '100%', height: bodyHeight > VOEWPORT_MIN_HEIGHT ? bodyHeight + 'px' : 'auto'}">
                     <div :class="[
                         'v2-table__body',
                         {
@@ -32,7 +32,7 @@
                         }
                     ]" 
                     ref="content" 
-                    :style="{width: !isContainerScroll ? contentWidth + 'px' : '100%'}">
+                    :style="{width: !isContainerScroll ? contentWidth + 'px' : '100%', marginTop: contentMarginTop + 'px'}">
                         <table-col-group :columns="columns" v-if="data && data.length > 0"></table-col-group>
                         <div class="v2-table__table-tbody" v-if="data && data.length > 0">
                             <table-row 
@@ -91,7 +91,7 @@
                         }
                     ]" 
                     ref="leftBody" 
-                    :style="{ height: bodyHeight > 100 ? bodyHeight + 'px' : !data.length ? '175px' : 'auto'}"
+                    :style="{ height: bodyHeight > VOEWPORT_MIN_HEIGHT ? bodyHeight + 'px' : !data.length ? '175px' : 'auto'}"
                     >
                         <div :class="[
                             'v2-table__body',
@@ -99,7 +99,7 @@
                                 'v2-table__border': border,
                                 'v2-table__body-border': border
                             }
-                        ]">
+                        ]" :style="{marginTop: contentMarginTop + 'px'}">
                             <table-col-group :columns="leftColumns"></table-col-group>
                             <div class="v2-table__table-tbody">
                                 <table-row 
@@ -147,7 +147,7 @@
                         }
                     ]" 
                     ref="rightBody" 
-                    :style="{ height: bodyHeight > 100 ? bodyHeight + 'px' : !data.length ? '175px' : 'auto'}"
+                    :style="{ height: bodyHeight > VOEWPORT_MIN_HEIGHT ? bodyHeight + 'px' : !data.length ? '175px' : 'auto'}"
                     >
                         <div :class="[
                             'v2-table__body',
@@ -155,7 +155,7 @@
                                 'v2-table__border': border,
                                 'v2-table__body-border': border
                             }
-                        ]">
+                        ]" :style="{marginTop: contentMarginTop + 'px'}">
                             <table-col-group :columns="rightColumns"></table-col-group>
                             <div class="v2-table__table-tbody">
                                 <table-row 
@@ -336,7 +336,11 @@
             },
 
             summaryMethod: Function,
-            rowClassName: [String, Function]
+            rowClassName: [String, Function],
+            lazyLoad: {
+                type: Boolean,
+                default: false
+            }
         },
 
         provide () {
@@ -346,6 +350,9 @@
         },
 
         data () {
+            const ch = Number.parseInt(this.height, 10);
+            const rh = Number.parseInt(this.rowHeight, 10);
+
             return {
                 rows: [],
                 columns: [],
@@ -359,7 +366,6 @@
                 hoverRowIndex: -1,
 
                 containerWith: 0,
-                bodyHeight: 100,
                 sort: {
                     prop: '',
                     order: ''
@@ -372,7 +378,16 @@
                 curPage: 1,
                 totalPage: 1,
                 renderPages: [],
-                pageDiff: 2
+                pageDiff: 2,
+
+                // for on demand loading
+                VOEWPORT_MIN_HEIGHT: 100,
+                ITEM_MIN_HEIGHT: 20,
+                rh: (this.isValidNumber(rh) || rh <= this.ITEM_MIN_HEIGHT) ? this.ITEM_MIN_HEIGHT : rh,
+                contentHeight: NaN,
+                bodyHeight: this.VOEWPORT_MIN_HEIGHT,
+                contentMarginTop: 0,
+                scrollTop: 0
             };
         },
 
@@ -393,6 +408,14 @@
 
             rightContainerWidth () {
                 return this.getFixedContainerWidth(this.rightColumns);
+            },
+
+            isMetLazyLoad () {
+                return this.lazyLoad && !this.shownPagination && this.bodyHeight > this.VOEWPORT_MIN_HEIGHT;
+            },
+
+            tbodyHeight () {
+                return Math.ceil(this.bodyHeight / this.rh) * this.rh;
             }
         },
 
@@ -401,7 +424,19 @@
                 deep: true,
                 immediate: true,
                 handler (val) {
-                    this.rows = [].concat(val);
+                    if (this.isMetLazyLoad) {
+                        this.initRenderRows();
+                        if (this.scrollbar) {
+                            this.$nextTick(() => {
+                                this.scrollbar.update({
+                                    contentHeight: this.contentHeight
+                                });
+                            });
+                        }
+                    } else {
+                        this.rows = [].concat(val);
+                    }
+
                     if (this.updatedSelection && this.selectedIndex.length > 0) {
                         this.emitSelectChange();
                         return;
@@ -422,6 +457,10 @@
 
             curPage () {
                 this.resetSelection();
+            },
+
+            scrollTop (val) {
+                this.updateRenderRows();
             }
         },
 
@@ -545,6 +584,8 @@
                 if (this.$refs.footer) {
                     this.$refs.footer.scrollLeft = ele.scrollLeft;
                 }
+                
+                this.isMetLazyLoad && (this.scrollTop = ele.scrollTop);
             },
 
             isValidNumber (number) {
@@ -608,6 +649,32 @@
                 this.isIndeterminate = false;
                 this.selectedIndex = isChecked ? Array.from(Array(this.rows.length).keys()) : [];
                 this.emitSelectChange();
+            },
+
+            // on demand loading
+            initRenderRows () {
+                this.contentHeight = Math.ceil(this.data.length * this.rh);
+                this.rows = this.getRenderRows();
+            },
+
+            updateRenderRows () {
+                this.rows = this.getRenderRows();
+            },
+
+            getRenderRows () {
+                const list = [];
+
+                const from = Math.floor(this.scrollTop / this.rh); 
+                const to = Math.ceil((this.scrollTop + this.tbodyHeight) / this.rh);
+
+                for (let i = from; i < to; i++) {
+                    if (typeof this.data[i] !== 'undefined') {
+                        list.push(this.data[i]);
+                    }
+                }
+
+                this.contentMarginTop = from * this.rh;
+                return list;
             }
         },
 
@@ -616,8 +683,8 @@
                 order: this.defaultSort.order || 'ascending'
             });
 
-            if (this.height !== 'auto' && !isNaN(parseInt(this.height, 10))) {
-                this.bodyHeight = parseInt(this.height, 10) > 100 ? parseInt(this.height, 10) : 100;
+            if (this.height !== 'auto' && !this.isValidNumber(this.height)) {
+                this.bodyHeight = parseInt(this.height, 10) > this.VOEWPORT_MIN_HEIGHT ? parseInt(this.height, 10) : this.VOEWPORT_MIN_HEIGHT;
             }
         },
 
@@ -639,10 +706,15 @@
             this.columns = [].concat(selectionColumnComponents, fixedLeftColumnComponents, normalColumnComponents, fixedRightColumnComponents);
             this.leftColumns = fixedLeftColumnComponents.length > 0 ? [].concat(selectionColumnComponents, fixedLeftColumnComponents) : [].concat(fixedLeftColumnComponents);
             this.rightColumns = [].concat(fixedRightColumnComponents);
-            this.rows = [].concat(this.data);
+
+            if (this.data.length && this.isMetLazyLoad) {
+                this.initRenderRows();
+            } else if (this.data.length) {
+                this.rows = [].concat(this.data);
+            }
 
             // Whether scroll event binding table-container element or table-body element
-            if (this.leftColumns.length || this.rightColumns.length || this.bodyHeight > 100) {
+            if (this.leftColumns.length || this.rightColumns.length || this.bodyHeight > this.VOEWPORT_MIN_HEIGHT) {
                 this.isContainerScroll = false;
             }
 
@@ -656,13 +728,12 @@
                 this.eventBus.$on('row-select', this.handleRowSelect);
                 this.eventBus.$on('row-select-all', this.handleRowSelectAll);
             }
-            
+
             this.$nextTick(() => {
                 this.container = this.isContainerScroll ? this.$refs.container : this.$refs.body;
-
                 this.scrollbar = new BeautifyScrollbar(this.container, {
                     contentWidth: this.$refs.content.scrollWidth,
-                    contentHeight: this.$refs.content.scrollHeight
+                    contentHeight: this.isMetLazyLoad ? this.contentHeight : this.$refs.content.scrollHeight
                 });
                 this.container.addEventListener('bs-update-scroll-value', this.updateHeaderWrapScrollLeft, false);
             });
