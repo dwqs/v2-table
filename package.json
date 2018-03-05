@@ -52,6 +52,7 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-2": "^6.24.1",
+    "beautify-scrollbar": "^1.0.2",
     "chai": "^4.1.2",
     "clean-webpack-plugin": "^0.1.17",
     "codecov": "^3.0.0",

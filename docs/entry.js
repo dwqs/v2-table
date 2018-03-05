@@ -1,5 +1,6 @@
 import 'github-markdown-css';
 import 'highlight.js/styles/color-brewer.css';
+import 'beautify-scrollbar/dist/index.css';
 
 import './common.less';
 
