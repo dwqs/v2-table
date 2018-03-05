@@ -85,6 +85,7 @@ Vue.use(V2Table)
 | show-summary | Boolean | - | false | 是否在表尾显示合计行 |
 | sum-text | String | - | Sum | 合计行第一列的文本 |
 | summary-method | Function({ columns, data }) | - | - | 自定义的合计计算方法 |
+| lazy-load | Boolean | - | false | 是否开启懒加载 |
 
 ### Table Events
 

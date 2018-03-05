@@ -8,12 +8,12 @@ A simple table component based Vue 2.x.
 Install the pkg with npm:
 
 ```
-npm i --save v2-table
+npm i --save v2-table beautify-scrollbar
 ```
 or yarn
 
 ```
-yarn add  v2-table
+yarn add  v2-table beautify-scrollbar
 ```
 
 ## Get Started
@@ -21,6 +21,7 @@ yarn add  v2-table
 ```
 import Vue from 'vue';
 
+import 'beautify-scrollbar/dist/index.css';
 import 'v2-table/dist/index.css'; 
 import V2Table from 'v2-table';
 
@@ -86,6 +87,7 @@ More demo to visit [here](https://dwqs.github.io/v2-table).
 | show-summary | Boolean | - | false | whether to display a summary row |
 | sum-text | String | - | Sum | displayed text for the first column of summary row |
 | summary-method | Function({ columns, data }) | - | - | custom summary method |
+| lazy-load | Boolean | - | false | whether enable lazy-load |
 
 
 ### Table Events
