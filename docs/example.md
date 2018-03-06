@@ -358,7 +358,7 @@
 
 ```html
 <template>
-  <v2-table :data="list5" border :lazy-load="true" height="300" unique-field="name" :updated-selection="true">
+  <v2-table :data="list5" border :lazy-load="true" height="300" unique-field="name">
     <v2-table-column
       type="selection"
       width="45">
