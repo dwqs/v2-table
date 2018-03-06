@@ -325,6 +325,11 @@
                 default: false
             },
 
+            uniqueField: {
+                type: String,
+                default: ''
+            },
+
             showSummary: {
                 type: Boolean,
                 default: false
@@ -623,10 +628,18 @@
             },
 
             emitSelectChange () {
-                const rows = [];
-                this.selectedIndex.forEach(item => {
-                    rows.push(this.rows[item]);
-                });
+                let rows = [];
+                if (this.uniqueField) {
+                    this.selectedIndex.forEach(item => {
+                        const r = this.data.filter(d => d[this.uniqueField] === item);
+                        rows = [].concat(...rows, ...r);
+                    });
+                } else {
+                    // row-index
+                    this.selectedIndex.forEach(item => {
+                        rows.push(this.rows[item]);
+                    });
+                }
 
                 this.$emit('select-change', rows);
             },
@@ -639,26 +652,33 @@
                     this.selectedIndex.splice(delIndex, 1);
                 }
             
-                this.isAll = this.selectedIndex.length === this.rows.length;
+                this.isAll = this.selectedIndex.length === this.data.length;
                 this.isIndeterminate = this.selectedIndex.length > 0 && !this.isAll;
                 this.emitSelectChange();
+            },
+
+            getAllSelectedRows () {
+                if (!this.uniqueField) {
+                    return Array.from(Array(this.data.length).keys());
+                }
+                return this.data.map(item => item[this.uniqueField]);
             },
 
             handleRowSelectAll (isChecked) {
                 this.isAll = isChecked;
                 this.isIndeterminate = false;
-                this.selectedIndex = isChecked ? Array.from(Array(this.rows.length).keys()) : [];
+                this.selectedIndex = isChecked ? this.getAllSelectedRows() : [];
                 this.emitSelectChange();
             },
 
             // on demand loading
             initRenderRows () {
                 this.contentHeight = Math.ceil(this.data.length * this.rh);
-                this.rows = this.getRenderRows();
+                this.rows = [].concat(this.getRenderRows());
             },
 
             updateRenderRows () {
-                this.rows = this.getRenderRows();
+                this.rows = [].concat(this.getRenderRows());
             },
 
             getRenderRows () {
@@ -666,7 +686,7 @@
 
                 const from = Math.floor(this.scrollTop / this.rh); 
                 const to = Math.ceil((this.scrollTop + this.tbodyHeight) / this.rh);
-
+                
                 for (let i = from; i < to; i++) {
                     if (typeof this.data[i] !== 'undefined') {
                         list.push(this.data[i]);

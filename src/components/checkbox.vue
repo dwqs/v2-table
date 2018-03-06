@@ -2,8 +2,8 @@
     <label :class="[
         'v2-checkbox__input',
         {
-            'is-indeterminate': table.isIndeterminate && selectIndex === -1,
-            'is-checked': selectIndex === -1 ? table.isAll : table.selectedIndex.includes(selectIndex)
+            'is-indeterminate': table.isIndeterminate && curRowIndex === -1,
+            'is-checked': isChecked ()
         }
     ]">
         <span class="v2-checkbox__inner"></span>
@@ -15,9 +15,12 @@
     export default {
         name: 'v2-table-checkbox',
         props: {
-            selectIndex: {
-                type: [Number, String],
-                required: true
+            curRowIndex: {
+                type: [Number, String]
+            },
+            curRow: {
+                type: Object,
+                default: () => {}
             }
         },
 
@@ -30,11 +33,27 @@
         inject: ['table'],
 
         methods: {
+            isChecked () {
+                if (this.curRowIndex === -1) {
+                    return this.table.isAll;
+                }
+
+                if (this.table.uniqueField) {
+                    return this.table.selectedIndex.includes(this.curRow[this.table.uniqueField]);
+                }
+
+                return this.table.selectedIndex.includes(curRowIndex);
+            },
+
             handleChange (e) {
-                if (this.selectIndex === -1) {
+                if (this.curRowIndex === -1) {
                     this.table.eventBus.$emit('row-select-all', this.val);
                 } else {
-                    this.table.eventBus.$emit('row-select', this.val, this.selectIndex);
+                    let rowIndex = this.curRowIndex;
+                    if (this.table.uniqueField) {
+                        rowIndex = this.curRow[this.table.uniqueField];
+                    }
+                    this.table.eventBus.$emit('row-select', this.val, rowIndex);
                 }
             }
         }

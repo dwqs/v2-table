@@ -11,7 +11,7 @@
                     <i class="v2-table__sort-caret ascending-caret"></i>
                     <i class="v2-table__sort-caret descending-caret"></i>
                 </span>
-                <check-box v-if="column.type === 'selection'" :select-index="-1"></check-box>
+                <check-box v-if="column.type === 'selection'" :cur-row-index="-1"></check-box>
             </div>
         </div>
     </div>

@@ -20,11 +20,12 @@ export default {
             //     textAlign: ['left', 'center', 'right'].indexOf(column.align) > -1 ? column.align : 'center'
             // }
         };
-
+        
         if (column.type === 'selection') {
             return createElement('div', data, [createElement(CheckBox, {
                 props: {
-                    selectIndex: rowIndex
+                    curRowIndex: rowIndex,
+                    curRow: row
                 }
             })]);
         }
