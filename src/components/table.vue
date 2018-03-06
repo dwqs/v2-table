@@ -654,7 +654,9 @@
             
                 this.isAll = this.selectedIndex.length === this.data.length;
                 this.isIndeterminate = this.selectedIndex.length > 0 && !this.isAll;
-                this.emitSelectChange();
+                this.$nextTick(() => {
+                    this.emitSelectChange();
+                });
             },
 
             getAllSelectedRows () {
@@ -668,7 +670,9 @@
                 this.isAll = isChecked;
                 this.isIndeterminate = false;
                 this.selectedIndex = isChecked ? this.getAllSelectedRows() : [];
-                this.emitSelectChange();
+                this.$nextTick(() => {
+                    this.emitSelectChange();
+                });
             },
 
             // on demand loading
