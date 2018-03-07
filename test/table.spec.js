@@ -171,18 +171,8 @@ describe('v2-table', () => {
             }, DELAY);
         });
 
-        it('fixed not with width', done => {
+        it('fixed column', done => {
             const vm = createTable('label="test1"', 'fixed="left" label="test2"', 'fixed="right" label="test3"');
-            setTimeout(() => {
-                expect(getLabels(vm, '.v2-table__fixed-left .v2-table__column-cell')).to.eql([]);
-                expect(getLabels(vm, '.v2-table__fixed-right .v2-table__column-cell')).to.eql([]);
-                destroyVM(vm);
-                done();
-            }, DELAY);
-        });
-
-        it('fixed with width', done => {
-            const vm = createTable('label="test1"', 'fixed="left" width="100" label="test2"', 'fixed="right" width="100" label="test3"');
             setTimeout(() => {
                 expect(getLabels(vm, '.v2-table__fixed-left .v2-table__column-cell')).to.eql(['test2']);
                 expect(getLabels(vm, '.v2-table__fixed-right .v2-table__column-cell')).to.eql(['test3']);
@@ -190,7 +180,7 @@ describe('v2-table', () => {
                 done();
             }, DELAY);
         });
-
+        
         it('align', done => {
             const vm = createTable('align="left"', 'align="right"');
             const len = getTestData().length + 1;
