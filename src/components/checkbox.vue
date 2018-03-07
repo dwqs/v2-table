@@ -38,22 +38,22 @@
                     return this.table.isAll;
                 }
 
-                if (this.table.uniqueField) {
-                    return this.table.selectedIndex.includes(this.curRow[this.table.uniqueField]);
-                }
+                // if (this.table.uniqueField) {
+                //     return this.table.selectedIndex.includes(this.curRow[this.table.uniqueField]);
+                // }
 
-                return this.table.selectedIndex.includes(curRowIndex);
+                return this.table.selectedIndex.includes(this.curRowIndex);
             },
 
             handleChange (e) {
                 if (this.curRowIndex === -1) {
                     this.table.eventBus.$emit('row-select-all', this.val);
                 } else {
-                    let rowIndex = this.curRowIndex;
-                    if (this.table.uniqueField) {
-                        rowIndex = this.curRow[this.table.uniqueField];
-                    }
-                    this.table.eventBus.$emit('row-select', this.val, rowIndex);
+                    // let rowIndex = this.curRowIndex;
+                    // if (this.table.uniqueField) {
+                    //     rowIndex = this.curRow[this.table.uniqueField];
+                    // }
+                    this.table.eventBus.$emit('row-select', this.val, this.curRowIndex);
                 }
             }
         }

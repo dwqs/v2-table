@@ -7,6 +7,12 @@
     ]" ref="table">
         <div class="v2-table__table-wrapper">
             <div class="v2-table__table-container" ref="container">
+                <!-- 解耦 checkbox 和 table 在DOM结构上的耦合-->
+                <checkboxList v-if="selectionColumn" 
+                    :column="selectionColumn" 
+                    :left="scrollLeft"
+                    :top="scrollTop">
+                </checkboxList>
                 <!-- header -->
                 <div class="v2-table__header-wrapper" ref="header" :style="{width: isContainerScroll ? contentWidth + 'px' : '100%'}">
                     <div :class="[
@@ -68,7 +74,7 @@
                 <div :class="[
                     'v2-table-fixed',
                     'v2-table__fixed-left'
-                ]" v-if="leftColumns.length > 0" :style="{width: leftContainerWidth + 'px'}">
+                ]" v-if="leftColumns.length > 0" :style="{width: leftContainerWidth + 'px', marginLeft: selectionColumn ? selectionColumn.width + 'px' : 0}">
                     <!-- header -->
                     <div class="v2-table-fixed__header-wrapper">
                         <div :class="[
@@ -242,6 +248,7 @@
     import TableRow from './table-row.vue';
     import EmptyIcon from './empty-icon.vue';
     import TableFooter from './table-footer.vue';
+    import CheckboxList from './checkbox-list.vue';
 
     export default {
         name: 'v2-table',
@@ -308,6 +315,11 @@
                 type: [Number, String],
                 default: 40
             },
+            // column header height
+            colHeight: {
+                type: [Number, String],
+                default: 40
+            },
 
             shownPagination: {
                 type: Boolean,
@@ -319,16 +331,16 @@
                 default: 'auto'
             },
 
-            updatedSelection: {
-                // whether updated selection row when data is changed.
-                type: Boolean,
-                default: false
-            },
+            // updatedSelection: {
+            //     // whether updated selection row when data is changed.
+            //     type: Boolean,
+            //     default: false
+            // },
 
-            uniqueField: {
-                type: String,
-                default: ''
-            },
+            // uniqueField: {
+            //     type: String,
+            //     default: ''
+            // },
 
             showSummary: {
                 type: Boolean,
@@ -363,6 +375,7 @@
                 columns: [],
                 leftColumns: [],
                 rightColumns: [],
+                selectionColumn: null,
 
                 // row select status
                 selectedIndex: [],
@@ -392,7 +405,8 @@
                 contentHeight: NaN,
                 bodyHeight: this.VOEWPORT_MIN_HEIGHT,
                 contentMarginTop: 0,
-                scrollTop: 0
+                scrollTop: 0,
+                scrollLeft: 0
             };
         },
 
@@ -442,10 +456,10 @@
                         this.rows = [].concat(val);
                     }
 
-                    if (this.updatedSelection && this.selectedIndex.length > 0) {
-                        this.emitSelectChange();
-                        return;
-                    } 
+                    // if (this.updatedSelection && this.selectedIndex.length > 0) {
+                    //     this.emitSelectChange();
+                    //     return;
+                    // } 
 
                     if (this.selectedIndex.length > 0) {
                         // reset selection status.
@@ -465,7 +479,9 @@
             },
 
             scrollTop (val) {
-                this.updateRenderRows();
+                if (this.isMetLazyLoad) {
+                    this.updateRenderRows();
+                }
             }
         },
 
@@ -590,7 +606,8 @@
                     this.$refs.footer.scrollLeft = ele.scrollLeft;
                 }
                 
-                this.isMetLazyLoad && (this.scrollTop = ele.scrollTop);
+                this.scrollTop = ele.scrollTop;
+                this.scrollLeft = ele.scrollLeft;
             },
 
             isValidNumber (number) {
@@ -628,20 +645,22 @@
             },
 
             emitSelectChange () {
-                let rows = [];
-                if (this.uniqueField) {
-                    this.selectedIndex.forEach(item => {
-                        const r = this.data.filter(d => d[this.uniqueField] === item);
-                        rows = [].concat(...rows, ...r);
-                    });
-                } else {
-                    // row-index
-                    this.selectedIndex.forEach(item => {
-                        rows.push(this.rows[item]);
-                    });
-                }
+                const rows = [];
+                // if (this.uniqueField) {
+                //     this.selectedIndex.forEach(item => {
+                //         const r = this.data.filter(d => d[this.uniqueField] === item);
+                //         rows = [].concat(...rows, ...r);
+                //     });
+                // } else {
+                    
+                // }
+                // row-index
+                this.selectedIndex.forEach(item => {
+                    rows.push(this.data[item]);
+                });
 
                 this.$emit('select-change', rows);
+                console.log('rrrr', rows);
             },
 
             handleRowSelect (isChecked, rowIndex) {
@@ -693,11 +712,15 @@
                 
                 for (let i = from; i < to; i++) {
                     if (typeof this.data[i] !== 'undefined') {
-                        list.push(this.data[i]);
+                        list.push(Object.assign({}, this.data[i], {
+                            __index: i
+                        }));
                     }
                 }
 
                 this.contentMarginTop = from * this.rh;
+                this.from = from;
+                this.to = to;
                 return list;
             }
         },
@@ -728,8 +751,9 @@
             const fixedRightColumnComponents = this.getColumnComponentsByType(columnComponents, 'right');
 
             this.columns = [].concat(selectionColumnComponents, fixedLeftColumnComponents, normalColumnComponents, fixedRightColumnComponents);
-            this.leftColumns = fixedLeftColumnComponents.length > 0 ? [].concat(selectionColumnComponents, fixedLeftColumnComponents) : [].concat(fixedLeftColumnComponents);
+            this.leftColumns = fixedLeftColumnComponents.length > 0 ? [].concat(fixedLeftColumnComponents) : [].concat(fixedLeftColumnComponents);
             this.rightColumns = [].concat(fixedRightColumnComponents);
+            this.selectionColumn = selectionColumnComponents.length > 0 ? selectionColumnComponents[0] : null;
 
             if (this.data.length && this.isMetLazyLoad) {
                 this.initRenderRows();
@@ -768,7 +792,8 @@
             TableRow,
             EmptyIcon,
             TableColGroup,
-            TableFooter
+            TableFooter,
+            CheckboxList
         },
 
         beforeDestroy () {
