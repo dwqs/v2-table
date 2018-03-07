@@ -622,10 +622,10 @@
                         cols = cols.length > 1 ? [cols[0]] : cols; 
                         break;
                     case 'left':
-                        cols = columns.filter(column => (column.fixed === 'left' && !this.isValidNumber(column.width) && column.type !== 'selection'));
+                        cols = columns.filter(column => (column.fixed === 'left' && column.type !== 'selection'));
                         break;
                     case 'right':
-                        cols = columns.filter(column => (column.fixed === 'right' && !this.isValidNumber(column.width) && column.type !== 'selection'));
+                        cols = columns.filter(column => (column.fixed === 'right' && column.type !== 'selection'));
                         break;  
                     default:
                         cols = columns.filter(column => {
