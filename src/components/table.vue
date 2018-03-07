@@ -629,7 +629,7 @@
                         break;  
                     default:
                         cols = columns.filter(column => {
-                            return (!['left', 'right'].includes(column.fixed) || this.isValidNumber(column.width)) && column.type !== 'selection';
+                            return !['left', 'right'].includes(column.fixed) && column.type !== 'selection';
                         });
                         break;  
                 }
