@@ -87,6 +87,7 @@ Vue.use(V2Table)
 | sum-text | String | - | Sum | 合计行第一列的文本 |
 | summary-method | Function({ columns, data }) | - | - | 自定义的合计计算方法 |
 | lazy-load | Boolean | - | false | 是否开启懒加载 |
+| col-height | Number/String | - | 40 | 表头列高度 |
 
 ### Table Events
 

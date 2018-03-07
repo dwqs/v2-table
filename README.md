@@ -88,6 +88,7 @@ More demo to visit [here](https://dwqs.github.io/v2-table).
 | sum-text | String | - | Sum | displayed text for the first column of summary row |
 | summary-method | Function({ columns, data }) | - | - | custom summary method |
 | lazy-load | Boolean | - | false | whether enable lazy-load |
+| col-height | Number/String | - | 40 | header columns\' height |
 
 
 ### Table Events
