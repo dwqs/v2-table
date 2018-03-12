@@ -37,7 +37,9 @@
     "build": "rm -rf dist && npx webpack --config ./webpack.build.config.js --hide-modules",
     "build:docs": "npx cross-env NODE_ENV=production npx webpack --config ./build/webpack.prod.config.js --hide-modules && mv ./docs/dist/index.html ./docs/"
   },
-  "dependencies": {},
+  "dependencies": {
+    "lodash.findindex": "^4.6.0"
+  },
   "peerDependencies": {
     "vue": ">= 2.5.0",
     "beautify-scrollbar": ">=1.0.2"

@@ -241,6 +241,7 @@
 
 <script>
     import BeautifyScrollbar from 'beautify-scrollbar';
+    import findIndex from 'lodash.findindex';
     import Bus from '../bus.js';
 
     import TableHeader from './table-header.vue';
@@ -486,6 +487,30 @@
         },
 
         methods: {
+            toggleRowSelection (row, selected) {
+                const curIndex = findIndex(this.rows, row);
+                
+                if (curIndex >= 0) {
+                    if (typeof selected === 'undefined') {
+                        this.toggleSelect(curIndex);
+                    } else {
+                        if (selected) {
+                            this.toggleSelect(curIndex);
+                        } else if (!selected && this.selectedIndex.includes(curIndex)) {
+                            this.handleRowSelect(false, curIndex);
+                        }
+                    }
+                }
+            },
+
+            toggleSelect (rowIndex) {
+                if (this.selectedIndex.includes(rowIndex)) {
+                    this.handleRowSelect(false, rowIndex);
+                } else {
+                    this.handleRowSelect(true, rowIndex);
+                }
+            },
+
             getFixedContainerWidth (columns) {
                 let containerWidth = 0;
 
