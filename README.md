@@ -99,6 +99,11 @@ More demo to visit [here](https://dwqs.github.io/v2-table).
 | page-change | triggers when table's page changes | currentPage |
 | select-change | triggers when selection changes | rows |
 
+### Table Methods
+|  Event Name  |  Description  |  Parameters |
+|  :--:  |  :--:  |  :--: |
+| toggleRowSelection | used in multiple selection Table, toggle if a certain row is selected. With the second parameter, you can directly set if this row is selected | row, selected |
+
 ### Table Slot
 
 |  Name  |  Description  |

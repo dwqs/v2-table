@@ -97,6 +97,11 @@ Vue.use(V2Table)
 | page-change | 当表格的分页发生变化的时候会触发该事件 | currentPage |
 | select-change | 当选择项发生变化时会触发该事件 | rows |
 
+### Table Methods
+|  事件名 |  描述  |  参数 |
+|  :--:  |  :--:  |  :--: |
+| toggleRowSelection | 用于多选表格，切换某一行的选中状态，如果使用了第二个参数，则是设置这一行选中与否（selected 为 true 则选中） | row, selected |
+
 ### Table Slot
 
 |  名称  |  描述  |
