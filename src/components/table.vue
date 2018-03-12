@@ -489,7 +489,7 @@
         methods: {
             toggleRowSelection (row, selected) {
                 const curIndex = findIndex(this.rows, row);
-                
+
                 if (curIndex >= 0) {
                     if (typeof selected === 'undefined') {
                         this.toggleSelect(curIndex);
@@ -685,7 +685,6 @@
                 });
 
                 this.$emit('select-change', rows);
-                console.log('rrrr', rows);
             },
 
             handleRowSelect (isChecked, rowIndex) {
