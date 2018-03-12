@@ -41,8 +41,8 @@
                 // if (this.table.uniqueField) {
                 //     return this.table.selectedIndex.includes(this.curRow[this.table.uniqueField]);
                 // }
-
-                return this.table.selectedIndex.includes(this.curRowIndex);
+                this.val = this.table.selectedIndex.includes(this.curRowIndex);
+                return this.val;
             },
 
             handleChange (e) {
