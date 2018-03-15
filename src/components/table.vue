@@ -447,11 +447,7 @@
                     if (this.isMetLazyLoad) {
                         this.initRenderRows();
                         if (this.scrollbar) {
-                            this.$nextTick(() => {
-                                this.scrollbar.update({
-                                    contentHeight: this.contentHeight
-                                });
-                            });
+                            this.updateScrollbar();
                         }
                     } else {
                         this.rows = [].concat(val);
@@ -487,6 +483,7 @@
         },
 
         methods: {
+            // exposed table method 
             toggleRowSelection (row, selected) {
                 const curIndex = findIndex(this.rows, row);
 
@@ -502,6 +499,18 @@
                     }
                 }
             },
+
+            updateScrollbar () {
+                if (this.scrollbar) {
+                    this.$nextTick(() => {
+                        this.scrollbar.update({
+                            contentWidth: this.$refs.content.scrollWidth,
+                            contentHeight: this.isMetLazyLoad ? this.contentHeight : this.$refs.content.scrollHeight
+                        });
+                    });
+                }
+            },
+            // exposed table method --end
 
             toggleSelect (rowIndex) {
                 if (this.selectedIndex.includes(rowIndex)) {
