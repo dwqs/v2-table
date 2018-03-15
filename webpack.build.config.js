@@ -10,12 +10,14 @@ module.exports = {
     entry: {
         index: path.resolve(__dirname, './src/index')
     },
+    
     output: {
         path: path.join(__dirname, './dist'),
         filename: '[name].js',
         library: 'V2Table',
         libraryTarget: 'umd'
     },
+
     module: {
         rules: [
             {
@@ -36,6 +38,7 @@ module.exports = {
             }
         ]
     },
+
     externals: {
         'beautify-scrollbar': {
             root: 'BeautifyScrollbar',
@@ -44,6 +47,11 @@ module.exports = {
             amd: 'beautify-scrollbar'
         }
     },
+
+    stats: {
+        children: false
+    },
+
     plugins: [
         new ExtractTextPlugin({
             filename: '[name].css'
