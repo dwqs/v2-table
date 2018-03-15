@@ -103,6 +103,7 @@ More demo to visit [here](https://dwqs.github.io/v2-table).
 |  Event Name  |  Description  |  Parameters |
 |  :--:  |  :--:  |  :--: |
 | toggleRowSelection | used in multiple selection Table, toggle if a certain row is selected. With the second parameter, you can directly set if this row is selected | row, selected |
+| updateScrollbar | update the scrollbar config for the table  | - |
 
 ### Table Slot
 
