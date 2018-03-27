@@ -15,7 +15,7 @@ module.exports = {
                 loader: 'babel-loader'
             },
             {
-                test: /\.less$/,
+                test: /\.(less|css)$/,
                 use: ['vue-style-loader', 'css-loader', 'less-loader']
             }
         ]
