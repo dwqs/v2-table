@@ -8,12 +8,20 @@ A simple table component based Vue 2.x.
 Install the pkg with npm:
 
 ```
+// v1
 npm i --save v2-table beautify-scrollbar
+
+// v2
+npm i --save v2-table
 ```
 or yarn
 
 ```
+// v1
 yarn add  v2-table beautify-scrollbar
+
+// v2
+yarn add  v2-table
 ```
 
 ## Get Started
@@ -21,7 +29,12 @@ yarn add  v2-table beautify-scrollbar
 ```
 import Vue from 'vue';
 
-import 'beautify-scrollbar/dist/index.css';
+// v1
+import 'beautify-scrollbar/dist/index.css'; 
+import 'v2-table/dist/index.css'; 
+import V2Table from 'v2-table';
+
+// v2
 import 'v2-table/dist/index.css'; 
 import V2Table from 'v2-table';
 
@@ -123,6 +136,7 @@ More demo to visit [here](https://dwqs.github.io/v2-table).
 | align | String | left/center/right | center | alignment |
 | fixed | String | left/right | - | fixed column to left or right |
 | type | String | - | - | type of the column |
+| render-header | Function(h, { column }) | - | - | render function for table header of this column |
 
 ## Development
 

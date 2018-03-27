@@ -8,19 +8,32 @@ A simple table component based Vue 2.x.
 npm:
 
 ```
+// v1
 npm i --save v2-table beautify-scrollbar
+
+// v2
+npm i --save v2-table
 ```
 yarn:
 
 ```
+// v1
 yarn add  v2-table beautify-scrollbar
+
+// v2
+yarn add  v2-table
 ```
 ## 快速开始
 
 ```
 import Vue from 'vue';
 
-import 'beautify-scrollbar/dist/index.css';
+// v1
+import 'beautify-scrollbar/dist/index.css'; 
+import 'v2-table/dist/index.css'; 
+import V2Table from 'v2-table';
+
+// v2
 import 'v2-table/dist/index.css'; 
 import V2Table from 'v2-table';
 
@@ -121,6 +134,7 @@ Vue.use(V2Table)
 | align | String | left/center/right | center | 对应列的对齐方式 |
 | fixed | String | left/right | - | 列是否固定在左侧或者右侧 |
 | type | String | - | - | 对应列的类型。如果设置了 `selection` 则显示多选框 |
+| render-header | Function(h, { column }) | - | - | 列标题 Label 区域渲染使用的 Function |
 
 ## Development
 
