@@ -244,7 +244,7 @@
     import findIndex from 'lodash.findindex';
     import Bus from '../bus.js';
 
-    import TableHeader from './table-header.vue';
+    import TableHeader from './table-header.js';
     import TableColGroup from './table-col-group.vue';
     import TableRow from './table-row.vue';
     import EmptyIcon from './empty-icon.vue';
