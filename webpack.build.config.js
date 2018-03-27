@@ -30,22 +30,13 @@ module.exports = {
                 loader: 'babel-loader'
             },
             {
-                test: /\.less$/,
+                test: /\.(less|css)$/,
                 use: ExtractTextPlugin.extract({
                     fallback: 'vue-style-loader',
                     use: ['css-loader', 'postcss-loader', 'less-loader']
                 })
             }
         ]
-    },
-
-    externals: {
-        'beautify-scrollbar': {
-            root: 'BeautifyScrollbar',
-            commonjs2: 'beautify-scrollbar',
-            commonjs: 'beautify-scrollbar',
-            amd: 'beautify-scrollbar'
-        }
     },
 
     stats: {

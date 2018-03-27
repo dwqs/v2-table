@@ -1,3 +1,4 @@
+import 'beautify-scrollbar/dist/index.css';
 import './style/index.less';
 
 import Table from './components/table.vue';

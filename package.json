@@ -38,11 +38,11 @@
     "build:docs": "npx cross-env NODE_ENV=production npx webpack --config ./build/webpack.prod.config.js --hide-modules && mv ./docs/dist/index.html ./docs/"
   },
   "dependencies": {
+    "beautify-scrollbar": "^1.0.5",
     "lodash.findindex": "^4.6.0"
   },
   "peerDependencies": {
-    "vue": ">= 2.5.0",
-    "beautify-scrollbar": ">=1.0.2"
+    "vue": ">= 2.5.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^5.2.8",
@@ -56,7 +56,6 @@
     "babel-plugin-transform-vue-jsx": "^3.7.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-2": "^6.24.1",
-    "beautify-scrollbar": "^1.0.2",
     "chai": "^4.1.2",
     "clean-webpack-plugin": "^0.1.17",
     "codecov": "^3.0.0",
