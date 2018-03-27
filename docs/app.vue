@@ -5,11 +5,11 @@
             <h2 style="textAlign: center">V2 Table: A simple table component based Vue 2.x</h2>
             <h3>Quick Start</h3>
             <h4>Install</h4>
-            <pre>npm i --save v2-table beautify-scrollbar</pre>
+            <pre>npm i --save v2-table</pre>
             <p>OR</p>
-            <pre>yarn add v2-table beautify-scrollbar</pre>
+            <pre>yarn add v2-table</pre>
             <h4>Global Register</h4>
-            <pre>import Vue from 'vue';<br><br>import 'beautify-scrollbar/dist/index.css';<br/>import 'v2-table/dist/index.css';<br/>import V2Table from 'v2-table';<br><br>Vue.use(V2Table);<br></pre>
+            <pre>import Vue from 'vue';<br><br/>import 'v2-table/dist/index.css';<br/>import V2Table from 'v2-table';<br><br>Vue.use(V2Table);<br></pre>
         </header>
         <div class="docs-content-wrap">
             <example class="docs-content"></example>
