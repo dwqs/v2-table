@@ -1,9 +1,14 @@
 <template>
-    <div class="v2-checkbox-list-wrap" :style="{
+    <div :class="[
+        'v2-checkbox-list-wrap',
+        {
+            'wrap-border': table.border
+        }
+    ]" :style="{
         width: column.width + 'px',
         height: '100%',
-        left: table.leftColumns.length ? '0' : -left + 'px',
-        borderRight: table.leftColumns.length ? 'none' : '1px solid #dfe6ec'
+        left: table.leftColumns.length ? '0' : -left + 'px'
+        // borderRight: table.leftColumns.length ? 'none' : '1px solid #dfe6ec'
     }">
         <div class="v2-checkbox-item checked-all" :style="getItemStyle(0)">
             <checkbox :cur-row-index="-1"></checkbox>
@@ -99,8 +104,13 @@
         margin: 0;
         padding: 0;
         background: #FFFFFF;
-        border-left: 1px solid #dfe6ec;
-        border-top: 1px solid #dfe6ec;
+        &.wrap-border {
+            border-left: 1px solid #ebeef5;
+            border-top: 1px solid #ebeef5;
+        }
+        &.wrap-border-right {
+            border-right: 1px solid #ebeef5
+        }
     }
     .v2-checkbox-list {
         position: relative;
@@ -112,7 +122,7 @@
     .v2-checkbox-item {
         position: absolute;
         box-sizing: border-box;
-        border-bottom: 1px solid #dfe6ec;
+        border-bottom: 1px solid #ebeef5;
         &.checked-all {
             position: relative;
         }
