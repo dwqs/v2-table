@@ -7,8 +7,8 @@
     ]" :style="{
         width: column.width + 'px',
         height: '100%',
-        left: table.leftColumns.length ? '0' : -left + 'px'
-        // borderRight: table.leftColumns.length ? 'none' : '1px solid #dfe6ec'
+        left: table.leftColumns.length ? '0' : -left + 'px',
+        borderRight: table.leftColumns.length ? 'none' : ''
     }">
         <div class="v2-checkbox-item checked-all" :style="getItemStyle(0)">
             <checkbox :cur-row-index="-1"></checkbox>
@@ -20,7 +20,14 @@
                 overflow: table.bodyHeight > table.VOEWPORT_MIN_HEIGHT ? 'hidden' : 'auto',
             }">
             <ul class="v2-checkbox-list" :style="{height: this.list.length * this.h + 'px'}">
-                <li class="v2-checkbox-item" v-for="(row, index) in list" :key="index" :style="getItemStyle(index)">
+                <li v-for="(row, index) in list" :key="index" 
+                    :class="[
+                        'v2-checkbox-item',
+                        {
+                            'checkbox-hover': hoverRowIndex === index
+                        }
+                    ]"
+                    :style="getItemStyle(index)" @mouseenter="handleRowHover(index)" @mouseleave="handleRowLeave">
                     <checkbox :cur-row-index="index" :cur-row="row"></checkbox>
                 </li>
             </ul>
@@ -41,7 +48,8 @@
             top: {
                 type: Number,
                 default: 0
-            }
+            },
+            hoverRowIndex: [String, Number]
         },
 
         inject: ['table'],
@@ -81,6 +89,14 @@
                 style.top = parseInt(style.height, 10) * index + 'px';
 
                 return style;
+            },
+
+            handleRowHover (index) {
+                this.table.hoverRowIndex = index;
+            },
+
+            handleRowLeave () {
+                this.table.hoverRowIndex = -1;
             }
         },
 
@@ -107,9 +123,7 @@
         &.wrap-border {
             border-left: 1px solid #ebeef5;
             border-top: 1px solid #ebeef5;
-        }
-        &.wrap-border-right {
-            border-right: 1px solid #ebeef5
+            border-right: 1px solid #ebeef5;
         }
     }
     .v2-checkbox-list {
@@ -123,8 +137,12 @@
         position: absolute;
         box-sizing: border-box;
         border-bottom: 1px solid #ebeef5;
+        transition: all .3s cubic-bezier(.645,.045,.355,1);
         &.checked-all {
             position: relative;
+        }
+        &.checkbox-hover {
+            background-color: #f5f7fa;
         }
     }
 </style>

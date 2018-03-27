@@ -11,6 +11,7 @@
                 <checkboxList v-if="selectionColumn" 
                     :column="selectionColumn" 
                     :left="scrollLeft"
+                    :hoverRowIndex="hoverRowIndex" 
                     :top="scrollTop">
                 </checkboxList>
                 <!-- header -->
@@ -418,8 +419,8 @@
                     const colWidth = isNaN(parseInt(column.width, 10)) ? 90 : parseInt(column.width, 10);
                     bodyMinWidth = bodyMinWidth + colWidth;
                 });
-
-                return bodyMinWidth < this.containerWith ? this.containerWith : bodyMinWidth;
+                // < this.containerWith ? this.containerWith : bodyMinWidth
+                return bodyMinWidth;
             },
 
             leftContainerWidth () {
