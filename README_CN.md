@@ -8,32 +8,19 @@ A simple table component based Vue 2.x.
 npm:
 
 ```
-// v1
 npm i --save v2-table beautify-scrollbar
-
-// v2
-npm i --save v2-table
 ```
 yarn:
 
 ```
-// v1
 yarn add  v2-table beautify-scrollbar
-
-// v2
-yarn add  v2-table
 ```
 ## 快速开始
 
 ```
 import Vue from 'vue';
 
-// v1
 import 'beautify-scrollbar/dist/index.css'; 
-import 'v2-table/dist/index.css'; 
-import V2Table from 'v2-table';
-
-// v2
 import 'v2-table/dist/index.css'; 
 import V2Table from 'v2-table';
 
