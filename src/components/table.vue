@@ -8,178 +8,153 @@
         <div class="v2-table__table-wrapper">
             <div class="v2-table__table-container" ref="container">
                 <!-- 解耦 checkbox 和 table 在DOM结构上的耦合-->
-                <checkboxList v-if="selectionColumn" 
+                <checkboxList v-if="selectionColumn.length > 0" 
                     :column="selectionColumn" 
                     :left="scrollLeft"
                     :hoverRowIndex="hoverRowIndex" 
                     :top="scrollTop">
                 </checkboxList>
                 <!-- header -->
-                <div class="v2-table__header-wrapper" ref="header" :style="{width: isContainerScroll ? contentWidth + 'px' : '100%'}">
-                    <div :class="[
-                        'v2-table__header',
-                        {
-                            'v2-table__border': border,
-                            'v2-table__header-border': border
-                        }
-                    ]" 
-                    :style="{width: !isContainerScroll ? contentWidth + 'px' : '100%'}">
-                        <table-col-group :columns="columns"></table-col-group>
-                        <table-header :columns="columns" :sort="sort"></table-header>
-                    </div>
+                <!-- :style="{width: isContainerScroll ? contentWidth + 'px' : '100%'}" -->
+                <div class="v2-table__header-wrapper" ref="header" >
+                    <table-header
+                        :style="{ width: bodyWidth + 'px' }"
+                        :columns="columns" 
+                        :sort="sort"
+                        :border="border">
+                    </table-header>
                 </div>
 
                 <!-- body -->
-                <div class="v2-table__body-wrapper" ref="body" :style="{width: isContainerScroll ? contentWidth + 'px' : '100%', height: bodyHeight > VOEWPORT_MIN_HEIGHT ? bodyHeight + 'px' : 'auto'}">
-                    <div :class="[
-                        'v2-table__body',
-                        {
-                            'v2-table__border': border,
-                            'v2-table__body-border': border
-                        }
-                    ]" 
-                    ref="content" 
-                    :style="{width: !isContainerScroll ? contentWidth + 'px' : '100%', marginTop: contentMarginTop + 'px'}">
-                        <table-col-group :columns="columns" v-if="data && data.length > 0"></table-col-group>
-                        <div class="v2-table__table-tbody" v-if="data && data.length > 0">
-                            <table-row 
-                                v-for="(row, index) in rows" 
-                                :key="index" 
-                                :row="row"
-                                :rowIndex="index"
-                                :hoverRowIndex="hoverRowIndex" 
-                                :columns="columns">
-                            </table-row>
-                        </div>
-
-                        <!-- Empty data -->
-                        <div class="v2-table__empty-data" 
-                            v-if="!data || !data.length" 
-                            :style="{width: contentWidth + 'px', minHeight: bodyHeight <= VOEWPORT_MIN_HEIGHT ? '175px' : bodyHeight + 'px'}">
-                            <slot name="empty">
-                                <div class="v2-table__empty-default">
-                                    <empty-icon></empty-icon>
-                                    <span class="v2-table__empty-text" v-text="emptyText"></span>
-                                </div>
-                            </slot>
-                        </div>
+                <!-- width: isContainerScroll ? contentWidth + 'px' : '100%', -->
+                <!-- :style="{ height: bodyHeight > VOEWPORT_MIN_HEIGHT ? bodyHeight + 'px' : 'auto'}" -->
+                <!-- :style="{width: !isContainerScroll ? contentWidth + 'px' : '100%', marginTop: contentMarginTop + 'px'}" -->
+                <div class="v2-table__body-wrapper" ref="body">
+                    <table-body
+                        v-if="data && data.length > 0"
+                        :style="{ width: bodyWidth + 'px' }" 
+                        :border="border"
+                        :columns="columns" 
+                        :hoverRowIndex="hoverRowIndex"
+                        :rows="rows">
+                    </table-body>
+                    <div v-else 
+                        :style="{ width: bodyWidth + 'px' }" 
+                        :class="{
+                            'v2-table__empty-data': true,
+                            'v2-table__empty-border': border
+                        }">
+                        <slot name="empty">
+                            <div class="v2-table__empty-default">
+                                <empty-icon></empty-icon>
+                                <span class="v2-table__empty-text" v-text="emptyText"></span>
+                            </div>
+                        </slot>
                     </div>
                 </div>
                 
                 <!-- footer -->
-                <div class="v2-table__footer-wrapper" ref="footer" :style="{width: isContainerScroll ? contentWidth + 'px' : '100%'}">
-                    <table-footer type="normal" :cols="columns" v-if="showSummary" v-show="data && data.length > 0"></table-footer>
+                <!-- :style="{width: isContainerScroll ? contentWidth + 'px' : '100%'}" -->
+                <div class="v2-table__footer-wrapper" ref="footer">
+                    <table-footer
+                        v-if="showSummary" 
+                        v-show="data && data.length > 0" 
+                        type="normal" 
+                        :columns="columns" 
+                        :border="border">
+                    </table-footer>
                 </div>
 
                 <!-- fixed left -->
                 <div :class="[
                     'v2-table-fixed',
-                    'v2-table__fixed-left'
-                ]" v-if="leftColumns.length > 0" :style="{width: leftContainerWidth + 'px', marginLeft: selectionColumn ? selectionColumn.width + 'px' : 0}">
+                    'v2-table__fixed-left',
+                    {
+                        'v2-table-fixed__left-empty-border': border && !data.length,
+                        'v2-table-fixed__left-with-border': border && data.length
+                    }
+                ]" v-if="leftColumns.length > 0" 
+                :style="[{width: fixedLeftWidth + 'px', left: scrollLeft + 'px', marginLeft: selectionColumn ? selectionColumn.width + 'px' : 0}, fixedBottom]">
                     <!-- header -->
-                    <div class="v2-table-fixed__header-wrapper">
-                        <div :class="[
-                            'v2-table__header',
-                            {
-                                'v2-table__border': border,
-                                'v2-table__header-border': border
-                            }
-                        ]">
-                            <table-col-group :columns="leftColumns"></table-col-group>
-                            <table-header :columns="leftColumns" :sort="sort"></table-header>
-                        </div>
+                    <div class="v2-table-fixed__header-wrapper" ref="leftHeader">
+                        <table-header
+                            :style="{ width: fixedLeftWidth + 'px' }"
+                            :columns="leftColumns" 
+                            :sort="sort"
+                            :border="border">
+                        </table-header>
                     </div>
 
                     <!-- body -->
                     <div :class="[
-                        'v2-table-fixed__body-wrapper',
-                        {
-                            'v2-table-fixed__left-empty-border': border && !data.length
-                        }
-                    ]" 
-                    ref="leftBody" 
-                    :style="{ height: bodyHeight > VOEWPORT_MIN_HEIGHT ? bodyHeight + 'px' : !data.length ? '175px' : 'auto'}"
-                    >
-                        <div :class="[
-                            'v2-table__body',
-                            {
-                                'v2-table__border': border,
-                                'v2-table__body-border': border
-                            }
-                        ]" :style="{marginTop: contentMarginTop + 'px'}">
-                            <table-col-group :columns="leftColumns"></table-col-group>
-                            <div class="v2-table__table-tbody">
-                                <table-row 
-                                    v-for="(row, index) in rows" 
-                                    :key="index" 
-                                    :row="row"
-                                    :rowIndex="index" 
-                                    :hoverRowIndex="hoverRowIndex" 
-                                    :columns="leftColumns">
-                                </table-row>
-                            </div>
-                        </div>
+                        'v2-table-fixed__body-wrapper'
+                    ]" ref="leftBody">
+                        <table-body
+                            v-if="data && data.length > 0"
+                            :style="{ width: fixedLeftWidth + 'px' }" 
+                            :border="border"
+                            :hoverRowIndex="hoverRowIndex"
+                            :columns="leftColumns" 
+                            :rows="rows">
+                        </table-body>
                     </div>
 
                     <!-- footer -->
-                    <div class="v2-table-fixed__footer-wrapper">
-                        <table-footer type="left" :cols="leftColumns" v-if="showSummary" v-show="data && data.length > 0"></table-footer>
+                    <div class="v2-table-fixed__footer-wrapper" ref="leftFooter">
+                        <table-footer 
+                            v-if="showSummary" 
+                            v-show="data && data.length > 0"
+                            type="left" 
+                            :columns="columns" 
+                            :border="border" >
+                        </table-footer>
                     </div>
                 </div>
 
                 <!-- fixed right -->
                 <div :class="[
                     'v2-table-fixed',
-                    'v2-table__fixed-right'
-                ]" v-if="rightColumns.length > 0" :style="{width: (rightContainerWidth + 2) + 'px'}">
-                    <!-- header -->
-                    <div class="v2-table-fixed__header-wrapper">
-                        <div :class="[
-                            'v2-table__header',
-                            {
-                                'v2-table__border': border,
-                                'v2-table__header-border': border
-                            }
-                        ]">
-                            <table-col-group :columns="rightColumns"></table-col-group>
-                            <table-header :columns="rightColumns" :sort="sort"></table-header>
-                        </div>
+                    'v2-table__fixed-right',
+                    {
+                        'v2-table-fixed__right-empty-border': border && !data.length,
+                        'v2-table-fixed__right-with-border': border && data.length
+                    }
+                ]" v-if="rightColumns.length > 0"
+                :style="[{width: (fixedRightWidth + 1) + 'px', right: -scrollLeft + 'px'}, fixedBottom]">
+                     <!-- header -->
+                    <div class="v2-table-fixed__header-wrapper" ref="rightHeader">
+                        <table-header
+                            :style="{ width: fixedRightWidth + 'px' }"
+                            :columns="rightColumns" 
+                            :sort="sort"
+                            :border="border">
+                        </table-header>
                     </div>
 
                     <!-- body -->
                     <div :class="[
-                        'v2-table-fixed__body-wrapper', 
-                        {
-                            'v2-table-fixed__right-empty-border': border && !data.length
-                        }
+                        'v2-table-fixed__body-wrapper'
                     ]" 
-                    ref="rightBody" 
-                    :style="{ height: bodyHeight > VOEWPORT_MIN_HEIGHT ? bodyHeight + 'px' : !data.length ? '175px' : 'auto'}"
-                    >
-                        <div :class="[
-                            'v2-table__body',
-                            {
-                                'v2-table__border': border,
-                                'v2-table__body-border': border
-                            }
-                        ]" :style="{marginTop: contentMarginTop + 'px'}">
-                            <table-col-group :columns="rightColumns"></table-col-group>
-                            <div class="v2-table__table-tbody">
-                                <table-row 
-                                    v-for="(row, index) in rows" 
-                                    :key="index" 
-                                    :row="row"
-                                    :rowIndex="index" 
-                                    :hoverRowIndex="hoverRowIndex" 
-                                    :columns="rightColumns">
-                                </table-row>
-                            </div>
-                        </div>
+                    ref="rightBody">
+                        <table-body
+                            v-if="data && data.length > 0"
+                            :style="{ width: fixedRightWidth + 'px'}" 
+                            :border="border"
+                            :hoverRowIndex="hoverRowIndex"
+                            :columns="rightColumns" 
+                            :rows="rows">
+                        </table-body>
                     </div>
 
                     <!-- footer -->
-                    <div class="v2-table-fixed__footer-wrapper">
-                        <table-footer type="right" :cols="rightColumns" v-if="showSummary" v-show="data && data.length > 0"></table-footer>
+                    <div class="v2-table-fixed__footer-wrapper" ref="rightFooter">
+                        <table-footer 
+                            v-if="showSummary" 
+                            v-show="data && data.length > 0"
+                            type="right" 
+                            :columns="rightColumns" 
+                            :border="border">
+                        </table-footer>
                     </div>
                 </div>
 
@@ -244,12 +219,12 @@
     import BeautifyScrollbar from 'beautify-scrollbar';
     import findIndex from 'lodash.findindex';
     import Bus from '../bus.js';
+    import debounce from '../debounce';
 
     import TableHeader from './table-header.js';
-    import TableColGroup from './table-col-group.vue';
-    import TableRow from './table-row.vue';
+    import TableBody from './table-body.js';
+    import TableFooter from './table-footer.js';
     import EmptyIcon from './empty-icon.vue';
-    import TableFooter from './table-footer.vue';
     import CheckboxList from './checkbox-list.vue';
 
     export default {
@@ -313,9 +288,9 @@
                 default: 0
             },
 
-            rowHeight: {
+            cellHeight: {
                 type: [Number, String],
-                default: 40
+                default: 44
             },
             // column header height
             colHeight: {
@@ -328,21 +303,7 @@
                 default: false
             },
 
-            height: {
-                type: [Number, String],
-                default: 'auto'
-            },
-
-            // updatedSelection: {
-            //     // whether updated selection row when data is changed.
-            //     type: Boolean,
-            //     default: false
-            // },
-
-            // uniqueField: {
-            //     type: String,
-            //     default: ''
-            // },
+            height: [Number, String],
 
             showSummary: {
                 type: Boolean,
@@ -370,14 +331,14 @@
 
         data () {
             const ch = Number.parseInt(this.height, 10);
-            const rh = Number.parseInt(this.rowHeight, 10);
+            const rh = Number.parseInt(this.cellHeight, 10);
 
             return {
                 rows: [],
                 columns: [],
                 leftColumns: [],
                 rightColumns: [],
-                selectionColumn: null,
+                selectionColumn: [],
 
                 // row select status
                 selectedIndex: [],
@@ -385,7 +346,14 @@
                 isIndeterminate: false,
                 hoverRowIndex: -1,
 
-                containerWith: 0,
+                // the size of wrapper        
+                containerWidth: 0,
+                containerHeight: 0,
+
+                // table body width
+                bodyWidth: undefined,
+                flexColumnIndexs: undefined,
+
                 sort: {
                     prop: '',
                     order: ''
@@ -404,8 +372,8 @@
                 VOEWPORT_MIN_HEIGHT: 100,
                 ITEM_MIN_HEIGHT: 20,
                 rh: (this.isValidNumber(rh) || rh <= this.ITEM_MIN_HEIGHT) ? this.ITEM_MIN_HEIGHT : rh,
-                contentHeight: NaN,
-                bodyHeight: this.VOEWPORT_MIN_HEIGHT,
+                contentHeight: undefined,
+                bodyHeight: undefined, // this.VOEWPORT_MIN_HEIGHT,
                 contentMarginTop: 0,
                 scrollTop: 0,
                 scrollLeft: 0
@@ -413,21 +381,11 @@
         },
 
         computed: {
-            contentWidth () {
-                let bodyMinWidth = 0;
-                this.columns.forEach(column => {
-                    const colWidth = isNaN(parseInt(column.width, 10)) ? 90 : parseInt(column.width, 10);
-                    bodyMinWidth = bodyMinWidth + colWidth;
-                });
-                // < this.containerWith ? this.containerWith : bodyMinWidth
-                return bodyMinWidth;
-            },
-
-            leftContainerWidth () {
+            fixedLeftWidth () {
                 return this.getFixedContainerWidth(this.leftColumns);
             },
 
-            rightContainerWidth () {
+            fixedRightWidth () {
                 return this.getFixedContainerWidth(this.rightColumns);
             },
 
@@ -437,6 +395,10 @@
 
             tbodyHeight () {
                 return Math.ceil(this.bodyHeight / this.rh) * this.rh;
+            },
+
+            fixedBottom () {
+                return this.data.length ? {} : { bottom: 0 };
             }
         },
 
@@ -444,20 +406,18 @@
             data: {
                 deep: true,
                 immediate: true,
-                handler (val) {
+                handler (val, oldVal) {
                     if (this.isMetLazyLoad) {
                         this.initRenderRows();
-                        if (this.scrollbar) {
-                            this.updateScrollbar();
-                        }
+                        this.updateScrollbar();
                     } else {
                         this.rows = [].concat(val);
+                        if (!oldVal) {
+                            this.updateScrollbar();
+                        } else if (val.length !== oldVal.length) {
+                            this.updateScrollbar();
+                        }
                     }
-
-                    // if (this.updatedSelection && this.selectedIndex.length > 0) {
-                    //     this.emitSelectChange();
-                    //     return;
-                    // } 
 
                     if (this.selectedIndex.length > 0) {
                         // reset selection status.
@@ -505,14 +465,14 @@
                 if (this.scrollbar) {
                     this.$nextTick(() => {
                         this.scrollbar.update({
-                            contentWidth: this.$refs.content.scrollWidth,
-                            contentHeight: this.isMetLazyLoad ? this.contentHeight : this.$refs.content.scrollHeight
+                            contentWidth: this.bodyWidth
+                            // contentWidth: this.$refs.content.scrollWidth,
+                            // contentHeight: this.isMetLazyLoad ? this.contentHeight : this.$refs.content.scrollHeight
                         });
                     });
                 }
             },
             // exposed table method --end
-
             toggleSelect (rowIndex) {
                 if (this.selectedIndex.includes(rowIndex)) {
                     this.handleRowSelect(false, rowIndex);
@@ -523,10 +483,8 @@
 
             getFixedContainerWidth (columns) {
                 let containerWidth = 0;
-
                 columns.forEach(column => {
-                    const colWidth = isNaN(parseInt(column.width, 10)) ? 90 : parseInt(column.width, 10);
-                    containerWidth = containerWidth + colWidth;
+                    containerWidth += column.$realWidth;
                 });
 
                 return containerWidth;
@@ -548,7 +506,7 @@
 
             resetDataOrder (prop, order) {
                 // reset data order
-                this.$emit('sort-change', { prop, order });
+                this.$emit('sort-change', { order, prop });
             },
 
             changeCurPage (e) {
@@ -625,20 +583,22 @@
             // 固定头部时更改头部的 scroll left
             updateHeaderWrapScrollLeft () {
                 const ele = this.scrollbar.element;
-                if (!this.isContainerScroll) {
-                    this.$refs.header.scrollLeft = ele.scrollLeft;
-                }
+                const { header, leftBody, rightBody, footer } = this.$refs;
+                
+                // if (!this.isContainerScroll) {
+                //     header.scrollLeft = ele.scrollLeft;
+                // }
 
                 if (this.leftColumns.length) {
-                    this.$refs.leftBody.scrollTop = ele.scrollTop;
+                    leftBody.scrollTop = ele.scrollTop;
                 }
 
                 if (this.rightColumns.length > 0) {
-                    this.$refs.rightBody.scrollTop = ele.scrollTop;
+                    rightBody.scrollTop = ele.scrollTop;
                 }
 
-                if (this.$refs.footer) {
-                    this.$refs.footer.scrollLeft = ele.scrollLeft;
+                if (footer) {
+                    footer.scrollLeft = ele.scrollLeft;
                 }
                 
                 this.scrollTop = ele.scrollTop;
@@ -681,14 +641,6 @@
 
             emitSelectChange () {
                 const rows = [];
-                // if (this.uniqueField) {
-                //     this.selectedIndex.forEach(item => {
-                //         const r = this.data.filter(d => d[this.uniqueField] === item);
-                //         rows = [].concat(...rows, ...r);
-                //     });
-                // } else {
-                    
-                // }
                 // row-index
                 this.selectedIndex.forEach(item => {
                     rows.push(this.data[item]);
@@ -756,15 +708,111 @@
                 this.from = from;
                 this.to = to;
                 return list;
+            },
+
+            updateColumnsWidth (columns = undefined) {
+                const MIN_WIDTH = 90;
+                let allColumns = [];
+                let flexColumnIndexs = [];
+                let bodyMinWidth = 0;
+
+                if (!columns) {
+                    allColumns = this.$slots.default
+                        .filter(column => column.componentInstance && column.componentInstance.$options.name === 'v2-table-column')
+                        .map(column => column.componentInstance);
+                } else {
+                    allColumns = [].concat(columns);
+                }
+                
+                if (!this.flexColumnIndexs) {
+                    // 未指定 width 属性的弹性列
+                    flexColumnIndexs = allColumns.map((col, index) => {
+                        if (this.isValidNumber(col.width)) {
+                            return index;
+                        }
+                        return -1;
+                    }).filter(val => val !== -1);
+                    this.flexColumnIndexs = [].concat(flexColumnIndexs);
+                } else {
+                    flexColumnIndexs = [].concat(this.flexColumnIndexs);
+                }
+
+                if (!this.bodyMinWidth) {
+                    allColumns.forEach(col => {
+                        let colWidth = MIN_WIDTH;
+                        if (!this.isValidNumber(col.width)) {
+                            colWidth = parseInt(col.width, 10);
+                            col.$realWidth = colWidth;
+                        }
+                        bodyMinWidth += colWidth;
+                    });
+                    this.bodyMinWidth = bodyMinWidth;
+                } else {
+                    bodyMinWidth = this.bodyMinWidth;
+                }
+
+                if (flexColumnIndexs.length) {
+                    if (bodyMinWidth <= this.containerWidth) {
+                        const totalFlexWidth = this.containerWidth - bodyMinWidth;
+                        if (flexColumnIndexs.length === 1) {
+                            allColumns[flexColumnIndexs[0]].$realWidth = MIN_WIDTH + totalFlexWidth;
+                        } else {
+                            const allColumnsWidth = flexColumnIndexs.length * MIN_WIDTH;
+                            const flexWidthPerPixel = totalFlexWidth / allColumnsWidth;
+                            let noneFirstWidth = 0;
+
+                            flexColumnIndexs.forEach((col, index) => {
+                                if (index === 0) {
+                                    return;
+                                }
+                                const flexWidth = Math.floor(MIN_WIDTH * flexWidthPerPixel);
+                                noneFirstWidth += flexWidth;
+                                allColumns[flexColumnIndexs[index]].$realWidth = MIN_WIDTH + flexWidth;
+                            });
+
+                            allColumns[flexColumnIndexs[0]].$realWidth = MIN_WIDTH + totalFlexWidth - noneFirstWidth;
+                        }
+                    } else {
+                        flexColumnIndexs.forEach((col, index) => {
+                            allColumns[flexColumnIndexs[index]].$realWidth = MIN_WIDTH;
+                        });
+                    }
+                }
+
+                this.bodyWidth = Math.max(bodyMinWidth, this.containerWidth);
+                return allColumns;
+            },
+
+            handleWinResize () {
+                if (this.$el.clientWidth === this.containerWidth) {
+                    return;
+                }
+
+                this.containerWidth = this.$el.clientWidth;
+                this.containerHeight = this.$el.clientHeight;
+                
+                this.columns = [].concat(this.updateColumnsWidth(this.columns));
+                
+                if (this.rightColumns.length) {
+                    this.rightColumns = [].concat(this.getColumnComponentsByType(this.columns, 'right'));
+                }
+                if (this.leftColumns.length) {
+                    this.leftColumns = [].concat(this.getColumnComponentsByType(this.columns, 'left'));
+                }
+
+                if (this.scrollbar) {
+                    this.updateScrollbar();
+                }
             }
         },
 
         created () {
+            this.winResize = debounce(this.handleWinResize);
             this.sort = Object.assign({}, this.defaultSort, {
                 order: this.defaultSort.order || 'ascending'
             });
 
-            if (this.height !== 'auto' && !this.isValidNumber(this.height)) {
+            if (this.height && !this.isValidNumber(this.height)) {
                 this.bodyHeight = parseInt(this.height, 10) > this.VOEWPORT_MIN_HEIGHT ? parseInt(this.height, 10) : this.VOEWPORT_MIN_HEIGHT;
             }
         },
@@ -773,21 +821,21 @@
             if (!Bus._Vue) {
                 throw new Error('[v2-table]: Must be call Vue.use(v2-table) before used');
             }
-
-            this.containerWith = this.$el.clientWidth;
-            const columnComponents = this.$slots.default
-                .filter(column => column.componentInstance && column.componentInstance.$options.name === 'v2-table-column')
-                .map(column => column.componentInstance);
             
+            this.containerWidth = this.$el.clientWidth;
+            this.containerHeight = this.$el.clientHeight;
+
+            const columnComponents = this.updateColumnsWidth();
+
             const selectionColumnComponents = this.getColumnComponentsByType(columnComponents, 'selection');
             const normalColumnComponents = this.getColumnComponentsByType(columnComponents, 'normal');
             const fixedLeftColumnComponents = this.getColumnComponentsByType(columnComponents, 'left');
             const fixedRightColumnComponents = this.getColumnComponentsByType(columnComponents, 'right');
 
             this.columns = [].concat(selectionColumnComponents, fixedLeftColumnComponents, normalColumnComponents, fixedRightColumnComponents);
-            this.leftColumns = fixedLeftColumnComponents.length > 0 ? [].concat(fixedLeftColumnComponents) : [].concat(fixedLeftColumnComponents);
+            this.leftColumns = [].concat(fixedLeftColumnComponents);
             this.rightColumns = [].concat(fixedRightColumnComponents);
-            this.selectionColumn = selectionColumnComponents.length > 0 ? selectionColumnComponents[0] : null;
+            this.selectionColumn = [].concat(selectionColumnComponents);
 
             if (this.data.length && this.isMetLazyLoad) {
                 this.initRenderRows();
@@ -813,26 +861,27 @@
 
             this.$nextTick(() => {
                 this.container = this.isContainerScroll ? this.$refs.container : this.$refs.body;
-                this.scrollbar = new BeautifyScrollbar(this.container, {
-                    contentWidth: this.$refs.content.scrollWidth,
-                    contentHeight: this.isMetLazyLoad ? this.contentHeight : this.$refs.content.scrollHeight
+                this.scrollbar = new BeautifyScrollbar(this.$refs.container, {
+                    contentWidth: this.bodyWidth
                 });
-                this.container.addEventListener('bs-update-scroll-value', this.updateHeaderWrapScrollLeft, false);
+                this.$refs.container.addEventListener('bs-update-scroll-value', this.updateHeaderWrapScrollLeft, false);
             });
+            window.addEventListener('resize', this.winResize, false);
         },
 
         components: {
             TableHeader,
-            TableRow,
-            EmptyIcon,
-            TableColGroup,
+            TableBody,
             TableFooter,
+            EmptyIcon,
             CheckboxList
         },
 
         beforeDestroy () {
+            window.removeEventListener('resize', this.winResize, false);
+            this.winResize = null;
             this.scrollbar && this.scrollbar.destroy();
-            this.container.removeEventListener('bs-update-scroll-value', this.updateHeaderWrapScrollLeft, false);
+            this.container && this.container.removeEventListener('bs-update-scroll-value', this.updateHeaderWrapScrollLeft, false);
         }
     };
 </script>
