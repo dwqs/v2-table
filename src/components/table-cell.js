@@ -3,40 +3,55 @@ import CheckBox from './checkbox.vue';
 export default {
     functional: true,
 
-    props: ['column', 'row', 'rowIndex'],
+    props: ['column', 'row', 'rowIndex', 'height'],
 
     render (createElement, context) {
         const { props } = context;
-        const { row, column, rowIndex } = props;
+        const { row, column, rowIndex, height } = props;
 
         const data = {
             class: {
                 'v2-table__cell': true,
-                'v2-table__row-cell': true,
                 'text-left': column.align === 'left',
                 'text-right': column.align === 'right'
+            },
+            style: {
+                'height': height + 'px'
             }
-            // style: {
-            //     textAlign: ['left', 'center', 'right'].indexOf(column.align) > -1 ? column.align : 'center'
-            // }
         };
         
         if (column.type === 'selection') {
-            return createElement('div', data, [createElement(CheckBox, {
+            const box = createElement(CheckBox, {
                 props: {
                     curRowIndex: rowIndex,
                     curRow: row
                 }
-            })]);
+            });
+
+            return createElement('td', data, [createElement('div', {
+                class: {
+                    'cell': true
+                }
+            }, [box])]);
         }
 
         if (column.$scopedSlots.default) {
-            return createElement('div', data, column.$scopedSlots.default(row));
+            return createElement('td', data, [createElement('div', {
+                class: {
+                    'cell': true
+                }
+            }, column.$scopedSlots.default({
+                row: row
+            }))]);
         }
 
-        data.domProps = {};
-        data.domProps.innerHTML = typeof row[column.prop] !== 'undefined' ? row[column.prop] : '';
-
-        return createElement('div', data);
+        return createElement('td', data, [createElement('div', {
+            class: {
+                'cell': true
+            },
+            domProps: {
+                innerHTML: typeof row[column.prop] !== 'undefined' ? row[column.prop] : ''
+            }
+        })]);
     }
 };
