@@ -10,10 +10,7 @@
         props: {
             label: String,
             prop: String,
-            width: {
-                type: [Number, String],
-                default: 90
-            },
+            width: [Number, String],
             type: String,
             sortable: {
                 type: Boolean,
