@@ -33,6 +33,7 @@
         no-trailing-spaces: 0,
         no-unneeded-ternary: 0,
         new-cap: 0,
-        no-self-compare: 0
+        no-self-compare: 0,
+        no-return-assign: 0
     }
 }
