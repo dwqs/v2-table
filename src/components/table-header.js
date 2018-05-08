@@ -8,6 +8,7 @@ export default {
             default: () => []
         },
 
+        border: [Boolean],
         sort: {}
     },
 
@@ -18,7 +19,7 @@ export default {
     },
 
     methods: {
-        getColumnClass (col) {
+        getColumnClass (col, index) {
             const cls = ['v2-table__cell', 'v2-table__column-cell'];
 
             if (col.sortable && !col.type) {
@@ -40,11 +41,7 @@ export default {
 
         getColStyle (col) {
             const style = {};
-            
-            style.width = !isNaN(parseInt(col.width)) ? '90px' : `${parseInt(col.width, 10)}px`;
-            style.height = !isNaN(parseInt(this.table.colHeight, 10)) ? '40px' : `${parseInt(this.table.colHeight, 10)}px`;
-
-            // style.textAlign = ['left', 'center', 'right'].indexOf(col.align) > -1 ? col.align : 'center';
+            style.width = `${col.$realWidth}px`;
             
             return style;
         },
@@ -60,40 +57,52 @@ export default {
 
     render (h) {
         return (
-            <div class='v2-table__table-thead'>
-                <div class='v2-table__header-row'>
+            <table 
+                class={{ 'v2-table__header': true, 'v2-table__border': this.border, 'v2-table__header-border': this.border }}
+                cellspacing='0'
+                border='0'
+                cellpadding='0'>
+                <colgroup>
                     {
-                        this.columns.map((column, index) => {
-                            return (
-                                <div key={index}
-                                    onClick={this.changeSortRule(column)} 
-                                    class={ this.getColumnClass(column) } 
-                                    style={ this.getColStyle(column) }
-                                >
-                                    {
-                                        typeof column.renderHeader === 'function' 
-                                            ? column.renderHeader.call(this._renderProxy, h, { column, index })
-                                            : column.label
-                                    }
-                                    {
-                                        column.sortable && !column.type 
-                                            ? <span class='v2-table__caret-wrapper'>
-                                                <i class='v2-table__sort-caret ascending-caret'></i>
-                                                <i class='v2-table__sort-caret descending-caret'></i>
-                                            </span>
-                                            : ''  
-                                    }
-                                    {
-                                        column.type === 'selection'
-                                            ? <check-box cur-row-index={-1}></check-box>
-                                            : ''
-                                    }
-                                </div>
-                            );
-                        })
+                        this.columns.map(column => <col style={ this.getColStyle(column) } />)
                     }
-                </div>
-            </div>
+                </colgroup>
+                <thead>
+                    <tr>
+                        {
+                            this.columns.map((column, index) => {
+                                return (
+                                    <th key={index}
+                                        onClick={this.changeSortRule(column)} 
+                                        class={ this.getColumnClass(column, index) }
+                                        style= {{ height: this.table.colHeight + 'px' }} 
+                                        colspan='1' 
+                                        rowspan='1'>
+                                        {
+                                            typeof column.renderHeader === 'function' 
+                                                ? column.renderHeader.call(this._renderProxy, h, { column, index })
+                                                : column.label
+                                        }
+                                        {
+                                            column.sortable && !column.type 
+                                                ? <span class='v2-table__caret-wrapper'>
+                                                    <i class='v2-table__sort-caret ascending-caret'></i>
+                                                    <i class='v2-table__sort-caret descending-caret'></i>
+                                                </span>
+                                                : ''  
+                                        }
+                                        {
+                                            column.type === 'selection'
+                                                ? <check-box cur-row-index={-1}></check-box>
+                                                : ''
+                                        }
+                                    </th>
+                                );
+                            })
+                        }
+                    </tr>
+                </thead>
+            </table>
         );
     }
 };
