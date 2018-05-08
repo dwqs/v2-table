@@ -5,47 +5,33 @@
 .v2-table {
     position: relative;
     width: 100%;
+    height: 100%;
     overflow: hidden;
     box-sizing: border-box;
     background-color: @background-color-white;
     font-size: @normal-font-size;
     font-weight: @font-weight-normal;
     color: @color-primary;
-    *, *::after, *::before {
+    table, tbody, tr, td, th {
         position: relative;
         box-sizing: border-box;
         margin: 0;
         padding: 0;
     }
-    .beautify-scroll__y-thumb,
-    .beautify-scroll__x-thumb,
-    .beautify-scroll__x-bar,
-    .beautify-scroll__y-bar {
-        position: absolute;
-    }
-    .v2-table-fixed {
-        position: absolute;
-        z-index: @z-index-min;
-        top: 0;
-        bottom: 0;
-        overflow: hidden;
-        &.v2-table__fixed-left {
-            left: 0;
-        }
-        &.v2-table__fixed-right {
-            right: 0;
-        }
-    }
 }
 
 .v2-table__table-wrapper, .v2-table__table-container {
     width: 100%;
+    height: 100%;
     overflow: hidden;
 }
 
-.v2-table__header-wrapper, .v2-table__body-wrapper, .v2-table__footer-wrapper {
-    width: 100%;
-    overflow: hidden;
+.v2-table__header-wrapper {
+    // overflow: hidden;
+}
+
+.v2-table__body-wrapper, .v2-table-fixed__body-wrapper {
+    // height: 148px;
 }
 
 .v2-table__col-group {
@@ -56,9 +42,7 @@
 }
 
 .v2-table__body, .v2-table__header, .v2-table__footer {
-    display: table;
     table-layout: fixed;
-    width: 100%;
     &.v2-table__border {
         .v2-table__cell {
             border-right: 1px solid @border-regular-color;
@@ -70,44 +54,41 @@
     &.v2-table__header-border {
         border-top: 1px solid @border-primary-color;
     }
-    &.v2-table__body-border {
-        .v2-table__empty-data {
-            border-right: 1px solid @border-primary-color;
-            border-left: 1px solid @border-primary-color;
-        }
-    }
     &.v2-table__footer-border {
 
     }
 }
 
-.v2-table__table-thead {
-    display: table-header-group;
+.v2-table__header th {
+    height: 40px;
 }
 
-.v2-table__header-row {
-    display: table-row;
-}
-
-.v2-table__table-tbody {
-    display: table-row-group;
+.v2-table__footer td, .v2-table__body td {
+    height: 44px;
+    .cell {
+        color: @color-primary;
+        white-space: normal;
+        word-wrap: break-word;
+        word-break: break-all;
+        line-height: 1.5;
+    }
 }
 
 .v2-table__cell {
     border-bottom: 1px solid @border-regular-color;
     cursor: default;
-    font-size: 14px;
-    padding: 10px 5px;
+    font-size: @normal-font-size;
     user-select: none;
     vertical-align: middle;
-    display: table-cell;
     overflow: hidden;
     text-align: center;
     &.v2-table__column-cell {
-        color: @color-thead;
+        // color: @color-thead;
+        color: @color-regular2;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        font-weight: 400;
         background-color: @background-color-white;
         &.sortable {
             cursor: pointer;
@@ -119,23 +100,14 @@
             border-bottom: 5px solid @background-color-light
         }
     }
-    &.v2-table__row-cell {
-        color: @color-primary;
-        // white-space: normal;
-        // word-wrap: break-word;
-        // word-break: break-all;
-        /** 简化列的固定，后续提供类似 rowHeight/colHeight 等属性来设置行高 **/
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
     &.v2-table__footer-cell {
         background-color: @background-color-hover;
     }
     &.text-left {
-        text-align: left
+        text-align: left;
     }
     &.text-right {
-        text-align: right
+        text-align: right;
     }
 }
 
@@ -171,7 +143,6 @@
     background-color: @background-color-white;
     transition: @all-transition;
     font-size: 0;
-    display: table-row;
     &.row-hover {
         background-color: @background-color-hover;
     }
@@ -182,12 +153,16 @@
 
 .v2-table__empty-data {
     position: relative;
-    min-height: 175px;
+    height: 144px;
     box-sizing: border-box;
     font-size: @normal-font-size;
     color: @color-thead;
     text-align: center;
-    border-bottom: 1px solid @border-primary-color;
+    &.v2-table__empty-border {
+        border-right: 1px solid @border-primary-color;
+        border-left: 1px solid @border-primary-color;
+        border-bottom: 1px solid @border-primary-color;
+    }
     .v2-table__empty-default {
         position: absolute;
         left: 50%;
@@ -227,7 +202,7 @@
     top: 0;
     height: 100%;
     width: 100%;
-    z-index: @z-index-min;
+    z-index: @z-index-normal;
     // background-color: transparent;
     background: rgba(255,255,255,0.7);
     .v2-table__loading-spinner {
