@@ -692,14 +692,14 @@ Custom the display content of the column/自定义列表的显示内容
   <v2-table :data="list" border stripe>
     <v2-table-column label="Name" prop="name"></v2-table-column>
     <v2-table-column label="Date" prop="date" width="110">
-      <template slot-scope="row">
-        <div class="custom-display-date">{{row.date | formatDate}}</div> 
+      <template slot-scope="scope">
+        <div class="custom-display-date">{{scope.row.date | formatDate}}</div> 
       </template>
     </v2-table-column>
     <v2-table-column label="Address" prop="address" width="150" align="right"></v2-table-column>
     <v2-table-column label="Birthday" prop="birthDay" width="110">
-      <template slot-scope="row">
-        <div class="custom-display-date">{{row.birthDay | formatDate}}</div> 
+      <template slot-scope="scope">
+        <div class="custom-display-date">{{scope.row.birthDay | formatDate}}</div> 
       </template>
     </v2-table-column>
     <v2-table-column label="Songs" prop="songs"></v2-table-column>
