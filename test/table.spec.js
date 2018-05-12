@@ -93,10 +93,10 @@ describe('v2-table', () => {
             }, DELAY);
         });
 
-        it('row-height', done => {
-            const vm = createTable('row-height="50"');
+        it('cell-height', done => {
+            const vm = createTable('cell-height="50"');
             setTimeout(() => {
-                expect(vm.$el.querySelector('.v2-table__row').style.height).to.equal('50px');
+                expect(vm.$el.querySelector('.v2-table__body-wrapper .v2-table__cell').style.height).to.equal('50px');
                 destroyVM(vm);
                 done();
             }, DELAY);
@@ -105,7 +105,7 @@ describe('v2-table', () => {
         it('row-class-name', done => {
             const vm = createTable('row-class-name="test-class-name"');
             setTimeout(() => {
-                const rows = toArray(vm.$el.querySelectorAll('.v2-table__table-tbody .v2-table__row'));
+                const rows = toArray(vm.$el.querySelectorAll('.v2-table__body .v2-table__row'));
                 expect(rows.filter(row => row.classList.contains('test-class-name'))).to.have.lengthOf(getTestData().length);
                 destroyVM(vm);
                 done();
@@ -155,17 +155,6 @@ describe('v2-table', () => {
             setTimeout(() => {
                 expect(getLabels(vm, '.v2-table__header-wrapper .v2-table__column-cell'))
                     .to.eql(['attr1', 'attr2', 'attr3']);
-                destroyVM(vm);
-                done();
-            }, DELAY);
-        });
-
-        it('width', done => {
-            const vm = createTable('width="125px"', ':width="100"');
-            setTimeout(() => {
-                const ths = toArray(vm.$el.querySelectorAll('.v2-table__header-wrapper .v2-table__col-group div'));
-                expect(ths.map(node => node.style.width).filter(o => o))
-                    .to.include('125px').include('100px');
                 destroyVM(vm);
                 done();
             }, DELAY);
