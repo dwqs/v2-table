@@ -82,7 +82,7 @@ Vue.use(V2Table)
 | shown-pagination | Boolean | - | false | 是否显示分页，如果要显示分页，必须同时设置 `total` 属性 |
 | total | Number | - | 0 | 表格的总数据量，结合分页使用 |
 | height | Number/String | - | auto | 表格高度，可用于固定表头 |
-| row-height | Number/String | - | 40 | 行高 |
+| cell-height | Number/String | - | 44 | 行高 |
 | show-summary | Boolean | - | false | 是否在表尾显示合计行 |
 | sum-text | String | - | Sum | 合计行第一列的文本 |
 | summary-method | Function({ columns, data }) | - | - | 自定义的合计计算方法 |

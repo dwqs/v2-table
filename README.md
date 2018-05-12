@@ -83,7 +83,7 @@ More demo to visit [here](https://dwqs.github.io/v2-table).
 | shown-pagination | Boolean | - | false | whether showing pagination of table data |
 | total | Number | - | 0 | all data of table, it\'s needed when `shown-pagination` is true |
 | height | Number/String | - | auto | table\'s height |
-| row-height | Number/String | - | 40 | row\'s height |
+| cell-height | Number/String | - | 44 | cell\'s height |
 | show-summary | Boolean | - | false | whether to display a summary row |
 | sum-text | String | - | Sum | displayed text for the first column of summary row |
 | summary-method | Function({ columns, data }) | - | - | custom summary method |
@@ -109,7 +109,7 @@ More demo to visit [here](https://dwqs.github.io/v2-table).
 
 |  Name  |  Description  |
 |  :--:  |  :--:  |
-| empty| custom empty component, it's will show when data is empty |
+| empty | custom empty component, it's will show when data is empty |
 | loading | custom loading component, it's will show when `loading` property of table is true 
 
 ### The v2-table-column component
