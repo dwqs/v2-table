@@ -10,14 +10,14 @@
         left: table.leftColumns.length ? '0' : -left + 'px',
         borderRight: table.leftColumns.length ? 'none' : ''
     }">
-        <div class="v2-checkbox-item checked-all" :style="getItemStyle(0)">
+        <div class="v2-checkbox-item checked-all" :style="getItemStyle(0, false)">
             <checkbox :cur-row-index="-1"></checkbox>
         </div>
         <div ref="list" :style="{
                 position: 'relative',
                 top: '0px',
-                height: table.bodyHeight > table.VOEWPORT_MIN_HEIGHT ? table.bodyHeight + 'px' : 'auto',
-                overflow: table.bodyHeight > table.VOEWPORT_MIN_HEIGHT ? 'hidden' : 'auto',
+                height: table.bodyHeight ? table.bodyHeight + 'px' : 'auto',
+                overflow: table.bodyHeight ? 'hidden' : 'auto',
             }">
             <ul class="v2-checkbox-list" :style="{height: this.list.length * this.h + 'px'}">
                 <li v-for="(row, index) in list" :key="index" 
@@ -62,7 +62,7 @@
 
         computed: {
             h () {
-                return isNaN(parseInt(this.table.colHeight, 10)) ? 40 : `${parseInt(this.table.colHeight, 10)}`;
+                return isNaN(parseInt(this.table.cellHeight, 10)) ? 44 : `${parseInt(this.table.cellHeight, 10)}`;
             }
         },
 
@@ -79,11 +79,16 @@
         },
 
         methods: {
-            getItemStyle (index) {
+            getItemStyle (index, isCell = true) {
                 const style = {};
 
-                style.width = isNaN(parseInt(this.column.width, 10)) ? '45px' : `${parseInt(this.column.width, 10)}px`;
-                style.height = isNaN(parseInt(this.table.colHeight, 10)) ? '40px' : `${parseInt(this.table.colHeight, 10)}px`;
+                style.width = this.table.isValidNumber(this.column.width) ? '45px' : `${parseInt(this.column.width, 10)}px`;
+                style.height = this.table.isValidNumber(this.table.cellHeight) ? '44px' : `${parseInt(this.table.cellHeight, 10)}px`;
+                
+                if (!isCell) {
+                    style.height = this.table.isValidNumber(this.table.colHeight) ? '44px' : `${parseInt(this.table.colHeight, 10)}px`;
+                }
+
                 style.textAlign = ['left', 'center', 'right'].indexOf(this.column.align) > -1 ? this.column.align : 'center';
                 style.lineHeight = style.height;
                 style.top = parseInt(style.height, 10) * index + 'px';

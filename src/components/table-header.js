@@ -28,9 +28,6 @@ export default {
             if (this.sort.prop === col.prop) {
                 const order = this.sort.order || 'ascending';
                 cls.push(order);
-                this.$nextTick(() => {
-                    this.table.resetDataOrder(col.prop, order);
-                });
             }
 
             col.align === 'left' && cls.push('text-left');

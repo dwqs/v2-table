@@ -9,14 +9,15 @@
             <div class="v2-table__table-container" ref="container">
                 <!-- 解耦 checkbox 和 table 在DOM结构上的耦合-->
                 <checkboxList v-if="selectionColumn.length > 0" 
-                    :column="selectionColumn" 
+                    :column="selectionColumn[0]" 
                     :left="scrollLeft"
                     :hoverRowIndex="hoverRowIndex" 
                     :top="scrollTop">
                 </checkboxList>
                 <!-- header -->
-                <!-- :style="{width: isContainerScroll ? contentWidth + 'px' : '100%'}" -->
-                <div class="v2-table__header-wrapper" ref="header" >
+                <div class="v2-table__header-wrapper" ref="header" 
+                    :style="{width: isContainerScroll ? bodyWidth + 'px' : '100%'}"
+                >
                     <table-header
                         :style="{ width: bodyWidth + 'px' }"
                         :columns="columns" 
@@ -26,13 +27,13 @@
                 </div>
 
                 <!-- body -->
-                <!-- width: isContainerScroll ? contentWidth + 'px' : '100%', -->
-                <!-- :style="{ height: bodyHeight > VOEWPORT_MIN_HEIGHT ? bodyHeight + 'px' : 'auto'}" -->
                 <!-- :style="{width: !isContainerScroll ? contentWidth + 'px' : '100%', marginTop: contentMarginTop + 'px'}" -->
-                <div class="v2-table__body-wrapper" ref="body">
+                <div class="v2-table__body-wrapper" ref="body"
+                    :style="{ height: bodyHeight ? bodyHeight + 'px' : 'auto'}"
+                >
                     <table-body
                         v-if="data && data.length > 0"
-                        :style="{ width: bodyWidth + 'px' }" 
+                        :style="{ width: bodyWidth + 'px', marginTop: contentMarginTop + 'px'}" 
                         :border="border"
                         :columns="columns" 
                         :hoverRowIndex="hoverRowIndex"
@@ -54,12 +55,14 @@
                 </div>
                 
                 <!-- footer -->
-                <!-- :style="{width: isContainerScroll ? contentWidth + 'px' : '100%'}" -->
-                <div class="v2-table__footer-wrapper" ref="footer">
+                <div class="v2-table__footer-wrapper" ref="footer"
+                    :style="{width: isContainerScroll ? bodyWidth + 'px' : '100%'}"
+                >
                     <table-footer
                         v-if="showSummary" 
                         v-show="data && data.length > 0" 
                         type="normal" 
+                        :style="{ width: bodyWidth + 'px' }"
                         :columns="columns" 
                         :border="border">
                     </table-footer>
@@ -74,7 +77,7 @@
                         'v2-table-fixed__left-with-border': border && data.length
                     }
                 ]" v-if="leftColumns.length > 0" 
-                :style="[{width: fixedLeftWidth + 'px', left: scrollLeft + 'px', marginLeft: selectionColumn ? selectionColumn.width + 'px' : 0}, fixedBottom]">
+                :style="[{width: fixedLeftWidth + 'px', marginLeft: selectionColumn[0] ? selectionColumn[0].width + 'px' : 0}, fixedBottom]">
                     <!-- header -->
                     <div class="v2-table-fixed__header-wrapper" ref="leftHeader">
                         <table-header
@@ -88,10 +91,10 @@
                     <!-- body -->
                     <div :class="[
                         'v2-table-fixed__body-wrapper'
-                    ]" ref="leftBody">
+                    ]" ref="leftBody" :style="{ height: bodyHeight ? bodyHeight + 'px' : 'auto'}">
                         <table-body
                             v-if="data && data.length > 0"
-                            :style="{ width: fixedLeftWidth + 'px' }" 
+                            :style="{ width: fixedLeftWidth + 'px', marginTop: contentMarginTop + 'px'}" 
                             :border="border"
                             :hoverRowIndex="hoverRowIndex"
                             :columns="leftColumns" 
@@ -104,6 +107,7 @@
                         <table-footer 
                             v-if="showSummary" 
                             v-show="data && data.length > 0"
+                            :style="{ width: fixedLeftWidth + 'px' }" 
                             type="left" 
                             :columns="columns" 
                             :border="border" >
@@ -120,7 +124,7 @@
                         'v2-table-fixed__right-with-border': border && data.length
                     }
                 ]" v-if="rightColumns.length > 0"
-                :style="[{width: (fixedRightWidth + 1) + 'px', right: -scrollLeft + 'px'}, fixedBottom]">
+                :style="[{width: (fixedRightWidth + 1) + 'px'}, fixedBottom]">
                      <!-- header -->
                     <div class="v2-table-fixed__header-wrapper" ref="rightHeader">
                         <table-header
@@ -135,10 +139,10 @@
                     <div :class="[
                         'v2-table-fixed__body-wrapper'
                     ]" 
-                    ref="rightBody">
+                    ref="rightBody" :style="{ height: bodyHeight ? bodyHeight + 'px' : 'auto'}">
                         <table-body
                             v-if="data && data.length > 0"
-                            :style="{ width: fixedRightWidth + 'px'}" 
+                            :style="{ width: fixedRightWidth + 'px', marginTop: contentMarginTop + 'px'}" 
                             :border="border"
                             :hoverRowIndex="hoverRowIndex"
                             :columns="rightColumns" 
@@ -152,6 +156,7 @@
                             v-if="showSummary" 
                             v-show="data && data.length > 0"
                             type="right" 
+                            :style="{ width: fixedRightWidth + 'px'}" 
                             :columns="rightColumns" 
                             :border="border">
                         </table-footer>
@@ -330,9 +335,6 @@
         },
 
         data () {
-            const ch = Number.parseInt(this.height, 10);
-            const rh = Number.parseInt(this.cellHeight, 10);
-
             return {
                 rows: [],
                 columns: [],
@@ -370,8 +372,7 @@
 
                 // for on demand loading
                 VOEWPORT_MIN_HEIGHT: 100,
-                ITEM_MIN_HEIGHT: 20,
-                rh: (this.isValidNumber(rh) || rh <= this.ITEM_MIN_HEIGHT) ? this.ITEM_MIN_HEIGHT : rh,
+                rh: this.isValidNumber(this.cellHeight) ? 44 : parseInt(this.cellHeight, 10),
                 contentHeight: undefined,
                 bodyHeight: undefined, // this.VOEWPORT_MIN_HEIGHT,
                 contentMarginTop: 0,
@@ -390,7 +391,7 @@
             },
 
             isMetLazyLoad () {
-                return this.lazyLoad && !this.shownPagination && this.bodyHeight > this.VOEWPORT_MIN_HEIGHT;
+                return this.lazyLoad && !this.shownPagination && this.bodyHeight;
             },
 
             tbodyHeight () {
@@ -409,15 +410,11 @@
                 handler (val, oldVal) {
                     if (this.isMetLazyLoad) {
                         this.initRenderRows();
-                        this.updateScrollbar();
                     } else {
                         this.rows = [].concat(val);
-                        if (!oldVal) {
-                            this.updateScrollbar();
-                        } else if (val.length !== oldVal.length) {
-                            this.updateScrollbar();
-                        }
                     }
+
+                    this.isNeedUpdateScrollbar(val, oldVal);
 
                     if (this.selectedIndex.length > 0) {
                         // reset selection status.
@@ -465,19 +462,27 @@
                 if (this.scrollbar) {
                     this.$nextTick(() => {
                         this.scrollbar.update({
-                            contentWidth: this.bodyWidth
-                            // contentWidth: this.$refs.content.scrollWidth,
-                            // contentHeight: this.isMetLazyLoad ? this.contentHeight : this.$refs.content.scrollHeight
+                            contentWidth: this.bodyWidth,
+                            contentHeight: this.isMetLazyLoad ? this.contentHeight : undefined
                         });
                     });
                 }
             },
+
             // exposed table method --end
             toggleSelect (rowIndex) {
                 if (this.selectedIndex.includes(rowIndex)) {
                     this.handleRowSelect(false, rowIndex);
                 } else {
                     this.handleRowSelect(true, rowIndex);
+                }
+            },
+
+            isNeedUpdateScrollbar (val, oldVal) {
+                if (!oldVal) {
+                    this.updateScrollbar();
+                } else if (val.length !== oldVal.length) {
+                    this.updateScrollbar();
                 }
             },
 
@@ -502,10 +507,6 @@
                     prop: prop,
                     order: order
                 });
-            },
-
-            resetDataOrder (prop, order) {
-                // reset data order
                 this.$emit('sort-change', { order, prop });
             },
 
@@ -536,7 +537,7 @@
             },
 
             computedTotalPage () {
-                if (isNaN(parseInt(this.total, 10))) {
+                if (this.isValidNumber(this.total)) {
                     return;
                 }
                 
@@ -580,14 +581,14 @@
                 this.renderPages = [].concat(pages);   
             },
 
-            // 固定头部时更改头部的 scroll left
-            updateHeaderWrapScrollLeft () {
+            // 更新 scroll value
+            updateScrollValue () {
                 const ele = this.scrollbar.element;
                 const { header, leftBody, rightBody, footer } = this.$refs;
                 
-                // if (!this.isContainerScroll) {
-                //     header.scrollLeft = ele.scrollLeft;
-                // }
+                if (!this.isContainerScroll) {
+                    header.scrollLeft = ele.scrollLeft;
+                }
 
                 if (this.leftColumns.length) {
                     leftBody.scrollTop = ele.scrollTop;
@@ -808,12 +809,15 @@
 
         created () {
             this.winResize = debounce(this.handleWinResize);
+            this.updateScroll = debounce(this.updateScrollValue);
+
             this.sort = Object.assign({}, this.defaultSort, {
                 order: this.defaultSort.order || 'ascending'
             });
 
             if (this.height && !this.isValidNumber(this.height)) {
-                this.bodyHeight = parseInt(this.height, 10) > this.VOEWPORT_MIN_HEIGHT ? parseInt(this.height, 10) : this.VOEWPORT_MIN_HEIGHT;
+                const h = parseInt(this.height, 10);
+                this.bodyHeight = h > this.VOEWPORT_MIN_HEIGHT ? h : this.VOEWPORT_MIN_HEIGHT;
             }
         },
 
@@ -844,7 +848,7 @@
             }
 
             // Whether scroll event binding table-container element or table-body element
-            if (this.leftColumns.length || this.rightColumns.length || this.bodyHeight > this.VOEWPORT_MIN_HEIGHT) {
+            if (this.leftColumns.length || this.rightColumns.length || this.bodyHeight) {
                 this.isContainerScroll = false;
             }
 
@@ -861,10 +865,11 @@
 
             this.$nextTick(() => {
                 this.container = this.isContainerScroll ? this.$refs.container : this.$refs.body;
-                this.scrollbar = new BeautifyScrollbar(this.$refs.container, {
-                    contentWidth: this.bodyWidth
+                this.scrollbar = new BeautifyScrollbar(this.container, {
+                    contentWidth: this.bodyWidth,
+                    contentHeight: this.isMetLazyLoad ? this.contentHeight : undefined
                 });
-                this.$refs.container.addEventListener('bs-update-scroll-value', this.updateHeaderWrapScrollLeft, false);
+                this.container.addEventListener('bs-update-scroll-value', this.updateScroll, false);
             });
             window.addEventListener('resize', this.winResize, false);
         },
@@ -881,7 +886,9 @@
             window.removeEventListener('resize', this.winResize, false);
             this.winResize = null;
             this.scrollbar && this.scrollbar.destroy();
-            this.container && this.container.removeEventListener('bs-update-scroll-value', this.updateHeaderWrapScrollLeft, false);
+            this.container && this.container.removeEventListener('bs-update-scroll-value', this.updateScroll, false);
+            this.updateScroll = null;
+            this.container = null;
         }
     };
 </script>
