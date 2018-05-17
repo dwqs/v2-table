@@ -101,7 +101,7 @@ Vue.use(V2Table)
 |  事件名 |  描述  |  参数 |
 |  :--:  |  :--:  |  :--: |
 | toggleRowSelection | 用于多选表格，切换某一行的选中状态，如果使用了第二个参数，则是设置这一行选中与否（selected 为 true 则选中） | row, selected |
-| updateScrollbar | 更新 table 的 scrollbar 配置 | isReset |
+| updateScrollbar | 更新 table 的 scrollbar 配置 | isReset(是否重置 scrollbar, 默认值是 false) |
 
 ### Table Slot
 
