@@ -414,8 +414,6 @@
                         this.rows = [].concat(val);
                     }
 
-                    this.isNeedUpdateScrollbar(val, oldVal);
-
                     if (this.selectedIndex.length > 0) {
                         // reset selection status.
                         this.resetSelection();
@@ -458,31 +456,39 @@
                 }
             },
 
-            updateScrollbar () {
+            updateScrollbar (isReset = false) {
                 if (this.scrollbar) {
-                    this.$nextTick(() => {
-                        this.scrollbar.update({
-                            contentWidth: this.bodyWidth,
-                            contentHeight: this.isMetLazyLoad ? this.contentHeight : undefined
+                    if (isReset) {
+                        this.scrollbar && this.scrollbar.destroy();
+                        this.createScrollBar();
+                    } else {
+                        this.$nextTick(() => {
+                            this.scrollbar.update({
+                                contentWidth: this.bodyWidth,
+                                contentHeight: this.isMetLazyLoad ? this.contentHeight : undefined
+                            });
                         });
-                    });
+                    }
+                } else {
+                    this.createScrollBar();
                 }
             },
 
             // exposed table method --end
+            createScrollBar () {
+                this.$nextTick(() => {
+                    this.scrollbar = new BeautifyScrollbar(this.container, {
+                        contentWidth: this.bodyWidth,
+                        contentHeight: this.isMetLazyLoad ? this.contentHeight : undefined
+                    });
+                });
+            },
+
             toggleSelect (rowIndex) {
                 if (this.selectedIndex.includes(rowIndex)) {
                     this.handleRowSelect(false, rowIndex);
                 } else {
                     this.handleRowSelect(true, rowIndex);
-                }
-            },
-
-            isNeedUpdateScrollbar (val, oldVal) {
-                if (!oldVal) {
-                    this.updateScrollbar();
-                } else if (val.length !== oldVal.length) {
-                    this.updateScrollbar();
                 }
             },
 
@@ -863,15 +869,11 @@
                 this.eventBus.$on('row-select-all', this.handleRowSelectAll);
             }
 
-            this.$nextTick(() => {
-                this.container = this.isContainerScroll ? this.$refs.container : this.$refs.body;
-                this.scrollbar = new BeautifyScrollbar(this.container, {
-                    contentWidth: this.bodyWidth,
-                    contentHeight: this.isMetLazyLoad ? this.contentHeight : undefined
-                });
-                this.container.addEventListener('bs-update-scroll-value', this.updateScroll, false);
-            });
+            this.container = this.isContainerScroll ? this.$refs.container : this.$refs.body;
+            this.container.addEventListener('bs-update-scroll-value', this.updateScroll, false);
             window.addEventListener('resize', this.winResize, false);
+            
+            this.createScrollBar();
         },
 
         components: {
