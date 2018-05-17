@@ -125,6 +125,7 @@
         margin: 0;
         padding: 0;
         background: #FFFFFF;
+        overflow: hidden;
         &.wrap-border {
             border-left: 1px solid #ebeef5;
             border-top: 1px solid #ebeef5;
