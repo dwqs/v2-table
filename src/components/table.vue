@@ -535,11 +535,9 @@
                 }
 
                 this.curPage = parseInt(page, 10);
-                this.$emit('page-change', parseInt(page, 10));
+                this.$emit('page-change', this.curPage);
                 
-                if (this.totalPage > 7) {
-                    this.getRenderPages();
-                }
+                this.getRenderPages();
             },
 
             computedTotalPage () {
@@ -555,14 +553,16 @@
             getRenderPages () {
                 const pages = [];
                 const middlePage = this.curPage;
+                const restPage = this.totalPage - middlePage;
 
-                let start = (middlePage - this.pageDiff) > 1 ? middlePage - this.pageDiff : 1;
-                let end = (middlePage + this.pageDiff) < this.totalPage ? middlePage + this.pageDiff : this.totalPage;
+                let start = middlePage - this.pageDiff;
+                let end = middlePage + this.pageDiff;
 
-                start = ((this.totalPage - middlePage) < 3 && this.totalPage - middlePage >= 0) ? (this.totalPage - 5) : start;
-                end = (end <= 6 && this.totalPage >= 6) ? 6 : end;
+                if (restPage < 3 && restPage >= 0) start = this.totalPage - 5;
+                if (end <= 5 && this.totalPage >= 5) end = 5;
 
-                start = start > 0 ? start : 1;
+                if (start < 1) start = 1;
+                if (end > this.totalPage) end = this.totalPage;
 
                 for (let i = start; i <= end; i++) {
                     pages.push({
@@ -580,7 +580,9 @@
                 if (end !== this.totalPage) {
                     pages.push({
                         page: this.totalPage,
-                        text: (this.totalPage - end > 1 && this.totalPage > 7) ? `...${this.totalPage}` : this.totalPage
+                        text: (this.totalPage - end > 1 && this.totalPage > 6) 
+                            ? `...${this.totalPage}` 
+                            : this.totalPage
                     });
                 }
 
