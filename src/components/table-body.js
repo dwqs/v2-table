@@ -41,7 +41,7 @@ export default {
 
             // custom row class
             if (typeof this.table.rowClassName !== 'undefined') {
-                const customRowClass = typeof this.table.rowClassName === 'function' ? this.table.rowClassName({ row: this.row, rowIndex: index }) : this.table.rowClassName;
+                const customRowClass = typeof this.table.rowClassName === 'function' ? this.table.rowClassName({ row: this.rows[index], rowIndex: index }) : this.table.rowClassName;
                 cls.push(typeof customRowClass === 'string' ? customRowClass : '');
             }
 
